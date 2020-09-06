@@ -28,6 +28,7 @@ class CsvReader {
 
 class TypedCsvReader<T>(
     val targetClass: Class<T>,
+    val csvReflectionCreator: CsvReflectionCreator<T> = CsvReflectionCreator(targetClass),
     val headerCsvReader: HeaderCsvReader = HeaderCsvReader()
 ) {
     fun read(lines: Stream<String>): Stream<TypedCsvLine<T>> {
@@ -36,7 +37,7 @@ class TypedCsvReader<T>(
 
     fun readHeaderLines(lines: Stream<HeaderCsvLine>): Stream<TypedCsvLine<T>> {
         return lines.map {
-            val mappedInstance = createCsvInstance(targetClass, it.values)
+            val mappedInstance = csvReflectionCreator.createCsvInstance(it.values)
             TypedCsvLine(
                 result = mappedInstance.result,
                 errors = emptyList(),
@@ -67,12 +68,15 @@ data class TypedCsvLine<T>(
 }
 
 fun main() {
-    val res = TypedCsvReader(Test::class.java).read(listOf("""a,b,"c",d""", """r,e,e,e,"","a ", sdsdfsd """).stream())
+    val res = TypedCsvReader(Test::class.java).read(listOf("""a,b,"c",d""", """e,f,g,h,"","a ", sdsdfsd """).stream())
     println(res.collect(toList()))
 }
 
 data class Test(
-    val id: String,
-    @CsvProperty("test_value")
-    val second: Boolean
+    val a: String,
+    @CsvProperty("b")
+    val second: String?,
+    @CsvProperty("c")
+    val ce: String,
+    val d: String?
 )
