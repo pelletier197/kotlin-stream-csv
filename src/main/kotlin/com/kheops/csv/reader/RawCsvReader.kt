@@ -21,6 +21,7 @@ data class RawCsvLine(
 class RawCsvReader(
     val separator: String = ",",
     val delimiter: String = "\"",
+    val escapeCharacter: String = "\"",
     val trimEntries: Boolean = false,
     val skipEmptyLines: Boolean = true,
     val emptyStringsAsNull: Boolean = false
@@ -89,7 +90,8 @@ class RawCsvReader(
     private fun buildSplitRegex(): Regex {
         val s = separator
         val d = delimiter
+        val e = escapeCharacter
         // https://stackoverflow.com/questions/18144431/regex-to-split-a-csv/18147076
-        return Regex("(?:$s|\\n|^)($d(?:(?:$d$d)*[^$d]*)*$d|[^$d$s\\n]*|(?:\\n|\$))")
+        return Regex("(?:$s|\\n|^)($d(?:(?:$e$d)*[^$d]*)*$d|[^$d$s\\n]*|(?:\\n|\$))")
     }
 }
