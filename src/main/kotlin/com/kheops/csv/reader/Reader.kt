@@ -1,6 +1,7 @@
 package com.kheops.csv.reader
 
 import com.kheops.csv.CsvProperty
+import com.kheops.csv.reader.reflect.CsvReflectionCreator
 import java.util.stream.Collectors.toList
 import java.util.stream.Stream
 
