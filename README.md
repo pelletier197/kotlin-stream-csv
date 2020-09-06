@@ -4,7 +4,7 @@
 A pure kotlin implementation of the CSV parser. This implementation uses the simplicity and the power of Kotlin, while remaining compatible with Java source code.
 
 ## Characteristics
-1. Collect errors as it goes - you can customize how you handle each specific error, instead of throwing an exception on the first error.
+1. Collect errors as it goes - you can customize how you handle each specific error, instead of throwing an exception on the first one
 2. Easy to configure
 3. Kotlin :heart: 
 
