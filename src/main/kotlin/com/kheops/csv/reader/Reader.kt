@@ -1,10 +1,16 @@
 package com.kheops.csv.reader
 
+import com.kheops.csv.CsvProperty
 import java.util.stream.Collectors.toList
+import java.util.stream.Stream
 
 class CsvReader {
-    fun <T> readerForType(): TypedCsvReader<T> {
-        return TypedCsvReader()
+    inline fun <reified T> readerForType(): TypedCsvReader<T> {
+        return readerForType(T::class.java)
+    }
+
+    fun <T> readerForType(targetClass: Class<T>): TypedCsvReader<T> {
+        return TypedCsvReader(targetClass = targetClass)
     }
 
     fun readerWithHeader(): HeaderCsvReader {
@@ -21,21 +27,26 @@ class CsvReader {
 }
 
 class TypedCsvReader<T>(
+    val targetClass: Class<T>,
     val headerCsvReader: HeaderCsvReader = HeaderCsvReader()
-)
-
-
-data class TypedCsvSchema<T>(
-    val header: List<String>? = null
 ) {
-    fun withHeader(header: List<String>): TypedCsvSchema<T> {
-        return copy(header = header)
+    fun read(lines: Stream<String>): Stream<TypedCsvLine<T>> {
+        return readHeaderLines(headerCsvReader.read(lines))
+    }
+
+    fun readHeaderLines(lines: Stream<HeaderCsvLine>): Stream<TypedCsvLine<T>> {
+        return lines.map {
+            val mappedInstance = createCsvInstance(targetClass, it.values)
+            TypedCsvLine(
+                result = mappedInstance.result,
+                errors = emptyList(),
+                line = it.line
+            )
+        }
     }
 }
 
-
-
-data class CsvLine<T>(
+data class TypedCsvLine<T>(
     val result: T?,
     val line: Int,
     val errors: List<CsvErrorType>? = null
@@ -56,6 +67,12 @@ data class CsvLine<T>(
 }
 
 fun main() {
-    val res = RawCsvReader().read(listOf("""a,b,"c",d""", """r,e,e,e,"","a ", sdsdfsd """).stream())
+    val res = TypedCsvReader(Test::class.java).read(listOf("""a,b,"c",d""", """r,e,e,e,"","a ", sdsdfsd """).stream())
     println(res.collect(toList()))
 }
+
+data class Test(
+    val id: String,
+    @CsvProperty("test_value")
+    val second: Boolean
+)

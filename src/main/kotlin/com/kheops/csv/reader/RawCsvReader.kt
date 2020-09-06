@@ -12,8 +12,9 @@ import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.stream.Stream
 
+
 data class RawCsvLine(
-    val columns: List<String>,
+    val columns: List<String?>,
     val line: Int
 )
 
@@ -21,7 +22,8 @@ class RawCsvReader(
     val separator: String = ",",
     val delimiter: String = "\"",
     val trimEntries: Boolean = false,
-    val skipEmptyLines: Boolean = true
+    val skipEmptyLines: Boolean = true,
+    val emptyStringsAsNull: Boolean = false
 ) {
     private val regex = buildSplitRegex()
 
@@ -62,11 +64,15 @@ class RawCsvReader(
         }
     }
 
-    private fun format(value: String): String {
+    private fun format(value: String): String? {
         var output = removeDelimiters(value)
 
         if (trimEntries) {
             output = output.trim()
+        }
+
+        if (emptyStringsAsNull && output.isEmpty()) {
+            return null
         }
 
         return output

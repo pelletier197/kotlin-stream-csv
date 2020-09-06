@@ -3,16 +3,10 @@ package com.kheops.csv.reader
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Stream
 
-
 data class HeaderCsvLine(
-    val values: Map<String, String>,
-    val line: Int,
-    val errors: List<CsvErrorType>?,
-) {
-    val hasErrors: Boolean get() = !errors.isNullOrEmpty()
-}
-
-data class ColumnCsvError(override val type: CsvErrorType, override val line: Int, val column: String) : CsvError()
+    val values: Map<String, String?>,
+    val line: Int
+)
 
 data class HeaderCsvReader(
     val header: List<String>? = null,
@@ -28,19 +22,18 @@ data class HeaderCsvReader(
     }
 
     fun readRaw(lines: Stream<RawCsvLine>): Stream<HeaderCsvLine> {
-        var currentHeader = AtomicReference(this.header)
+        val currentHeader = AtomicReference(this.header)
         return lines.filter { setHeaderAndSkip(it, currentHeader) }.map {
             HeaderCsvLine(
-                values = emptyMap(),
+                values = currentHeader.get()!!.mapIndexed { index, column -> column to it.columns[index] }.toMap(),
                 line = it.line,
-                errors = null
             )
         }
     }
 
     private fun setHeaderAndSkip(rawCsvLine: RawCsvLine, currentHeader: AtomicReference<List<String>?>): Boolean {
         if (currentHeader.get() == null) {
-            currentHeader.set(rawCsvLine.columns)
+            currentHeader.set(rawCsvLine.columns.filterNotNull())
             return false
         }
         return true
