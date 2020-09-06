@@ -1,18 +1,6 @@
 package com.kheops.csv.reader
 
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.lang.Exception
-import java.net.URL
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.concurrent.atomic.AtomicInteger
 import java.util.stream.Collectors.toList
-import java.util.stream.Stream
 
 class CsvReader {
     fun <T> readerForType(): TypedCsvReader<T> {
@@ -50,7 +38,7 @@ data class TypedCsvSchema<T>(
 data class CsvLine<T>(
     val result: T?,
     val line: Int,
-    val errors: List<CsvError>? = null
+    val errors: List<CsvErrorType>? = null
 ) {
     val hasErrors: Boolean get() = !errors.isNullOrEmpty()
 
@@ -61,7 +49,7 @@ data class CsvLine<T>(
             line = line
         ) else result ?: throw CsvParsingException(
             message = "expected a non null CSV result",
-            errors = listOf(CsvError.NON_NULL_RESULT_EXPECTED),
+            errors = listOf(CsvErrorType.NON_NULL_RESULT_EXPECTED),
             line = line
         )
     }
