@@ -1,5 +1,6 @@
 package com.kheops.csv.reader
 
+import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Stream
 
 
@@ -27,16 +28,21 @@ data class HeaderCsvReader(
     }
 
     fun readRaw(lines: Stream<RawCsvLine>): Stream<HeaderCsvLine> {
-        var currentHeader = this.header
-        return lines.filter(fun(line: RawCsvLine): Boolean {
-            // Set header and skip
-            if (currentHeader == null) {
-                currentHeader = line.columns
-                return false
-            }
-            return true
-        }).map {
-
+        var currentHeader = AtomicReference(this.header)
+        return lines.filter { setHeaderAndSkip(it, currentHeader) }.map {
+            HeaderCsvLine(
+                values = emptyMap(),
+                line = it.line,
+                errors = null
+            )
         }
+    }
+
+    private fun setHeaderAndSkip(rawCsvLine: RawCsvLine, currentHeader: AtomicReference<List<String>?>): Boolean {
+        if (currentHeader.get() == null) {
+            currentHeader.set(rawCsvLine.columns)
+            return false
+        }
+        return true
     }
 }
