@@ -25,3 +25,10 @@ class StringFloatConverter() : StringConverterBase<Float>() {
     override val target: Class<Float> = Float::class.java
     override fun convert(value: String?): Float? = value?.toFloat()
 }
+
+class StringDoubleConverter() : StringConverterBase<Double>() {
+    override val target: Class<Double> get() = Double::class.java
+
+    override fun convert(value: String?): Double? = value?.toDouble()
+
+}
