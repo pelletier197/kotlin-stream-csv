@@ -1,5 +1,7 @@
 package com.kheops.csv.reader.reflect.converters
 
+import java.lang.reflect.Field
+import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.text.DateFormat
@@ -11,7 +13,11 @@ import java.util.*
 
 abstract class StringConverterBase<TO> : Converter<String, TO> {
     override val source: Class<String> get() = String::class.java
-    override fun convert(value: String, to: Class<TO>): TO? = doConvert(value.trim(), to)
+
+    @Suppress("UNCHECKED_CAST")
+    override fun convert(value: String, to: Type, settings: ConversionSettings): TO? =
+        doConvert(value.trim(), to as Class<TO>)
+
     abstract fun doConvert(value: String, to: Class<TO>): TO?
 }
 
@@ -86,6 +92,11 @@ class StringToBooleanConverter : StringConverterBase<Boolean>() {
     private val trueValues = setOf("true", "t", "yes", "1")
     override val target: Class<Boolean> get() = Boolean::class.java
     override fun doConvert(value: String, to: Class<Boolean>): Boolean = trueValues.contains(value.toLowerCase())
+}
+
+class StringToStringConverter : StringConverterBase<String>() {
+    override val target: Class<String> get() = String::class.java
+    override fun doConvert(value: String, to: Class<String>): String = value
 }
 
 @Suppress("EXPERIMENTAL_API_USAGE")

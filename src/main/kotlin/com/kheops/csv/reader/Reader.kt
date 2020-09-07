@@ -2,11 +2,11 @@ package com.kheops.csv.reader
 
 import com.kheops.csv.CsvProperty
 import com.kheops.csv.reader.reflect.CsvReflectionCreator
-import com.kheops.csv.reader.reflect.converters.convert
+import com.kheops.csv.reader.reflect.converters.convertToType
 import java.time.Instant
-import java.time.ZonedDateTime
 import java.util.stream.Collectors.toList
 import java.util.stream.Stream
+import kotlin.reflect.jvm.javaField
 
 class CsvReader {
     inline fun <reified T> readerForType(): TypedCsvReader<T> {
@@ -72,9 +72,15 @@ data class TypedCsvLine<T>(
 }
 
 fun main() {
-    println(convert(Instant.now().toString(), Instant::class.java))
-    val resu = convert(" ${Instant.now()} ", Instant::class.java)
+    val t: Instant = convertToType(Instant.now().toString(), Instant::class.java)
+    println(t)
+    val ty = ArrayList<String>()
+
+    val resu: List<Instant> =
+        convertToType(" ${Instant.now()}, ${Instant.now().minusMillis(1000)} ", List::class.java)
     println(resu)
+    //val resu2 = convert("123", String::class.java)
+    //println(resu2)
     val res = TypedCsvReader(Test::class.java).read(listOf("""a,b,"c",d""", """e,f,g,h,"","a ", sdsdfsd """).stream())
     println(res.collect(toList()))
 }
@@ -82,11 +88,13 @@ fun main() {
 enum class Lolz {
     TEST
 }
+
 data class Test(
     val a: String,
     @CsvProperty("b")
     val second: String?,
     @CsvProperty("c")
     val ce: String,
-    val d: String?
+    val d: String?,
+    val l: List<Instant>
 )
