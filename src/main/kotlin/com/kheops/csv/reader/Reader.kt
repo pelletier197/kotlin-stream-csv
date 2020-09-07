@@ -2,12 +2,12 @@ package com.kheops.csv.reader
 
 import com.kheops.csv.CsvProperty
 import com.kheops.csv.reader.reflect.CsvReflectionCreator
+import com.kheops.csv.reader.reflect.InstantiationError
 import com.kheops.csv.reader.reflect.converters.convertToClass
 import com.kheops.csv.reader.reflect.converters.convertToType
 import java.time.Instant
 import java.util.stream.Collectors.toList
 import java.util.stream.Stream
-import kotlin.reflect.jvm.javaField
 
 class CsvReader {
     inline fun <reified T> readerForType(): TypedCsvReader<T> {
@@ -45,17 +45,26 @@ class TypedCsvReader<T>(
             val mappedInstance = csvReflectionCreator.createCsvInstance(it.values)
             TypedCsvLine(
                 result = mappedInstance.result,
-                errors = emptyList(),
+                errors = mappedInstance.errors.map { error -> mapInstantiationError(error) },
                 line = it.line
             )
         }
+    }
+
+    private fun mapInstantiationError(error: InstantiationError): CsvError {
+        return CsvError(
+            csvField = error.originalField,
+            classField = error.field,
+            type = CsvErrorType.valueOf(error.type.toString()),
+            cause = error.cause
+        )
     }
 }
 
 data class TypedCsvLine<T>(
     val result: T?,
     val line: Int,
-    val errors: List<CsvErrorType>? = null
+    val errors: List<CsvError>? = null
 ) {
     val hasErrors: Boolean get() = !errors.isNullOrEmpty()
 
@@ -64,11 +73,7 @@ data class TypedCsvLine<T>(
             message = "error while parsing CSV file",
             errors = errors!!,
             line = line
-        ) else result ?: throw CsvParsingException(
-            message = "expected a non null CSV result",
-            errors = listOf(CsvErrorType.NON_NULL_RESULT_EXPECTED),
-            line = line
-        )
+        ) else result ?: error("unexpected null result for an entity with no error")
     }
 }
 
@@ -83,7 +88,7 @@ fun main() {
     println(resu)
     //val resu2 = convert("123", String::class.java)
     //println(resu2)
-    val res = TypedCsvReader(Test::class.java).read(listOf("""a,b,"c",d""", """e,f,g,h,"","a ", sdsdfsd """).stream())
+    val res = TypedCsvReader(Test::class.java).read(listOf("""a,b,"c",d, l""", """e,f,g,h,"","a ", sdsdfsd """).stream())
     println(res.collect(toList()))
 }
 
@@ -98,5 +103,5 @@ data class Test(
     @CsvProperty("c")
     val ce: String,
     val d: String?,
-    val l: List<Instant>
+    val l: List<Instant>?
 )

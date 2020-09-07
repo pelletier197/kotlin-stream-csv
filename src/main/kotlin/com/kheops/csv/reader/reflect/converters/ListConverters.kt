@@ -36,6 +36,8 @@ private fun asList(value: String, to: Type, settings: ConversionSettings): List<
             """
     )
     val targetClass = to.actualTypeArguments[0]
-    return value.split(settings.listSeparator).map { it.trim() }
+    return value.split(settings.listSeparator)
+        .map { it.trim() }
+        .filter { it.isNotEmpty() }
         .map { convertToType<String, Any?>(it, targetClass, settings) }
 }

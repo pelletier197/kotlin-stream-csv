@@ -77,18 +77,18 @@ fun <T> createInstance(target: Class<T>, arguments: List<InstantiationArgument>)
     }
 
     return InstantiationWithErrors(
-        result = constructor.newInstance(args),
+        result = constructor.call(args),
         errors = errors
     )
 }
 
 private fun <T> buildConstructorArguments(
-    constructor: Constructor<T>,
+    constructor: GenericConstructor<T>,
     arguments: List<InstantiationArgument>,
     errors: MutableList<InstantiationError>
 ): Array<Any?> {
     val instantiationFieldByName = arguments.map { it.field.name to it }.toMap()
-    val names = constructor.parameters.map { it.name }
+    val names = constructor.parameterNames
     return names.map(fun(it: String): Any? {
         val instField = instantiationFieldByName[it] ?: error("no field found with name '${it}'")
         val fieldValue = instField.value
@@ -126,15 +126,34 @@ private fun createError(
 private fun <T> getTargetConstructor(
     target: Class<*>,
     fields: Collection<InstantiationField>
-): Constructor<T> {
+): GenericConstructor<T> {
     val fieldNames = fields.map { it.name }
     return try {
-        target.kotlin.constructors.find { constructor ->
+        (target.kotlin.constructors.find { constructor ->
             constructor.parameters.map { it.name }.containsAll(fieldNames)
-        }?.javaConstructor as Constructor<T>? ?: throw InvalidTargetClass(target, fields)
-    } catch (ex: Exception) {
-        target.constructors.find { constructor ->
+        } as KFunction<T>?)?.let { KotlinConstructor<T>(it) }
+    } catch (ex: KotlinReflectionNotSupportedError) {
+        (target.constructors.find { constructor ->
             constructor.parameters.map { it.name }.containsAll(fieldNames)
-        } as Constructor<T>? ?: throw InvalidTargetClass(target, fields)
-    }
+        } as Constructor<T>?)?.let { JavaConstructor(it) }
+    } ?: throw InvalidTargetClass(target, fields)
+}
+
+private interface GenericConstructor<T> {
+    val parameterNames: List<String>
+    fun call(args: Array<Any?>): T
+}
+
+private class JavaConstructor<T>(private val constructor: Constructor<T>) : GenericConstructor<T> {
+    override val parameterNames: List<String>
+        get() = constructor.parameters.map { it.name }
+
+    override fun call(args: Array<Any?>): T = constructor.newInstance(*args)
+}
+
+private class KotlinConstructor<T>(private val function: KFunction<T>) : GenericConstructor<T> {
+    override val parameterNames: List<String>
+        get() = function.parameters.map { it.name ?: error("expected a parameter with a name on $function") }
+
+    override fun call(args: Array<Any?>): T = function.call(*args)
 }

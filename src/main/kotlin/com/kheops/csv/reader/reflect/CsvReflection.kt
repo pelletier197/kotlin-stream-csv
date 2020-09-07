@@ -3,7 +3,6 @@ package com.kheops.csv.reader.reflect
 import com.kheops.csv.CsvProperty
 import java.lang.reflect.Field
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.reflect.jvm.kotlinProperty
 
 class CsvReflectionCreator<T>(private val target: Class<T>) {
