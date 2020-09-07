@@ -2,6 +2,7 @@ package com.kheops.csv.reader
 
 import com.kheops.csv.CsvProperty
 import com.kheops.csv.reader.reflect.CsvReflectionCreator
+import com.kheops.csv.reader.reflect.converters.convertToClass
 import com.kheops.csv.reader.reflect.converters.convertToType
 import java.time.Instant
 import java.util.stream.Collectors.toList
@@ -76,8 +77,9 @@ fun main() {
     println(t)
     val ty = ArrayList<String>()
 
-    val resu: List<Instant> =
-        convertToType(" ${Instant.now()}, ${Instant.now().minusMillis(1000)} ", List::class.java)
+    val test = convertToClass("TEST", Lolz::class.java)
+    val resu =
+        convertToClass(" ${Instant.now()}, ${Instant.now().minusMillis(1000)} ", String::class.java)
     println(resu)
     //val resu2 = convert("123", String::class.java)
     //println(resu2)

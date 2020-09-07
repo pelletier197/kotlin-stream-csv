@@ -63,7 +63,7 @@ private object Converters {
         val typeName = getConverterTypeName(to) ?: return null
         val result = allConverters[ConversionTargets(from.canonicalName, typeName)]
 
-        if (result == null && to is Class<*> && to.superclass == Enum::class.java) {
+        if (result == null && to is Class<*> && to.isEnum) {
             // Special converter for enums
             return allConverters[ConversionTargets(from.canonicalName, Enum::class.java.canonicalName)]
         }
@@ -88,7 +88,11 @@ private object Converters {
 }
 
 class NoConverterFoundException(value: Any, target: Type) :
-    Exception("could not find a converter for value '${value}' of type '${value::class.java.name}' to '${target.typeName}'")
+    Exception("""
+        could not find a converter for value '${value}' of type '${value::class.java.name}' to '${target.typeName}'.
+        It is possible the value you are trying to convert is not supported by default. You can add the custom converter yourself by calling
+        com.kheops.csv.reader.reflect.converters.registerConverter(com.kheops.csv.reader.reflect.converters.Converter)
+    """.trimMargin())
 
 class ConversionFailedException(value: Any, target: Type, exception: Exception) :
     Exception(

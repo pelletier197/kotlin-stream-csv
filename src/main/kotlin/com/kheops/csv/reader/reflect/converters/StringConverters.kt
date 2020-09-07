@@ -1,6 +1,5 @@
 package com.kheops.csv.reader.reflect.converters
 
-import java.lang.reflect.Field
 import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.math.BigInteger
