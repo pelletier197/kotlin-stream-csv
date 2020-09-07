@@ -1,5 +1,7 @@
 package com.kheops.csv.reader.reflect.converters
 
+import java.math.BigDecimal
+import java.math.BigInteger
 import java.text.DateFormat
 import java.time.Instant
 import java.time.LocalDate
@@ -37,7 +39,6 @@ class StringDateConverter() : StringConverterBase<Date>() {
     override fun convert(value: String?): Date? = value?.let { dateFormat.parse(it) }
 }
 
-
 class StringLongConverter() : StringConverterBase<Long>() {
     override val target: Class<Long> = Long::class.java
     override fun convert(value: String?): Long? = value?.toLong()
@@ -61,6 +62,16 @@ class StringDoubleConverter() : StringConverterBase<Double>() {
 class StringToByteConverter() : StringConverterBase<Byte>() {
     override val target: Class<Byte> get() = Byte::class.java
     override fun convert(value: String?): Byte? = value?.toByte()
+}
+
+class StringToBigDecimalConverter() : StringConverterBase<BigDecimal>() {
+    override val target: Class<BigDecimal> get() = BigDecimal::class.java
+    override fun convert(value: String?): BigDecimal? = value?.toBigDecimal()
+}
+
+class StringToBigIntegerConverter() : StringConverterBase<BigInteger>() {
+    override val target: Class<BigInteger> get() = BigInteger::class.java
+    override fun convert(value: String?): BigInteger? = value?.toBigInteger()
 }
 
 @Suppress("EXPERIMENTAL_API_USAGE")

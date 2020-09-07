@@ -40,6 +40,8 @@ private object Converters {
             StringDoubleConverter(),
             StringToByteConverter(),
             StringIntConverter(),
+            StringToBigDecimalConverter(),
+            StringToBigIntegerConverter(),
             StringUIntConverter(),
             StringULongConverter(),
         ).forEach { registerConverter(it) }
