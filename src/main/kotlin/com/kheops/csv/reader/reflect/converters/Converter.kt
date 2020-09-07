@@ -53,7 +53,9 @@ private object Converters {
             StringULongConverter(),
             StringToEnumConverter(),
             StringToBooleanConverter(),
-            StringToListConverter()
+            StringToListConverter(),
+            StringToArrayListConverter(),
+            StringToLinkedListConverter(),
         ).forEach { registerConverter(it) }
     }
 

@@ -94,11 +94,6 @@ class StringToBooleanConverter : StringConverterBase<Boolean>() {
     override fun doConvert(value: String, to: Class<Boolean>): Boolean = trueValues.contains(value.toLowerCase())
 }
 
-class StringToStringConverter : StringConverterBase<String>() {
-    override val target: Class<String> get() = String::class.java
-    override fun doConvert(value: String, to: Class<String>): String = value
-}
-
 @Suppress("EXPERIMENTAL_API_USAGE")
 class StringUIntConverter : StringConverterBase<UInt>() {
     override val target: Class<UInt> get() = UInt::class.java
