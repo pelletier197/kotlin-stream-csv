@@ -6,18 +6,46 @@ import com.kheops.csv.reader.reflect.converters.ConversionSettings
 import java.util.stream.Stream
 
 
-class TypedCsvReader<T>(
+data class TypedCsvReader<T>(
     val targetClass: Class<T>,
     val listSeparator: String = ",",
-    val csvReflectionCreator: CsvReflectionCreator<T> = CsvReflectionCreator(targetClass),
-    val headerCsvReader: HeaderCsvReader = HeaderCsvReader()
+    private val csvReflectionCreator: CsvReflectionCreator<T> = CsvReflectionCreator(targetClass),
+    private val reader: HeaderCsvReader = HeaderCsvReader()
 ) {
     private val conversionSettings = ConversionSettings(
         listSeparator = listSeparator
     )
 
     fun read(lines: Stream<String>): Stream<TypedCsvLine<T>> {
-        return readHeaderLines(headerCsvReader.read(lines))
+        return readHeaderLines(reader.read(lines))
+    }
+
+    fun withSeparator(separator: String): TypedCsvReader<T> {
+        return copy(reader = reader.withSeparator(separator))
+    }
+
+    fun withDelimiter(delimiter: String): TypedCsvReader<T> {
+        return copy(reader = reader.withDelimiter(delimiter))
+    }
+
+    fun withEscapeCharacter(character: String): TypedCsvReader<T> {
+        return copy(reader = reader.withEscapeCharacter(character))
+    }
+
+    fun withTrimEntries(trim: Boolean): TypedCsvReader<T> {
+        return copy(reader = reader.withTrimEntries(trim))
+    }
+
+    fun withSkipEmptyLines(skip: Boolean): TypedCsvReader<T> {
+        return copy(reader = reader.withSkipEmptyLines(skip))
+    }
+
+    fun withEmptyStringsAsNull(emptyAsNulls: Boolean): TypedCsvReader<T> {
+        return copy(reader = reader.withEmptyStringsAsNull(emptyAsNulls))
+    }
+
+    fun withListSeparator(listSeparator: String): TypedCsvReader<T> {
+        return copy(listSeparator = listSeparator)
     }
 
     fun readHeaderLines(lines: Stream<HeaderCsvLine>): Stream<TypedCsvLine<T>> {

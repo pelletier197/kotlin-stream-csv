@@ -10,8 +10,7 @@ data class HeaderCsvLine(
 
 data class HeaderCsvReader(
     val header: List<String>? = null,
-    val errorOnMissingProperties: Boolean = true,
-    val reader: RawCsvReader = RawCsvReader(),
+    private val reader: RawCsvReader = RawCsvReader(),
 ) {
     fun withHeader(header: List<String>): HeaderCsvReader {
         return copy(header = header)
@@ -19,6 +18,30 @@ data class HeaderCsvReader(
 
     fun read(lines: Stream<String>): Stream<HeaderCsvLine> {
         return readRaw(reader.read(lines))
+    }
+
+    fun withSeparator(separator: String): HeaderCsvReader {
+        return copy(reader = reader.withSeparator(separator))
+    }
+
+    fun withDelimiter(delimiter: String): HeaderCsvReader {
+        return copy(reader = reader.withDelimiter(delimiter))
+    }
+
+    fun withEscapeCharacter(character: String): HeaderCsvReader {
+        return copy(reader = reader.withEscapeCharacter(character))
+    }
+
+    fun withTrimEntries(trim: Boolean): HeaderCsvReader {
+        return copy(reader = reader.withTrimEntries(trim))
+    }
+
+    fun withSkipEmptyLines(skip: Boolean): HeaderCsvReader {
+        return copy(reader = reader.withSkipEmptyLines(skip))
+    }
+
+    fun withEmptyStringsAsNull(emptyAsNulls: Boolean): HeaderCsvReader {
+        return copy(reader = reader.withEmptyStringsAsNull(emptyAsNulls))
     }
 
     fun readRaw(lines: Stream<RawCsvLine>): Stream<HeaderCsvLine> {

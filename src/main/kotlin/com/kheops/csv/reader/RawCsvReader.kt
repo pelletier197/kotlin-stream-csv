@@ -18,7 +18,7 @@ data class RawCsvLine(
     val line: Int
 )
 
-class RawCsvReader(
+data class RawCsvReader(
     val separator: String = ",",
     val delimiter: String = "\"",
     val escapeCharacter: String = "\"",
@@ -51,6 +51,30 @@ class RawCsvReader(
     fun read(lines: Stream<String>): Stream<RawCsvLine> {
         val skippedEmptyLines = if (skipEmptyLines) lines.filter { it.isNotBlank() } else lines
         return processLines(skippedEmptyLines)
+    }
+
+    fun withSeparator(separator: String): RawCsvReader {
+        return copy(separator = separator)
+    }
+
+    fun withDelimiter(delimiter: String): RawCsvReader {
+        return copy(delimiter = delimiter)
+    }
+
+    fun withEscapeCharacter(character: String): RawCsvReader {
+        return copy(escapeCharacter = character)
+    }
+
+    fun withTrimEntries(trim: Boolean): RawCsvReader {
+        return copy(trimEntries = trim)
+    }
+
+    fun withSkipEmptyLines(skip: Boolean): RawCsvReader {
+        return copy(skipEmptyLines = skip)
+    }
+
+    fun withEmptyStringsAsNull(emptyAsNulls: Boolean): RawCsvReader {
+        return copy(emptyStringsAsNull = emptyAsNulls)
     }
 
     private fun processLines(
