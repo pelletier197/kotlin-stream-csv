@@ -1,6 +1,5 @@
 package com.kheops.csv.reader.reflect
 
-import com.kheops.csv.reader.Test
 import com.kheops.csv.reader.reflect.converters.ConversionFailedException
 import com.kheops.csv.reader.reflect.converters.ConversionSettings
 import com.kheops.csv.reader.reflect.converters.NoConverterFoundException
