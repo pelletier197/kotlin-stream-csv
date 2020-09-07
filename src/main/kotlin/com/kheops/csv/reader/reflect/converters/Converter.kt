@@ -7,7 +7,7 @@ import kotlin.reflect.full.functions
 interface Converter<FROM, TO> {
     val source: Class<FROM>
     val target: Class<TO>
-    fun convert(value: FROM?): TO?
+    fun convert(value: FROM, to: Class<TO>): TO?
 }
 
 private data class ConverterWrapper(
@@ -15,8 +15,8 @@ private data class ConverterWrapper(
     private val function: KFunction<Any?>
 ) {
     @Suppress("UNCHECKED_CAST")
-    fun <S, T> convert(value: S): T {
-        return function.call(converter, value) as T
+    fun <S, T> convert(value: S, to: Class<T>): T {
+        return function.call(converter, value, to) as T
     }
 }
 
@@ -44,11 +44,20 @@ private object Converters {
             StringToBigIntegerConverter(),
             StringUIntConverter(),
             StringULongConverter(),
+            StringToEnumConverter(),
+            StringToBooleanConverter(),
         ).forEach { registerConverter(it) }
     }
 
     fun getConverter(from: Class<*>, to: Class<*>): ConverterWrapper? {
-        return allConverters[ConversionTargets(from.canonicalName, to.canonicalName)]
+        val result = allConverters[ConversionTargets(from.canonicalName, to.canonicalName)]
+
+        if (result == null && to.superclass == (Enum::class.java)) {
+            // Special converter for enum entities
+            return allConverters[ConversionTargets(from.canonicalName, Enum::class.java.canonicalName)]
+        }
+
+        return result
     }
 
     fun registerConverter(converter: Converter<*, *>) {
@@ -59,8 +68,6 @@ private object Converters {
                     ?: error("expected a function convert inside the converter interface")
             )
     }
-
-
 }
 
 class NoConverterFoundException(value: Any, target: Class<*>) :
@@ -79,7 +86,7 @@ fun <S, T> convert(value: S?, to: Class<T>): T? {
     val converter = getConverter(nonNullValue::class.java, to) ?: throw NoConverterFoundException(nonNullValue, to)
 
     try {
-        return converter.convert(nonNullValue)
+        return converter.convert(nonNullValue, to)
     } catch (ex: Exception) {
         throw ConversionFailedException(nonNullValue, to, ex)
     }
@@ -88,3 +95,4 @@ fun <S, T> convert(value: S?, to: Class<T>): T? {
 fun registerConverter(converter: Converter<*, *>) {
     Converters.registerConverter(converter)
 }
+

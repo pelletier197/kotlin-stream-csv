@@ -15,73 +15,86 @@ abstract class StringConverterBase<TO> : Converter<String, TO> {
 
 class StringInstantConverter() : StringConverterBase<Instant>() {
     override val target: Class<Instant> = Instant::class.java
-    override fun convert(value: String?): Instant? = value?.let { Instant.parse(it) }
+    override fun convert(value: String, to: Class<Instant>): Instant = Instant.parse(value)
 }
 
 class StringZonedDateTimeConverter() : StringConverterBase<ZonedDateTime>() {
     override val target: Class<ZonedDateTime> get() = ZonedDateTime::class.java
-    override fun convert(value: String?): ZonedDateTime? = value?.let { ZonedDateTime.parse(it) }
+    override fun convert(value: String, to: Class<ZonedDateTime>): ZonedDateTime = ZonedDateTime.parse(value)
 }
 
 class StringLocalDateConverter() : StringConverterBase<LocalDate>() {
     override val target: Class<LocalDate> get() = LocalDate::class.java
-    override fun convert(value: String?): LocalDate? = value?.let { LocalDate.parse(it) }
+    override fun convert(value: String, to: Class<LocalDate>): LocalDate = LocalDate.parse(value)
 }
 
 class StringLocalDateTimeConverter() : StringConverterBase<LocalDateTime>() {
     override val target: Class<LocalDateTime> get() = LocalDateTime::class.java
-    override fun convert(value: String?): LocalDateTime? = value?.let { LocalDateTime.parse(it) }
+    override fun convert(value: String, to: Class<LocalDateTime>): LocalDateTime = LocalDateTime.parse(value)
 }
 
 class StringDateConverter() : StringConverterBase<Date>() {
     private val dateFormat = DateFormat.getInstance()
     override val target: Class<Date> get() = Date::class.java
-    override fun convert(value: String?): Date? = value?.let { dateFormat.parse(it) }
+    override fun convert(value: String, to: Class<Date>): Date = dateFormat.parse(value)
 }
 
 class StringLongConverter() : StringConverterBase<Long>() {
     override val target: Class<Long> = Long::class.java
-    override fun convert(value: String?): Long? = value?.toLong()
+    override fun convert(value: String, to: Class<Long>): Long = value.toLong()
 }
 
 class StringIntConverter() : StringConverterBase<Int>() {
     override val target: Class<Int> = Int::class.java
-    override fun convert(value: String?): Int? = value?.toInt()
+    override fun convert(value: String, to: Class<Int>): Int = value.toInt()
 }
 
 class StringFloatConverter() : StringConverterBase<Float>() {
     override val target: Class<Float> = Float::class.java
-    override fun convert(value: String?): Float? = value?.toFloat()
+    override fun convert(value: String, to: Class<Float>): Float = value.toFloat()
 }
 
 class StringDoubleConverter() : StringConverterBase<Double>() {
     override val target: Class<Double> get() = Double::class.java
-    override fun convert(value: String?): Double? = value?.toDouble()
+    override fun convert(value: String, to: Class<Double>): Double = value.toDouble()
 }
 
 class StringToByteConverter() : StringConverterBase<Byte>() {
     override val target: Class<Byte> get() = Byte::class.java
-    override fun convert(value: String?): Byte? = value?.toByte()
+    override fun convert(value: String, to: Class<Byte>): Byte = value.toByte()
 }
 
 class StringToBigDecimalConverter() : StringConverterBase<BigDecimal>() {
     override val target: Class<BigDecimal> get() = BigDecimal::class.java
-    override fun convert(value: String?): BigDecimal? = value?.toBigDecimal()
+    override fun convert(value: String, to: Class<BigDecimal>): BigDecimal = value.toBigDecimal()
 }
 
 class StringToBigIntegerConverter() : StringConverterBase<BigInteger>() {
     override val target: Class<BigInteger> get() = BigInteger::class.java
-    override fun convert(value: String?): BigInteger? = value?.toBigInteger()
+    override fun convert(value: String, to: Class<BigInteger>): BigInteger = value.toBigInteger()
+}
+
+class StringToEnumConverter() : StringConverterBase<Enum<*>>() {
+    override val target: Class<Enum<*>> get() = Enum::class.java
+    override fun convert(value: String, to: Class<Enum<*>>): Enum<*> =
+        value.let { to.enumConstants.first { value.toLowerCase() == it.name.toLowerCase() } }
+}
+
+class StringToBooleanConverter() : StringConverterBase<Boolean>() {
+    private val trueValues = setOf("true", "t", "yes", "1")
+    override val target: Class<Boolean> get() = Boolean::class.java
+    override fun convert(value: String, to: Class<Boolean>): Boolean =
+        value.let { trueValues.contains(it) }
 }
 
 @Suppress("EXPERIMENTAL_API_USAGE")
 class StringUIntConverter() : StringConverterBase<UInt>() {
     override val target: Class<UInt> get() = UInt::class.java
-    override fun convert(value: String?): UInt? = value?.toUInt()
+    override fun convert(value: String, to: Class<UInt>): UInt = value.toUInt()
 }
 
 @Suppress("EXPERIMENTAL_API_USAGE")
 class StringULongConverter() : StringConverterBase<ULong>() {
     override val target: Class<ULong> get() = ULong::class.java
-    override fun convert(value: String?): ULong? = value?.toULong()
+    override fun convert(value: String, to: Class<ULong>): ULong = value.toULong()
 }
