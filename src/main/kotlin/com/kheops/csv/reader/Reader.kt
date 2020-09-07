@@ -88,7 +88,7 @@ fun main() {
     println(resu)
     //val resu2 = convert("123", String::class.java)
     //println(resu2)
-    val res = TypedCsvReader(Test::class.java).read(listOf("""a,b,"c",d, l""", """e,f,g,h,"","a ", sdsdfsd """).stream())
+    val res = TypedCsvReader(Test::class.java).read(listOf("""a,b,"c",d, l""", """e,f,test,h,"","a ", sdsdfsd """).stream())
     println(res.collect(toList()))
 }
 
@@ -101,7 +101,7 @@ data class Test(
     @CsvProperty("b")
     val second: String?,
     @CsvProperty("c")
-    val ce: String,
+    val ce: Lolz,
     val d: String?,
     val l: List<Instant>?
 )
