@@ -53,7 +53,7 @@ private object Converters {
         val result = allConverters[ConversionTargets(from.canonicalName, to.canonicalName)]
 
         if (result == null && to.superclass == (Enum::class.java)) {
-            // Special converter for enum entities
+            // Special converter for enums
             return allConverters[ConversionTargets(from.canonicalName, Enum::class.java.canonicalName)]
         }
 

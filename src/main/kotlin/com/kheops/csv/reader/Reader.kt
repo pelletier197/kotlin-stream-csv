@@ -73,7 +73,7 @@ data class TypedCsvLine<T>(
 
 fun main() {
     println(convert(Instant.now().toString(), Instant::class.java))
-    val resu = convert("TEST", Lolz::class.java)
+    val resu = convert(" ${Instant.now()} ", Instant::class.java)
     println(resu)
     val res = TypedCsvReader(Test::class.java).read(listOf("""a,b,"c",d""", """e,f,g,h,"","a ", sdsdfsd """).stream())
     println(res.collect(toList()))
