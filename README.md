@@ -1,3 +1,5 @@
+[![<ORG_NAME>](https://circleci.com/gh/Kheops-Engineering/kotlin-csv.svg?style=svg)](<LINK>)
+
 # Kotlin CSV
 > We are still working on this implementation for now, so it might not be stable yet.
 
