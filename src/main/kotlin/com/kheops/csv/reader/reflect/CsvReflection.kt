@@ -1,6 +1,7 @@
 package com.kheops.csv.reader.reflect
 
 import com.kheops.csv.CsvProperty
+import com.kheops.csv.reader.reflect.converters.ConversionSettings
 import java.lang.reflect.Field
 import java.util.*
 import kotlin.reflect.jvm.kotlinProperty
@@ -38,7 +39,7 @@ class CsvReflectionCreator<T>(private val target: Class<T>) {
         return value
     }
 
-    fun createCsvInstance(csvHeadersValues: Map<String, String?>): InstantiationWithErrors<T> {
+    fun createCsvInstance(csvHeadersValues: Map<String, String?>, settings: ConversionSettings): InstantiationWithErrors<T> {
         val ignoreCaseCsvHeader = csvHeadersValues.map { toIgnoreCaseToken(it.key) to it.value }.toMap()
 
         val arguments = fieldTranslation.map {
@@ -51,6 +52,6 @@ class CsvReflectionCreator<T>(private val target: Class<T>) {
             )
         }
 
-        return createInstance(target = target, arguments = arguments)
+        return createInstance(target = target, arguments = arguments, settings)
     }
 }

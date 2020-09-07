@@ -1,23 +1,16 @@
 package com.kheops.csv.reader.reflect
 
-import com.kheops.csv.CsvProperty
-import com.kheops.csv.reader.CsvErrorType
 import com.kheops.csv.reader.Test
 import com.kheops.csv.reader.reflect.converters.ConversionFailedException
+import com.kheops.csv.reader.reflect.converters.ConversionSettings
 import com.kheops.csv.reader.reflect.converters.NoConverterFoundException
 import com.kheops.csv.reader.reflect.converters.convertForField
 import java.lang.Exception
 import java.lang.reflect.Constructor
 import java.lang.reflect.Field
-import java.time.Instant
-import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.jvm.internal.Reflection
 import kotlin.reflect.KFunction
 import kotlin.reflect.KProperty
-import kotlin.reflect.jvm.javaConstructor
-import kotlin.reflect.jvm.kotlinProperty
 
 class InvalidTargetClass(
     target: Class<*>,
@@ -64,10 +57,10 @@ class InstantiationArgument(
     val originalTargetName: String
 )
 
-fun <T> createInstance(target: Class<T>, arguments: List<InstantiationArgument>): InstantiationWithErrors<T> {
+fun <T> createInstance(target: Class<T>, arguments: List<InstantiationArgument>, settings: ConversionSettings): InstantiationWithErrors<T> {
     val constructor = getTargetConstructor<T>(target, arguments.map { it.field })
     val errors = ArrayList<InstantiationError>()
-    val args = buildConstructorArguments(constructor, arguments, errors)
+    val args = buildConstructorArguments(constructor, arguments, settings, errors)
 
     if (errors.isNotEmpty()) {
         return InstantiationWithErrors(
@@ -85,6 +78,7 @@ fun <T> createInstance(target: Class<T>, arguments: List<InstantiationArgument>)
 private fun <T> buildConstructorArguments(
     constructor: GenericConstructor<T>,
     arguments: List<InstantiationArgument>,
+    settings: ConversionSettings,
     errors: MutableList<InstantiationError>
 ): Array<Any?> {
     val instantiationFieldByName = arguments.map { it.field.name to it }.toMap()
@@ -99,7 +93,7 @@ private fun <T> buildConstructorArguments(
         }
 
         try {
-            return fieldValue?.let { convertForField<String, Any?>(fieldValue, instField.field.field) }
+            return fieldValue?.let { convertForField<String, Any?>(fieldValue, instField.field.field, settings) }
         } catch (e: NoConverterFoundException) {
             errors.add(createError(instField, InstantiationErrorType.NO_CONVERTER_FOUND_FOR_VALUE, e))
         } catch (e: ConversionFailedException) {
