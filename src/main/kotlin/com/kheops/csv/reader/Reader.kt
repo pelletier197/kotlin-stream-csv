@@ -2,6 +2,8 @@ package com.kheops.csv.reader
 
 import com.kheops.csv.CsvProperty
 import com.kheops.csv.reader.reflect.CsvReflectionCreator
+import com.kheops.csv.reader.reflect.converters.convert
+import java.time.Instant
 import java.util.stream.Collectors.toList
 import java.util.stream.Stream
 
@@ -69,6 +71,9 @@ data class TypedCsvLine<T>(
 }
 
 fun main() {
+    println(convert(Instant.now().toString(), Instant::class.java))
+    val resu = convert("1232", Long::class.java)
+    println(resu)
     val res = TypedCsvReader(Test::class.java).read(listOf("""a,b,"c",d""", """e,f,g,h,"","a ", sdsdfsd """).stream())
     println(res.collect(toList()))
 }
