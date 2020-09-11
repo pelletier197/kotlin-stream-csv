@@ -223,6 +223,8 @@ class RawCsvReaderTest : ShouldSpec({
             }
         }
     }
+
+    afterSpec { Files.delete(Paths.get(filePath)) }
 })
 
 private fun writeFile(content: String) {
