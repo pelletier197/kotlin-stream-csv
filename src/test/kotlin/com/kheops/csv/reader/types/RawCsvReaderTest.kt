@@ -3,11 +3,8 @@ package com.kheops.csv.reader.types
 import com.kheops.csv.reader.CsvReader
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Assertions.*
 import java.io.File
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.streams.toList
 
