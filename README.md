@@ -13,3 +13,4 @@ A pure kotlin implementation of the CSV parser. This implementation uses the sim
 ## Known limitations
 As for now, this implementation does not yet respect all specifications of [RFC-4180](https://tools.ietf.org/html/rfc4180). 
 - Field containing line breaks is not yet supported
+- Escaping a string is not yet supported 

@@ -21,7 +21,6 @@ data class RawCsvLine(
 data class RawCsvReader(
     val separator: String = ",",
     val delimiter: String = "\"",
-    val escapeCharacter: String = "\"",
     val trimEntries: Boolean = false,
     val skipEmptyLines: Boolean = true,
     val emptyStringsAsNull: Boolean = false
@@ -48,7 +47,7 @@ data class RawCsvReader(
         return read(lines.stream())
     }
 
-    fun read(value: String) : Stream<RawCsvLine> {
+    fun read(value: String): Stream<RawCsvLine> {
         return read(value.lines().stream())
     }
 
@@ -63,10 +62,6 @@ data class RawCsvReader(
 
     fun withDelimiter(delimiter: String): RawCsvReader {
         return copy(delimiter = delimiter)
-    }
-
-    fun withEscapeCharacter(character: String): RawCsvReader {
-        return copy(escapeCharacter = character)
     }
 
     fun withTrimEntries(trim: Boolean): RawCsvReader {
@@ -85,12 +80,21 @@ data class RawCsvReader(
         lines: Stream<String>,
     ): Stream<RawCsvLine> {
         val index = AtomicInteger(1)
-        return lines.map {
-            RawCsvLine(
-                columns = regex.findAll(it).toList().map { v -> format(v.groupValues.last()) },
-                line = index.getAndIncrement(),
-            )
+        return lines.map { parseToCsvLine(it, index.getAndIncrement()) }
+    }
+
+    private fun parseToCsvLine(
+        it: String,
+        index: Int
+    ): RawCsvLine {
+        if (it.isBlank()) {
+            return RawCsvLine(columns = emptyList(), line = index)
         }
+
+        return RawCsvLine(
+            columns = regex.findAll(it).toList().map { v -> format(v.groupValues.last()) },
+            line = index,
+        )
     }
 
     private fun format(value: String): String? {
@@ -118,8 +122,7 @@ data class RawCsvReader(
     private fun buildSplitRegex(): Regex {
         val s = separator
         val d = delimiter
-        val e = escapeCharacter
         // https://stackoverflow.com/questions/18144431/regex-to-split-a-csv/18147076
-        return Regex("(?:$s|\\n|^)($d(?:(?:$e$d)*[^$d]*)*$d|[^$d$s\\n]*|(?:\\n|\$))")
+        return Regex("(?:$s|\\n|^)($d(?:(?:$d$d)*[^$d]*)*$d|[^$d$s\\n]*|(?:\\n|\$))")
     }
 }

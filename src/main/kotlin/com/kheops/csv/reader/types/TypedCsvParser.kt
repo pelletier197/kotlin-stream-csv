@@ -31,10 +31,6 @@ data class TypedCsvReader<T>(
         return copy(reader = reader.withDelimiter(delimiter))
     }
 
-    fun withEscapeCharacter(character: String): TypedCsvReader<T> {
-        return copy(reader = reader.withEscapeCharacter(character))
-    }
-
     fun withTrimEntries(trim: Boolean): TypedCsvReader<T> {
         return copy(reader = reader.withTrimEntries(trim))
     }

@@ -28,10 +28,6 @@ data class HeaderCsvReader(
         return copy(reader = reader.withDelimiter(delimiter))
     }
 
-    fun withEscapeCharacter(character: String): HeaderCsvReader {
-        return copy(reader = reader.withEscapeCharacter(character))
-    }
-
     fun withTrimEntries(trim: Boolean): HeaderCsvReader {
         return copy(reader = reader.withTrimEntries(trim))
     }
