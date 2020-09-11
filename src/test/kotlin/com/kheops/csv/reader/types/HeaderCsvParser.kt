@@ -1,14 +1,5 @@
 package com.kheops.csv.reader.types
 
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.net.URL
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Stream
 
@@ -43,30 +34,6 @@ data class HeaderCsvReader(
 
     fun withEmptyStringsAsNull(emptyAsNulls: Boolean): HeaderCsvReader {
         return copy(reader = reader.withEmptyStringsAsNull(emptyAsNulls))
-    }
-
-    fun read(url: URL, charset: Charset = StandardCharsets.UTF_8): Stream<HeaderCsvLine> {
-        return readRaw(reader.read(url, charset))
-    }
-
-    fun read(input: InputStream, charset: Charset = StandardCharsets.UTF_8): Stream<HeaderCsvLine> {
-        return readRaw(reader.read(input, charset))
-    }
-
-    fun read(file: File): Stream<HeaderCsvLine> {
-        return readRaw(reader.read(file))
-    }
-
-    fun read(path: Path): Stream<HeaderCsvLine> {
-        return readRaw(reader.read(path))
-    }
-
-    fun read(lines: List<String>): Stream<HeaderCsvLine> {
-        return readRaw(reader.read(lines))
-    }
-
-    fun read(value: String): Stream<HeaderCsvLine> {
-        return readRaw(reader.read(value))
     }
 
     fun read(lines: Stream<String>): Stream<HeaderCsvLine> {

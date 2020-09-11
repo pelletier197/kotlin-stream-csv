@@ -19,10 +19,6 @@ data class TypedCsvReader<T>(
         listSeparator = listSeparator
     )
 
-    fun read(lines: Stream<String>): Stream<TypedCsvLine<T>> {
-        return readHeaderLines(reader.read(lines))
-    }
-
     fun withSeparator(separator: String): TypedCsvReader<T> {
         return copy(reader = reader.withSeparator(separator))
     }
@@ -45,6 +41,10 @@ data class TypedCsvReader<T>(
 
     fun withListSeparator(listSeparator: String): TypedCsvReader<T> {
         return copy(listSeparator = listSeparator)
+    }
+
+    fun read(lines: Stream<String>): Stream<TypedCsvLine<T>> {
+        return readHeaderLines(reader.read(lines))
     }
 
     fun readHeaderLines(lines: Stream<HeaderCsvLine>): Stream<TypedCsvLine<T>> {
