@@ -1,4 +1,4 @@
-package com.kheops.csv.reader
+package com.kheops.csv.reader.types
 
 import java.io.BufferedReader
 import java.io.File
@@ -46,6 +46,10 @@ data class RawCsvReader(
 
     fun read(lines: List<String>): Stream<RawCsvLine> {
         return read(lines.stream())
+    }
+
+    fun read(value: String) : Stream<RawCsvLine> {
+        return read(value.lines().stream())
     }
 
     fun read(lines: Stream<String>): Stream<RawCsvLine> {
@@ -108,7 +112,7 @@ data class RawCsvReader(
         if (trimmed.startsWith(delimiter) && trimmed.endsWith(delimiter)) {
             return trimmed.drop(1).dropLast(1)
         }
-        return trimmed
+        return value
     }
 
     private fun buildSplitRegex(): Regex {

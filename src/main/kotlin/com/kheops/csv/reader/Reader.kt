@@ -1,10 +1,8 @@
 package com.kheops.csv.reader
 
-import com.kheops.csv.CsvProperty
-import com.kheops.csv.reader.reflect.converters.convertToClass
-import com.kheops.csv.reader.reflect.converters.convertToType
-import java.time.Instant
-import java.util.stream.Collectors.toList
+import com.kheops.csv.reader.types.HeaderCsvReader
+import com.kheops.csv.reader.types.RawCsvReader
+import com.kheops.csv.reader.types.TypedCsvReader
 
 class CsvReader {
     inline fun <reified T> readerForType(): TypedCsvReader<T> {

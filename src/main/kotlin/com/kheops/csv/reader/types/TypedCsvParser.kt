@@ -1,5 +1,8 @@
-package com.kheops.csv.reader
+package com.kheops.csv.reader.types
 
+import com.kheops.csv.reader.CsvError
+import com.kheops.csv.reader.CsvErrorType
+import com.kheops.csv.reader.CsvParsingException
 import com.kheops.csv.reader.reflect.CsvReflectionCreator
 import com.kheops.csv.reader.reflect.InstantiationError
 import com.kheops.csv.reader.reflect.converters.ConversionSettings

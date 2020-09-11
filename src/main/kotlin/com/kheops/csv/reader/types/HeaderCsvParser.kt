@@ -1,4 +1,4 @@
-package com.kheops.csv.reader
+package com.kheops.csv.reader.types
 
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Stream

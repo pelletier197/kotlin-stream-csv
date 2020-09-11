@@ -1,7 +1,5 @@
 package com.kheops.csv.reader
 
-import javax.lang.model.type.ErrorType
-
 enum class CsvErrorType {
     NON_NULL_RESULT_EXPECTED,
     NON_NULLABLE_FIELD_IS_NULL,
