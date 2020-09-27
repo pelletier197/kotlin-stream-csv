@@ -47,7 +47,7 @@ data class TypedCsvReader<T>(
         return readHeaderLines(reader.read(lines))
     }
 
-    fun readHeaderLines(lines: Stream<HeaderCsvLine>): Stream<TypedCsvLine<T>> {
+    private fun readHeaderLines(lines: Stream<HeaderCsvLine>): Stream<TypedCsvLine<T>> {
         return lines.map {
             val mappedInstance = csvReflectionCreator.createCsvInstance(
                 csvHeadersValues = it.values, settings = conversionSettings

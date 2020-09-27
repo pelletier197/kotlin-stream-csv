@@ -1,13 +1,10 @@
 package com.kheops.csv.reader.types
 
-import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
-import java.io.InputStreamReader
 import java.net.URL
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
-import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Stream
@@ -73,7 +70,7 @@ data class HeaderCsvReader(
         return readRaw(reader.read(lines))
     }
 
-    fun readRaw(lines: Stream<RawCsvLine>): Stream<HeaderCsvLine> {
+    private fun readRaw(lines: Stream<RawCsvLine>): Stream<HeaderCsvLine> {
         val currentHeader = AtomicReference(this.header)
         return lines.filter { setHeaderAndSkip(it, currentHeader) }.map {
             HeaderCsvLine(

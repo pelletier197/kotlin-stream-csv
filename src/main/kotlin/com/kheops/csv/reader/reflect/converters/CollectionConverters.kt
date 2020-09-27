@@ -4,27 +4,46 @@ import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
-abstract class BaseStringToListConverter<TO> : Converter<String, TO> {
+abstract class BaseStringToCollectionConverter<TO> : Converter<String, TO> {
     override val source: Class<String> get() = String::class.java
 
 }
 
-class StringToListConverter : BaseStringToListConverter<List<*>>() {
+class StringToListConverter : BaseStringToCollectionConverter<List<*>>() {
     override val target: Class<List<*>> get() = List::class.java
     override fun convert(value: String, to: Type, settings: ConversionSettings): List<*> = asList(value, to, settings)
 }
 
-class StringToArrayListConverter : BaseStringToListConverter<ArrayList<*>>() {
+class StringToArrayListConverter : BaseStringToCollectionConverter<ArrayList<*>>() {
     override val target: Class<ArrayList<*>> get() = ArrayList::class.java
     override fun convert(value: String, to: Type, settings: ConversionSettings): ArrayList<*> =
         ArrayList(asList(value, to, settings))
 }
 
-class StringToLinkedListConverter : BaseStringToListConverter<LinkedList<*>>() {
+class StringToLinkedListConverter : BaseStringToCollectionConverter<LinkedList<*>>() {
     override val target: Class<LinkedList<*>> get() = LinkedList::class.java
     override fun convert(value: String, to: Type, settings: ConversionSettings): LinkedList<*> =
         LinkedList(asList(value, to, settings))
+}
+
+class StringToSetConverter : BaseStringToCollectionConverter<Set<*>>() {
+    override val target: Class<Set<*>> get() = Set::class.java
+    override fun convert(value: String, to: Type, settings: ConversionSettings): Set<*> =
+        asList(value, to, settings).toSet()
+}
+
+class StringToHashSetConverter : BaseStringToCollectionConverter<HashSet<*>>() {
+    override val target: Class<HashSet<*>> get() = HashSet::class.java
+    override fun convert(value: String, to: Type, settings: ConversionSettings): HashSet<*> =
+        HashSet(asList(value, to, settings))
+}
+
+class StringToTreeSetConverter : BaseStringToCollectionConverter<TreeSet<*>>() {
+    override val target: Class<TreeSet<*>> get() = TreeSet::class.java
+    override fun convert(value: String, to: Type, settings: ConversionSettings): TreeSet<*> =
+        TreeSet(asList(value, to, settings))
 }
 
 private fun asList(value: String, to: Type, settings: ConversionSettings): List<*> {

@@ -56,6 +56,9 @@ private object Converters {
             StringToListConverter(),
             StringToArrayListConverter(),
             StringToLinkedListConverter(),
+            StringToSetConverter(),
+            StringToHashSetConverter(),
+            StringToTreeSetConverter(),
         ).forEach { registerConverter(it) }
     }
 
@@ -88,11 +91,13 @@ private object Converters {
 }
 
 class NoConverterFoundException(value: Any, target: Type) :
-    Exception("""
+    Exception(
+        """
         could not find a converter for value '${value}' of type '${value::class.java.name}' to '${target.typeName}'.
         It is possible the value you are trying to convert is not supported by default. You can add the custom converter yourself by calling
         com.kheops.csv.reader.reflect.converters.registerConverter(com.kheops.csv.reader.reflect.converters.Converter)
-    """.trimMargin())
+    """.trimMargin()
+    )
 
 class ConversionFailedException(value: Any, target: Type, exception: Exception) :
     Exception(
