@@ -19,8 +19,8 @@ data class RawCsvLine(
 )
 
 data class RawCsvReader(
-    val separator: String = ",",
-    val delimiter: String = "\"",
+    val separator: Char = ',',
+    val delimiter: Char = '"',
     val trimEntries: Boolean = false,
     val skipEmptyLines: Boolean = true,
     val emptyStringsAsNull: Boolean = false
@@ -56,11 +56,11 @@ data class RawCsvReader(
         return processLines(skippedEmptyLines)
     }
 
-    fun withSeparator(separator: String): RawCsvReader {
+    fun withSeparator(separator: Char): RawCsvReader {
         return copy(separator = separator)
     }
 
-    fun withDelimiter(delimiter: String): RawCsvReader {
+    fun withDelimiter(delimiter: Char): RawCsvReader {
         return copy(delimiter = delimiter)
     }
 

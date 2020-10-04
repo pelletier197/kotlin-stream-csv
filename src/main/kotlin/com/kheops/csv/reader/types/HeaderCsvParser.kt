@@ -22,11 +22,11 @@ data class HeaderCsvReader(
         return copy(header = header)
     }
 
-    fun withSeparator(separator: String): HeaderCsvReader {
+    fun withSeparator(separator: Char): HeaderCsvReader {
         return copy(reader = reader.withSeparator(separator))
     }
 
-    fun withDelimiter(delimiter: String): HeaderCsvReader {
+    fun withDelimiter(delimiter: Char): HeaderCsvReader {
         return copy(reader = reader.withDelimiter(delimiter))
     }
 

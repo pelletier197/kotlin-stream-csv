@@ -4,11 +4,9 @@ import com.kheops.csv.reader.CsvReader
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import java.io.File
-import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.streams.toList
 
-private const val filePath = "test.csv"
 
 class RawCsvReaderTest : ShouldSpec({
     val underTest = CsvReader().reader()
@@ -55,7 +53,7 @@ class RawCsvReaderTest : ShouldSpec({
         }
 
         context("parsing CSV from path") {
-            beforeTest { writeFile(csv) }
+            beforeTest { writeTestFile(csv) }
 
             should("parse and return all CSV lines") {
                 underTest.read(Paths.get(filePath)).toList().shouldContainExactly(expectedLines)
@@ -63,7 +61,7 @@ class RawCsvReaderTest : ShouldSpec({
         }
 
         context("parsing CSV from file") {
-            beforeTest { writeFile(csv) }
+            beforeTest { writeTestFile(csv) }
 
             should("parse and return all CSV lines") {
                 underTest.read(File(filePath)).toList().shouldContainExactly(expectedLines)
@@ -71,7 +69,7 @@ class RawCsvReaderTest : ShouldSpec({
         }
 
         context("parsing CSV from URL") {
-            beforeTest { writeFile(csv) }
+            beforeTest { writeTestFile(csv) }
 
             should("parse and return all CSV lines") {
                 @Suppress("BlockingMethodInNonBlockingContext")
@@ -97,7 +95,7 @@ class RawCsvReaderTest : ShouldSpec({
             }
 
             should("use only the custom separator to split") {
-                underTest.withSeparator(";").read(csv).toList().shouldContainExactly(
+                underTest.withSeparator(';').read(csv).toList().shouldContainExactly(
                     RawCsvLine(
                         columns = listOf("a", "b", "c,4"),
                         line = 1
@@ -124,7 +122,7 @@ class RawCsvReaderTest : ShouldSpec({
 
         context("with custom delimiter") {
             should("use only custom delimiter to ") {
-                underTest.withDelimiter("'").read(csv).toList().shouldContainExactly(
+                underTest.withDelimiter('\'').read(csv).toList().shouldContainExactly(
                     RawCsvLine(
                         columns = listOf("a", "\"b", " c\"", "c, d"),
                         line = 1
@@ -224,9 +222,7 @@ class RawCsvReaderTest : ShouldSpec({
         }
     }
 
-    afterSpec { Files.delete(Paths.get(filePath)) }
+    afterSpec { deleteTestFile() }
 })
 
-private fun writeFile(content: String) {
-    Files.writeString(Paths.get(filePath), content)
-}
+

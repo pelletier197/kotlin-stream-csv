@@ -19,11 +19,11 @@ data class TypedCsvReader<T>(
         listSeparator = listSeparator
     )
 
-    fun withSeparator(separator: String): TypedCsvReader<T> {
+    fun withSeparator(separator: Char): TypedCsvReader<T> {
         return copy(reader = reader.withSeparator(separator))
     }
 
-    fun withDelimiter(delimiter: String): TypedCsvReader<T> {
+    fun withDelimiter(delimiter: Char): TypedCsvReader<T> {
         return copy(reader = reader.withDelimiter(delimiter))
     }
 
