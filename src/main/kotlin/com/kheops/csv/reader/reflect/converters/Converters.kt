@@ -81,7 +81,7 @@ internal class Converters(converters: List<Converter<*, *>> = defaultConverters)
 
     init {
         allConverters = converters.map { converter ->
-            ConversionTargets(converter.source.canonicalName, converter.target.canonicalName) to ConverterWrapper(
+            ConversionTargets(converter.source.name, converter.target.name) to ConverterWrapper(
                 converter = converter,
                 function = Converter::class.functions.find { f -> f.name == "convert" }
                     ?: error("expected a function convert inside the converter interface")
@@ -93,11 +93,11 @@ internal class Converters(converters: List<Converter<*, *>> = defaultConverters)
 
     fun getConverter(from: Class<*>, to: Type): ConverterWrapper? {
         val typeName = getConverterTypeName(to) ?: return null
-        val result = allConverters[ConversionTargets(from.canonicalName, typeName)]
+        val result = allConverters[ConversionTargets(from.name, typeName)]
 
         if (result == null && to is Class<*> && to.isEnum) {
             // Special converter for enums
-            return allConverters[ConversionTargets(from.canonicalName, Enum::class.java.canonicalName)]
+            return allConverters[ConversionTargets(from.name, Enum::class.java.name)]
         }
 
         return result
@@ -122,7 +122,7 @@ internal class Converters(converters: List<Converter<*, *>> = defaultConverters)
     }
 
     private fun getConverterTypeName(type: Type): String? {
-        if (type is Class<*>) return type.canonicalName
+        if (type is Class<*>) return type.name
         if (type is ParameterizedType) return type.rawType.typeName
         return null
     }

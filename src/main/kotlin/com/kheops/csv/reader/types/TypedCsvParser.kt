@@ -18,7 +18,7 @@ import java.util.stream.Stream
 
 data class TypedCsvReader<T>(
     val targetClass: Class<T>,
-    val listSeparator: String = ",",
+    val listSeparator: Char = ',',
     private val creator: CsvReflectionCreator<T> = CsvReflectionCreator(targetClass),
     private val reader: HeaderCsvReader = HeaderCsvReader()
 ) {
@@ -46,7 +46,7 @@ data class TypedCsvReader<T>(
         return copy(reader = reader.withEmptyStringsAsNull(emptyAsNulls))
     }
 
-    fun withListSeparator(listSeparator: String): TypedCsvReader<T> {
+    fun withListSeparator(listSeparator: Char): TypedCsvReader<T> {
         return copy(listSeparator = listSeparator)
     }
 

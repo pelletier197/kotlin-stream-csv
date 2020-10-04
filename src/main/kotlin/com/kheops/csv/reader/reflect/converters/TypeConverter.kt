@@ -4,7 +4,7 @@ import java.lang.reflect.Field
 import java.lang.reflect.Type
 
 class ConversionSettings(
-    val listSeparator: String = ","
+    val listSeparator: Char = ','
 )
 
 class NoConverterFoundException(value: Any, target: Type) :

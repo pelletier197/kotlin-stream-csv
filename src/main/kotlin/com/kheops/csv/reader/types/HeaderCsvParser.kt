@@ -82,7 +82,7 @@ data class HeaderCsvReader(
 
     private fun setHeaderAndSkip(rawCsvLine: RawCsvLine, currentHeader: AtomicReference<List<String>?>): Boolean {
         if (currentHeader.get() == null) {
-            currentHeader.set(rawCsvLine.columns.filterNotNull())
+            currentHeader.set(rawCsvLine.columns.filterNotNull().map { it.trim() })
             return false
         }
         return true
