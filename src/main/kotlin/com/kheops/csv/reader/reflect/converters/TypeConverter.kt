@@ -67,5 +67,20 @@ class TypeConverter private constructor(private val converters: Converters) {
     fun withClearedConverters(): TypeConverter {
         return TypeConverter(converters = converters.withClearedConverters())
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as TypeConverter
+
+        if (converters != other.converters) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return converters.hashCode()
+    }
 }
 

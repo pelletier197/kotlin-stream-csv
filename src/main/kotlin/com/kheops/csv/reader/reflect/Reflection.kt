@@ -53,25 +53,19 @@ class InstantiationArgument(
     val originalTargetName: String
 )
 
-class InstanceCreator(
+data class InstanceCreator(
     private val typeConverter: TypeConverter = TypeConverter.getDefault()
 ) {
     fun withConverter(newConverter: Converter<*, *>): InstanceCreator {
-        return InstanceCreator(
-            typeConverter = typeConverter.withConverter(newConverter)
-        )
+        return copy(typeConverter = typeConverter.withConverter(newConverter))
     }
 
     fun withConverters(newConverters: List<Converter<*, *>>): InstanceCreator {
-        return InstanceCreator(
-            typeConverter = typeConverter.withConverters(newConverters)
-        )
+        return copy(typeConverter = typeConverter.withConverters(newConverters))
     }
 
     fun withClearedConverters(): InstanceCreator {
-        return InstanceCreator(
-            typeConverter = typeConverter.withClearedConverters()
-        )
+        return copy(typeConverter = typeConverter.withClearedConverters())
     }
 
     fun <T> createInstance(

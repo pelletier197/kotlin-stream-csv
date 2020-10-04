@@ -126,4 +126,19 @@ internal class Converters(converters: List<Converter<*, *>> = defaultConverters)
         if (type is ParameterizedType) return type.rawType.typeName
         return null
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Converters
+
+        if (allConverters != other.allConverters) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return allConverters.hashCode()
+    }
 }

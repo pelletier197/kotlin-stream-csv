@@ -4,6 +4,7 @@ import com.kheops.csv.reader.filePath
 import com.kheops.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 import java.io.File
 import java.nio.file.Paths
 import java.time.Instant
@@ -18,6 +19,68 @@ data class TestClass(
 
 class TypedCsvReaderTest : ShouldSpec({
     val underTest = TypedCsvReader(TestClass::class.java)
+
+    context("a request to set header reader parameters") {
+        context("configuring separator") {
+            should("update raw reader with given separator") {
+                underTest.withSeparator('/')
+                    .shouldBe(
+                        TypedCsvReader(
+                            targetClass = TestClass::class.java,
+                            reader = HeaderCsvReader(reader = RawCsvReader(separator = '/'))
+                        )
+                    )
+            }
+        }
+        context("configuring delimiter") {
+            should("update raw reader with given delimiter") {
+                underTest.withDelimiter('@').shouldBe(
+                    TypedCsvReader(
+                        targetClass = TestClass::class.java,
+                        reader = HeaderCsvReader(reader = RawCsvReader(delimiter = '@'))
+                    )
+                )
+            }
+        }
+        context("setting trim entries parameter") {
+            should("update raw reader with given parameter") {
+                listOf(false, true).forEach {
+                    underTest.withTrimEntries(it).shouldBe(
+                        TypedCsvReader(
+                            targetClass = TestClass::class.java,
+                            reader = HeaderCsvReader(reader = RawCsvReader(trimEntries = it))
+                        )
+                    )
+                }
+            }
+        }
+        context("setting skip empty lines parameter") {
+            should("update raw reader with given parameter") {
+                listOf(false, true).forEach {
+                    underTest.withSkipEmptyLines(it)
+                        .shouldBe(
+                            TypedCsvReader(
+                                targetClass = TestClass::class.java,
+                                reader = HeaderCsvReader(reader = RawCsvReader(skipEmptyLines = it))
+                            )
+                        )
+                }
+            }
+        }
+        context("setting empty strings as null parameter") {
+            should("update raw reader with given parameter") {
+                listOf(false, true).forEach {
+                    underTest.withEmptyStringsAsNull(it)
+                        .shouldBe(
+                            TypedCsvReader(
+                                targetClass = TestClass::class.java,
+                                reader = HeaderCsvReader(reader = RawCsvReader(emptyStringsAsNull = it))
+                            )
+                        )
+                }
+            }
+        }
+    }
 
     context("on a regular CSV") {
         val csv = """
@@ -85,7 +148,5 @@ class TypedCsvReaderTest : ShouldSpec({
             }
         }
     }
-
-
 })
 

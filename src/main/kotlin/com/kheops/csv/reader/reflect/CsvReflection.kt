@@ -7,7 +7,7 @@ import java.lang.reflect.Field
 import java.util.*
 import kotlin.reflect.jvm.kotlinProperty
 
-class CsvReflectionCreator<T>(
+data class CsvReflectionCreator<T>(
     private val target: Class<T>,
     private val instanceCreator: InstanceCreator = InstanceCreator()
 ) {
@@ -63,23 +63,14 @@ class CsvReflectionCreator<T>(
     }
 
     fun withConverter(newConverter: Converter<*, *>): CsvReflectionCreator<T> {
-        return CsvReflectionCreator(
-            target = target,
-            instanceCreator = instanceCreator.withConverter(newConverter)
-        )
+        return copy(instanceCreator = instanceCreator.withConverter(newConverter))
     }
 
     fun withConverters(newConverters: List<Converter<*, *>>): CsvReflectionCreator<T> {
-        return CsvReflectionCreator(
-            target = target,
-            instanceCreator = instanceCreator.withConverters(newConverters)
-        )
+        return copy(instanceCreator = instanceCreator.withConverters(newConverters))
     }
 
     fun withClearedConverters(): CsvReflectionCreator<T> {
-        return CsvReflectionCreator(
-            target = target,
-            instanceCreator = instanceCreator.withClearedConverters()
-        )
+        return copy(instanceCreator = instanceCreator.withClearedConverters())
     }
 }
