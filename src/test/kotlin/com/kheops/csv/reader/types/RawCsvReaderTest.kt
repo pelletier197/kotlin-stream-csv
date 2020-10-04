@@ -1,6 +1,9 @@
 package com.kheops.csv.reader.types
 
 import com.kheops.csv.reader.CsvReader
+import com.kheops.csv.reader.deleteTestFile
+import com.kheops.csv.reader.filePath
+import com.kheops.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import java.io.File

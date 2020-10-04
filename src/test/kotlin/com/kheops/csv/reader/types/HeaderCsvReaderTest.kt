@@ -1,5 +1,8 @@
 package com.kheops.csv.reader.types
 
+import com.kheops.csv.reader.deleteTestFile
+import com.kheops.csv.reader.filePath
+import com.kheops.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -108,6 +111,54 @@ class HeaderCsvReaderTest : ShouldSpec({
             should("parse and return all CSV lines with their header") {
                 @Suppress("BlockingMethodInNonBlockingContext")
                 underTest.read(Paths.get(filePath).toUri().toURL()).toList().shouldContainExactly(expectedLines)
+            }
+        }
+    }
+
+    context("different header provisioning") {
+        val csv = """
+            a1,b1,c1
+            12,14,67
+        """.trimIndent()
+        context("header is provided") {
+            val underTestWithHeader = underTest.withHeader(listOf("c1", "c2", "c3"))
+            val expectedLinesWithHeader = listOf(
+                HeaderCsvLine(
+                    values = mapOf(
+                        "c1" to "a1",
+                        "c2" to "b1",
+                        "c3" to "c1",
+                    ),
+                    line = 1
+                ),
+                HeaderCsvLine(
+                    values = mapOf(
+                        "c1" to "12",
+                        "c2" to "14",
+                        "c3" to "67",
+                    ),
+                    line = 2
+                )
+            )
+
+            should("use provided header") {
+                underTestWithHeader.read(csv).toList().shouldBe(expectedLinesWithHeader)
+            }
+        }
+
+        context("header is not provided") {
+            val expectedLines = listOf(
+                HeaderCsvLine(
+                    values = mapOf(
+                        "a1" to "12",
+                        "b1" to "14",
+                        "c1" to "67",
+                    ),
+                    line = 2
+                )
+            )
+            should("use first non empty line as the header provider") {
+                underTest.read(csv).toList().shouldBe(expectedLines)
             }
         }
     }

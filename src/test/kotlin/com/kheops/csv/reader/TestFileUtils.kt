@@ -1,4 +1,4 @@
-package com.kheops.csv.reader.types
+package com.kheops.csv.reader
 
 import java.nio.file.Files
 import java.nio.file.Paths

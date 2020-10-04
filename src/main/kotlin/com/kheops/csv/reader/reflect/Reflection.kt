@@ -1,9 +1,6 @@
 package com.kheops.csv.reader.reflect
 
-import com.kheops.csv.reader.reflect.converters.ConversionFailedException
-import com.kheops.csv.reader.reflect.converters.ConversionSettings
-import com.kheops.csv.reader.reflect.converters.NoConverterFoundException
-import com.kheops.csv.reader.reflect.converters.convertForField
+import com.kheops.csv.reader.reflect.converters.*
 import java.lang.Exception
 import java.lang.reflect.Constructor
 import java.lang.reflect.Field
@@ -56,97 +53,112 @@ class InstantiationArgument(
     val originalTargetName: String
 )
 
-fun <T> createInstance(target: Class<T>, arguments: List<InstantiationArgument>, settings: ConversionSettings): InstantiationWithErrors<T> {
-    val constructor = getTargetConstructor<T>(target, arguments.map { it.field })
-    val errors = ArrayList<InstantiationError>()
-    val args = buildConstructorArguments(constructor, arguments, settings, errors)
+class InstanceCreator(
+    private val typeConverter: TypeConverter = TypeConverter.getDefault()
+) {
+    fun <T> createInstance(
+        target: Class<T>,
+        arguments: List<InstantiationArgument>,
+        settings: ConversionSettings
+    ): InstantiationWithErrors<T> {
+        val constructor = getTargetConstructor<T>(target, arguments.map { it.field })
+        val errors = ArrayList<InstantiationError>()
+        val args = buildConstructorArguments(constructor, arguments, settings, errors)
 
-    if (errors.isNotEmpty()) {
+        if (errors.isNotEmpty()) {
+            return InstantiationWithErrors(
+                result = null,
+                errors = errors
+            )
+        }
+
         return InstantiationWithErrors(
-            result = null,
+            result = constructor.call(args),
             errors = errors
         )
     }
 
-    return InstantiationWithErrors(
-        result = constructor.call(args),
-        errors = errors
-    )
-}
+    private fun <T> buildConstructorArguments(
+        constructor: GenericConstructor<T>,
+        arguments: List<InstantiationArgument>,
+        settings: ConversionSettings,
+        errors: MutableList<InstantiationError>
+    ): Array<Any?> {
+        val instantiationFieldByName = arguments.map { it.field.name to it }.toMap()
+        val names = constructor.parameterNames
+        return names.map(fun(it: String): Any? {
+            val instField = instantiationFieldByName[it] ?: error("no field found with name '${it}'")
+            val fieldValue = instField.value
 
-private fun <T> buildConstructorArguments(
-    constructor: GenericConstructor<T>,
-    arguments: List<InstantiationArgument>,
-    settings: ConversionSettings,
-    errors: MutableList<InstantiationError>
-): Array<Any?> {
-    val instantiationFieldByName = arguments.map { it.field.name to it }.toMap()
-    val names = constructor.parameterNames
-    return names.map(fun(it: String): Any? {
-        val instField = instantiationFieldByName[it] ?: error("no field found with name '${it}'")
-        val fieldValue = instField.value
+            if (fieldValue == null && !instField.field.isNullable) {
+                errors.add(createError(instField, InstantiationErrorType.NON_NULLABLE_FIELD_IS_NULL))
+                return null
+            }
 
-        if (fieldValue == null && !instField.field.isNullable) {
-            errors.add(createError(instField, InstantiationErrorType.NON_NULLABLE_FIELD_IS_NULL))
+            try {
+                return fieldValue?.let {
+                    typeConverter.convertForField<String, Any?>(
+                        fieldValue,
+                        instField.field.field,
+                        settings
+                    )
+                }
+            } catch (e: NoConverterFoundException) {
+                errors.add(createError(instField, InstantiationErrorType.NO_CONVERTER_FOUND_FOR_VALUE, e))
+            } catch (e: ConversionFailedException) {
+                errors.add(createError(instField, InstantiationErrorType.CONVERSION_OF_FIELD_FAILED, e))
+            }
             return null
-        }
+        }).toTypedArray()
+    }
 
-        try {
-            return fieldValue?.let { convertForField<String, Any?>(fieldValue, instField.field.field, settings) }
-        } catch (e: NoConverterFoundException) {
-            errors.add(createError(instField, InstantiationErrorType.NO_CONVERTER_FOUND_FOR_VALUE, e))
-        } catch (e: ConversionFailedException) {
-            errors.add(createError(instField, InstantiationErrorType.CONVERSION_OF_FIELD_FAILED, e))
-        }
-        return null
-    }).toTypedArray()
+    private fun createError(
+        argument: InstantiationArgument,
+        type: InstantiationErrorType,
+        ex: Exception? = null
+    ): InstantiationError {
+        return InstantiationError(
+            field = argument.field.name,
+            originalField = argument.originalTargetName,
+            type = type,
+            cause = ex
+        )
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T> getTargetConstructor(
+        target: Class<*>,
+        fields: Collection<InstantiationField>
+    ): GenericConstructor<T> {
+        val fieldNames = fields.map { it.name }
+        return try {
+            (target.kotlin.constructors.find { constructor ->
+                constructor.parameters.map { it.name }.containsAll(fieldNames)
+            } as KFunction<T>?)?.let { KotlinConstructor<T>(it) }
+        } catch (ex: KotlinReflectionNotSupportedError) {
+            (target.constructors.find { constructor ->
+                constructor.parameters.map { it.name }.containsAll(fieldNames)
+            } as Constructor<T>?)?.let { JavaConstructor(it) }
+        } ?: throw InvalidTargetClass(target, fields)
+    }
+
+    private interface GenericConstructor<T> {
+        val parameterNames: List<String>
+        fun call(args: Array<Any?>): T
+    }
+
+    private class JavaConstructor<T>(private val constructor: Constructor<T>) : GenericConstructor<T> {
+        override val parameterNames: List<String>
+            get() = constructor.parameters.map { it.name }
+
+        override fun call(args: Array<Any?>): T = constructor.newInstance(*args)
+    }
+
+    private class KotlinConstructor<T>(private val function: KFunction<T>) : GenericConstructor<T> {
+        override val parameterNames: List<String>
+            get() = function.parameters.map { it.name ?: error("expected a parameter with a name on $function") }
+
+        override fun call(args: Array<Any?>): T = function.call(*args)
+    }
 }
 
-private fun createError(
-    argument: InstantiationArgument,
-    type: InstantiationErrorType,
-    ex: Exception? = null
-): InstantiationError {
-    return InstantiationError(
-        field = argument.field.name,
-        originalField = argument.originalTargetName,
-        type = type,
-        cause = ex
-    )
-}
-
-@Suppress("UNCHECKED_CAST")
-private fun <T> getTargetConstructor(
-    target: Class<*>,
-    fields: Collection<InstantiationField>
-): GenericConstructor<T> {
-    val fieldNames = fields.map { it.name }
-    return try {
-        (target.kotlin.constructors.find { constructor ->
-            constructor.parameters.map { it.name }.containsAll(fieldNames)
-        } as KFunction<T>?)?.let { KotlinConstructor<T>(it) }
-    } catch (ex: KotlinReflectionNotSupportedError) {
-        (target.constructors.find { constructor ->
-            constructor.parameters.map { it.name }.containsAll(fieldNames)
-        } as Constructor<T>?)?.let { JavaConstructor(it) }
-    } ?: throw InvalidTargetClass(target, fields)
-}
-
-private interface GenericConstructor<T> {
-    val parameterNames: List<String>
-    fun call(args: Array<Any?>): T
-}
-
-private class JavaConstructor<T>(private val constructor: Constructor<T>) : GenericConstructor<T> {
-    override val parameterNames: List<String>
-        get() = constructor.parameters.map { it.name }
-
-    override fun call(args: Array<Any?>): T = constructor.newInstance(*args)
-}
-
-private class KotlinConstructor<T>(private val function: KFunction<T>) : GenericConstructor<T> {
-    override val parameterNames: List<String>
-        get() = function.parameters.map { it.name ?: error("expected a parameter with a name on $function") }
-
-    override fun call(args: Array<Any?>): T = function.call(*args)
-}

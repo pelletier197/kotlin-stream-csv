@@ -1,0 +1,127 @@
+package com.kheops.csv.reader.reflect.converters
+
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
+import kotlin.reflect.KFunction
+import kotlin.reflect.full.functions
+
+private data class ConversionTargets(
+    val source: String,
+    val target: String
+)
+
+typealias ConvertFunction<S, T> = (value: S, to: Type, parameters: ConversionParameters) -> T
+
+data class ConversionParameters(
+    val settings: ConversionSettings,
+    val convert: ConvertFunction<Any, *>
+)
+
+interface Converter<FROM, TO> {
+    val source: Class<FROM>
+    val target: Class<TO>
+    fun convert(value: FROM, to: Type, parameters: ConversionParameters): TO?
+}
+
+internal data class ConverterWrapper(
+    val converter: Converter<*, *>,
+    val function: KFunction<Any?>
+) {
+    @Suppress("UNCHECKED_CAST")
+    fun <S, T> convert(value: S, to: Type, settings: ConversionSettings): T {
+        return convert(
+            value, to, ConversionParameters(
+                settings = settings,
+                convert = { internalValue, internalTo, internalParam ->
+                    this.convert(
+                        internalValue,
+                        internalTo,
+                        internalParam
+                    )
+                }
+            )
+        )
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <S, T> convert(value: S, to: Type, parameters: ConversionParameters): T {
+        return function.call(converter, value, to, parameters) as T
+    }
+}
+
+private val defaultConverters = listOf(
+    StringFloatConverter(),
+    StringLongConverter(),
+    StringInstantConverter(),
+    StringZonedDateTimeConverter(),
+    StringLocalDateConverter(),
+    StringLocalDateTimeConverter(),
+    StringDateConverter(),
+    StringDoubleConverter(),
+    StringToByteConverter(),
+    StringIntConverter(),
+    StringToBigDecimalConverter(),
+    StringToBigIntegerConverter(),
+    StringUIntConverter(),
+    StringULongConverter(),
+    StringToEnumConverter(),
+    StringToBooleanConverter(),
+    StringToListConverter(),
+    StringToArrayListConverter(),
+    StringToLinkedListConverter(),
+    StringToSetConverter(),
+    StringToHashSetConverter(),
+    StringToTreeSetConverter(),
+)
+
+internal class Converters(converters: List<Converter<*, *>> = defaultConverters) {
+    private val allConverters: Map<ConversionTargets, ConverterWrapper>
+
+    init {
+        allConverters = converters.map { converter ->
+            ConversionTargets(converter.source.canonicalName, converter.target.canonicalName) to ConverterWrapper(
+                converter = converter,
+                function = Converter::class.functions.find { f -> f.name == "convert" }
+                    ?: error("expected a function convert inside the converter interface")
+            )
+        }.toMap()
+    }
+
+    private val converters: List<Converter<*, *>> get() = allConverters.values.map { it.converter }
+
+    fun getConverter(from: Class<*>, to: Type): ConverterWrapper? {
+        val typeName = getConverterTypeName(to) ?: return null
+        val result = allConverters[ConversionTargets(from.canonicalName, typeName)]
+
+        if (result == null && to is Class<*> && to.isEnum) {
+            // Special converter for enums
+            return allConverters[ConversionTargets(from.canonicalName, Enum::class.java.canonicalName)]
+        }
+
+        return result
+    }
+
+    fun withConverter(newConverter: Converter<*, *>): Converters {
+        return Converters(
+            converters = converters + newConverter
+        )
+    }
+
+    fun withConverters(newConverters: List<Converter<*, *>>): Converters {
+        return Converters(
+            converters = converters + newConverters
+        )
+    }
+
+    fun withClearedConverters(): Converters {
+        return Converters(
+            converters = emptyList()
+        )
+    }
+
+    private fun getConverterTypeName(type: Type): String? {
+        if (type is Class<*>) return type.canonicalName
+        if (type is ParameterizedType) return type.rawType.typeName
+        return null
+    }
+}

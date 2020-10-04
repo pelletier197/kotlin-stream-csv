@@ -6,7 +6,10 @@ import java.lang.reflect.Field
 import java.util.*
 import kotlin.reflect.jvm.kotlinProperty
 
-class CsvReflectionCreator<T>(private val target: Class<T>) {
+class CsvReflectionCreator<T>(
+    private val target: Class<T>,
+    private val instanceCreator: InstanceCreator = InstanceCreator()
+) {
     private val fieldTranslation: Map<String, InstantiationField>
     private val ignoreCaseTokenId: String = UUID.randomUUID().toString()
 
@@ -35,11 +38,14 @@ class CsvReflectionCreator<T>(private val target: Class<T>) {
     }
 
     private fun toCsvHeader(value: String): String {
-        if(value.startsWith(ignoreCaseTokenId)) return value.replace(ignoreCaseTokenId, "").toLowerCase()
+        if (value.startsWith(ignoreCaseTokenId)) return value.replace(ignoreCaseTokenId, "").toLowerCase()
         return value
     }
 
-    fun createCsvInstance(csvHeadersValues: Map<String, String?>, settings: ConversionSettings): InstantiationWithErrors<T> {
+    fun createCsvInstance(
+        csvHeadersValues: Map<String, String?>,
+        settings: ConversionSettings
+    ): InstantiationWithErrors<T> {
         val ignoreCaseCsvHeader = csvHeadersValues.map { toIgnoreCaseToken(it.key) to it.value }.toMap()
 
         val arguments = fieldTranslation.map {
@@ -52,6 +58,6 @@ class CsvReflectionCreator<T>(private val target: Class<T>) {
             )
         }
 
-        return createInstance(target = target, arguments = arguments, settings)
+        return instanceCreator.createInstance(target = target, arguments = arguments, settings)
     }
 }

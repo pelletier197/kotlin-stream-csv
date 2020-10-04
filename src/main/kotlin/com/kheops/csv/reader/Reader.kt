@@ -17,10 +17,6 @@ class CsvReader {
         return HeaderCsvReader()
     }
 
-    fun readerWithHeader(header: List<String>): HeaderCsvReader {
-        return HeaderCsvReader(header = header)
-    }
-
     fun reader(): RawCsvReader {
         return RawCsvReader()
     }

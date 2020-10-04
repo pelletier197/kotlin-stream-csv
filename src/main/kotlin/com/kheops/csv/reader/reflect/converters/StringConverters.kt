@@ -14,7 +14,7 @@ abstract class StringConverterBase<TO> : Converter<String, TO> {
     override val source: Class<String> get() = String::class.java
 
     @Suppress("UNCHECKED_CAST")
-    override fun convert(value: String, to: Type, settings: ConversionSettings): TO? =
+    override fun convert(value: String, to: Type, parameters: ConversionParameters): TO? =
         doConvert(value.trim(), to as Class<TO>)
 
     abstract fun doConvert(value: String, to: Class<TO>): TO?
