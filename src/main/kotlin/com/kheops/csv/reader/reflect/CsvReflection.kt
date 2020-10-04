@@ -2,6 +2,7 @@ package com.kheops.csv.reader.reflect
 
 import com.kheops.csv.CsvProperty
 import com.kheops.csv.reader.reflect.converters.ConversionSettings
+import com.kheops.csv.reader.reflect.converters.Converter
 import java.lang.reflect.Field
 import java.util.*
 import kotlin.reflect.jvm.kotlinProperty
@@ -59,5 +60,26 @@ class CsvReflectionCreator<T>(
         }
 
         return instanceCreator.createInstance(target = target, arguments = arguments, settings)
+    }
+
+    fun withConverter(newConverter: Converter<*, *>): CsvReflectionCreator<T> {
+        return CsvReflectionCreator(
+            target = target,
+            instanceCreator = instanceCreator.withConverter(newConverter)
+        )
+    }
+
+    fun withConverters(newConverters: List<Converter<*, *>>): CsvReflectionCreator<T> {
+        return CsvReflectionCreator(
+            target = target,
+            instanceCreator = instanceCreator.withConverters(newConverters)
+        )
+    }
+
+    fun withClearedConverters(): CsvReflectionCreator<T> {
+        return CsvReflectionCreator(
+            target = target,
+            instanceCreator = instanceCreator.withClearedConverters()
+        )
     }
 }

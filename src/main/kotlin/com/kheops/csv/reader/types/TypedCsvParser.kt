@@ -6,13 +6,14 @@ import com.kheops.csv.reader.CsvParsingException
 import com.kheops.csv.reader.reflect.CsvReflectionCreator
 import com.kheops.csv.reader.reflect.InstantiationError
 import com.kheops.csv.reader.reflect.converters.ConversionSettings
+import com.kheops.csv.reader.reflect.converters.Converter
 import java.util.stream.Stream
 
 
 data class TypedCsvReader<T>(
     val targetClass: Class<T>,
     val listSeparator: String = ",",
-    private val csvReflectionCreator: CsvReflectionCreator<T> = CsvReflectionCreator(targetClass),
+    private val creator: CsvReflectionCreator<T> = CsvReflectionCreator(targetClass),
     private val reader: HeaderCsvReader = HeaderCsvReader()
 ) {
     private val conversionSettings = ConversionSettings(
@@ -43,13 +44,25 @@ data class TypedCsvReader<T>(
         return copy(listSeparator = listSeparator)
     }
 
+    fun withConverter(newConverter: Converter<*, *>) : TypedCsvReader<T> {
+        return copy(creator = creator.withConverter(newConverter))
+    }
+
+    fun withConverters(newConverters: List<Converter<*, *>>) : TypedCsvReader<T> {
+        return copy(creator = creator.withConverters(newConverters))
+    }
+
+    fun withClearedConverters() : TypedCsvReader<T> {
+        return copy(creator = creator.withClearedConverters())
+    }
+
     fun read(lines: Stream<String>): Stream<TypedCsvLine<T>> {
         return readHeaderLines(reader.read(lines))
     }
 
     private fun readHeaderLines(lines: Stream<HeaderCsvLine>): Stream<TypedCsvLine<T>> {
         return lines.map {
-            val mappedInstance = csvReflectionCreator.createCsvInstance(
+            val mappedInstance = creator.createCsvInstance(
                 csvHeadersValues = it.values, settings = conversionSettings
             )
             TypedCsvLine(
