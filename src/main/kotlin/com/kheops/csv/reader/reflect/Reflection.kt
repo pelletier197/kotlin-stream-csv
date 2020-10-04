@@ -134,7 +134,7 @@ class InstanceCreator(
         return try {
             (target.kotlin.constructors.find { constructor ->
                 constructor.parameters.map { it.name }.containsAll(fieldNames)
-            } as KFunction<T>?)?.let { KotlinConstructor<T>(it) }
+            } as KFunction<T>?)?.let { KotlinConstructor(it) }
         } catch (ex: KotlinReflectionNotSupportedError) {
             (target.constructors.find { constructor ->
                 constructor.parameters.map { it.name }.containsAll(fieldNames)
