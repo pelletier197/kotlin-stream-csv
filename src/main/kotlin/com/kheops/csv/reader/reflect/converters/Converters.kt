@@ -45,6 +45,8 @@ internal data class ConverterWrapper(
 
     @Suppress("UNCHECKED_CAST")
     fun <S, T> convert(value: S, to: Type, parameters: ConversionParameters): T {
+        val nonNullValue = value!!
+        if (nonNullValue::class.java == to || to == Any::class.java) return value as T
         return function.call(converter, value, to, parameters) as T
     }
 }

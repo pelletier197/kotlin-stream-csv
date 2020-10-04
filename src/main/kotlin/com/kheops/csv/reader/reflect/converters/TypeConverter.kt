@@ -7,8 +7,6 @@ class ConversionSettings(
     val listSeparator: String = ","
 )
 
-
-
 class NoConverterFoundException(value: Any, target: Type) :
     Exception(
         """
@@ -48,7 +46,6 @@ class TypeConverter private constructor(private val converters: Converters) {
     ): T {
         val nonNullValue = value!!
         if (nonNullValue::class.java == to || to == Any::class.java) return value as T
-
         val converter =
             converters.getConverter(nonNullValue::class.java, to) ?: throw NoConverterFoundException(nonNullValue, to)
 
