@@ -5,6 +5,18 @@ plugins {
 group 'com.kheops'
 version '1.0-SNAPSHOT'
 
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11
+    }
+}
+
 test {
     useJUnitPlatform()
 }
