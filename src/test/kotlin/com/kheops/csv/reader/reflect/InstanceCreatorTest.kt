@@ -2,7 +2,12 @@ package com.kheops.csv.reader.reflect
 
 import com.kheops.csv.reader.reflect.converters.ConversionSettings
 import io.kotest.core.spec.style.ShouldSpec
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import java.time.Instant
 import kotlin.reflect.jvm.javaField
 
 class InstanceCreatorTest : ShouldSpec({
@@ -64,6 +69,7 @@ class InstanceCreatorTest : ShouldSpec({
         data class NullableFieldClass(
             val field: String?
         )
+
         val argument = InstantiationArgument(
             field = InstantiationField(
                 field = NullableFieldClass::field.javaField!!,
@@ -99,6 +105,50 @@ class InstanceCreatorTest : ShouldSpec({
                     settings = ConversionSettings()
                 ).shouldBe(expected)
             }
+        }
+    }
+
+    context("given conversion of field fails") {
+        data class InstantFieldClass(
+            val field: Instant
+        )
+
+        val argument = InstantiationArgument(
+            field = InstantiationField(
+                field = InstantFieldClass::field.javaField!!,
+                property = InstantFieldClass::field
+            ),
+            value = "not_an_instant",
+            originalTargetName = "original_field"
+        )
+
+        val expected = InstantiationWithErrors(
+            result = null,
+            errors = listOf(
+                InstantiationError(
+                    field = argument.field.name,
+                    originalField = argument.originalTargetName,
+                    type = InstantiationErrorType.CONVERSION_OF_FIELD_FAILED,
+                    providedValue = argument.value,
+                    cause = null
+                )
+            )
+        )
+
+
+        should("return an error of conversion failed") {
+            val result = underTest.createInstance(
+                InstantFieldClass::class.java,
+                arguments = listOf(argument),
+                settings = ConversionSettings()
+            )
+            result.result.shouldBeNull()
+            result.errors.shouldHaveSize(1)
+            result.errors[0].shouldBeEqualToIgnoringFields(
+                expected.errors[0],
+                InstantiationError::cause
+            )
+            result.errors[0].cause.shouldNotBeNull()
         }
     }
 })
