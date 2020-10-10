@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/pelletier197/kotlin-stream-csv.svg?style=svg)](https://app.circleci.com/pipelines/github/pelletier197/kotlin-stream-csv)
+[![CircleCI](https://circleci.com/gh/pelletier197/kotlin-stream-csv.svg?style=shield)](https://app.circleci.com/pipelines/github/pelletier197/kotlin-stream-csv) [![Coverage Status](https://coveralls.io/repos/github/pelletier197/kotlin-stream-csv/badge.svg)](https://coveralls.io/github/pelletier197/kotlin-stream-csv)
 
 # Kotlin Stream CSV
 > We are still working on this implementation for now, so it might not be stable yet.
