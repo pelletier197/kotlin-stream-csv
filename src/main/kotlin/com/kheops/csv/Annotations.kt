@@ -4,5 +4,5 @@ package com.kheops.csv
 @Retention(AnnotationRetention.RUNTIME)
 annotation class CsvProperty(
     val name: String,
-    val ignoreCase: Boolean = true
+    val ignoreCase: Boolean = false
 )
