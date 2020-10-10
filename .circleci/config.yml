@@ -1,24 +1,22 @@
 version: 2.1
 aliases:
+  - &dependencies-path
+      v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
+
   - &restore-cache
     restore_cache:
       keys:
-        - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
+        - *dependencies-path
         - v1-dependencies-
   - &save-cache
     save_cache:
       paths:
         - ./.gradle
-      key: v1-dependencies--{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
+      key: *dependencies-path
+
   - &defaults
     docker:
       - image: cimg/openjdk:11.0
-  - &default-steps |-
-      checkout
-      *restore-cache
-      run: ./gradlew dependencies --info
-      *save-cache
-
 
 commands:
   run-with-dependencies:
@@ -29,8 +27,6 @@ commands:
     steps:
       - checkout
       - *restore-cache
-      - run: ./gradlew dependencies
-      - *save-cache
       - steps: << parameters.steps >>
 
 jobs:
@@ -54,7 +50,11 @@ jobs:
             - run: ./gradlew ktlintCheck --info
 workflows:
   version: 2.1
-  test_and_verify:
+  create-cache:
+    jobs:
+      - run: ./gradlew dependencies
+      - *save-cache
+  test-and-verify:
     jobs:
       - build
       - tests
