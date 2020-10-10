@@ -1,45 +1,21 @@
-# Java Gradle CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
-version: 2
-aliases:
-  - &restore-cache
-    - restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
-          - v1-dependencies-
-  - &save-cache
-    - save_cache:
-        paths:
-          - ~/.gradle
-          - ./.gradle
-        key: v1-dependencies--{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
-
-  - &dependencies
-    - checkout
-    - *restore-cache
-    - ./gradlew dependencies --info
-    - *save-cache
-  - &docker-image
-    cimg/openjdk:11.0
+version: 2.1
 
 jobs:
-  build:
-    docker: *docker-image
+  tests:
+    docker:
+      - image: cimg/openjdk:11.0
     steps:
-      - *dependencies
       - run: ./gradlew test --info
   lint:
-    docker: *docker-image
+    docker:
+      - image: cimg/openjdk:11.0
     steps:
-      - *dependencies
       - run: ./gradlew ktlintCheck --info
 
 workflows:
-  version: 2
-  test_and_validate:
+  version: 2.1
+  test_and_verify:
     jobs:
-      - test
+      - tests
       - lint
 
