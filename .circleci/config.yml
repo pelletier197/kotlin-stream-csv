@@ -12,6 +12,7 @@ aliases:
     save_cache:
       paths:
         - ./.gradle
+        - ~/.gradle
       key: *dependencies-path
 
   - &defaults
