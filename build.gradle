@@ -1,7 +1,10 @@
 plugins {
+    id 'jacoco'
+    id 'java'
     id 'org.jetbrains.kotlin.jvm' version "$kotlin_version" apply false
     id "org.jlleitschuh.gradle.ktlint" version "$ktlint_version"
     id "org.jlleitschuh.gradle.ktlint-idea" version "$ktlint_version"
+    id 'com.github.kt3k.coveralls' version "$coveralls_version"
 }
 
 allprojects {
@@ -14,8 +17,11 @@ allprojects {
     sourceCompatibility = 11
     targetCompatibility = 11
 
-    jacoco {
-        reportsDir = file("$buildDir/customJacocoReportDir")
+    jacocoTestReport {
+        reports {
+            html.enabled = true
+            xml.enabled = true
+        }
     }
 
     repositories {
@@ -30,4 +36,31 @@ allprojects {
         }
         finalizedBy jacocoTestReport
     }
+}
+
+task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
+    description = 'Generates an aggregate report from all subprojects'
+
+    additionalSourceDirs.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
+    sourceDirectories.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
+    classDirectories.setFrom(files(subprojects.sourceSets.main.output))
+    executionData.setFrom(files(subprojects.jacocoTestReport.executionData))
+
+    reports {
+        html.enabled = true
+        xml.enabled = true
+    }
+
+    doFirst {
+        executionData.setFrom(files(executionData.findAll { it.exists() }))
+    }
+}
+
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+}
+
+tasks.coveralls {
+    description = "Uploads coverage report to coveralls"
+    dependsOn jacocoRootReport
 }
