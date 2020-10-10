@@ -27,6 +27,7 @@ private data class TestInstance(
 )
 
 internal enum class EnumTest {
+    FIRST_ENUM,
     ANOTHER_ENUM_VALUE
 }
 
