@@ -3,14 +3,14 @@ aliases:
   - &restore-cache
     restore_cache:
       keys:
-        - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
+        - v1-dependencies-{{ checksum "gradle.properties" }}
         - v1-dependencies-
   - &save-cache
     save_cache:
       paths:
-        - ./.gradle
-        - ~/.gradle
-      key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
+        - ~/.gradle/wrapper
+        - ~/.gradle/caches
+      key: v1-dependencies-{{ checksum "gradle.properties" }}
 
 
   - &defaults
@@ -21,7 +21,7 @@ commands:
   run-with-dependencies:
     parameters:
       steps:
-        description: "Steps that will be executed after loading dependencices"
+        description: "Steps that will be executed after loading dependencies"
         type: steps
     steps:
       - checkout
