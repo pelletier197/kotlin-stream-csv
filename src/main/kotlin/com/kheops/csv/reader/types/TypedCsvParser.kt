@@ -17,7 +17,7 @@ import java.util.stream.Stream
 
 
 data class TypedCsvReader<T>(
-    val targetClass: Class<T>,
+    private val targetClass: Class<T>,
     val listSeparator: Char = ',',
     private val creator: CsvReflectionCreator<T> = CsvReflectionCreator(targetClass),
     private val reader: HeaderCsvReader = HeaderCsvReader()

@@ -10,9 +10,8 @@ class ConversionSettings(
 class NoConverterFoundException(value: Any, target: Type) :
     Exception(
         """
-        could not find a converter for value '${value}' of type '${value::class.java.name}' to '${target.typeName}'.
-        It is possible the value you are trying to convert is not supported by default. You can add the custom converter yourself by calling
-        com.kheops.csv.reader.reflect.converters.registerConverter(com.kheops.csv.reader.reflect.converters.Converter)
+        Could not find a converter for value '${value}' of type '${value::class.java.name}' to '${target.typeName}'.
+        It is possible the value you are trying to convert is not supported by default. You should create and register your custom converter to handle this value. 
     """.trimMargin()
     )
 

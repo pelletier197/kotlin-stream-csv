@@ -13,7 +13,7 @@ class InvalidTargetClass(
     fields: Collection<InstantiationField>
 ) : Exception(
     """
-    Invalid recipient class for '${target.name}'. Recipient class is expected to have a public constructor for all the public field of the target class and no other parameters.
+    Invalid recipient class: '${target.name}'. Recipient class is expected to have a public constructor for all the public field of the target class and no other parameters.
     Expected constructor:
     ${target.name} (
 ${fields.joinToString(separator = "\n") { "         ${it.name}: ${it.field.genericType.typeName}" }}
@@ -26,7 +26,7 @@ data class InstantiationError(
     val originalField: String,
     val type: InstantiationErrorType,
     val providedValue: String?,
-    val cause: Throwable?
+    val cause: Exception?
 )
 
 enum class InstantiationErrorType {
@@ -40,15 +40,15 @@ data class InstantiationWithErrors<T>(
     val errors: List<InstantiationError>
 )
 
-class InstantiationField(
+data class InstantiationField(
     val field: Field,
-    val property: KProperty<*>?,
+    private val property: KProperty<*>?,
 ) {
     val name: String get() = this.field.name
     val isNullable: Boolean get() = property?.returnType?.isMarkedNullable ?: true
 }
 
-class InstantiationArgument(
+data class InstantiationArgument(
     val field: InstantiationField,
     val value: String?,
     val originalTargetName: String

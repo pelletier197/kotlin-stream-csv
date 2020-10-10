@@ -49,7 +49,7 @@ class StringToTreeSetConverter : BaseStringToCollectionConverter<TreeSet<*>>() {
 private fun asList(value: String, to: Type, parameters: ConversionParameters): List<*> {
     if (to !is ParameterizedType) throw IllegalArgumentException(
         """
-                Not enough information to determine the type of the target list for value '${value}' for type '${to}'
+                Not enough information to determine the type of the target list for value '${value}' of type '${to}'
                 To convert a list, it is mandatory to pass the generic type of the list, and not simply the class, otherwise it is impossible 
                 to determine the target type
             """

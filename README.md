@@ -13,7 +13,8 @@ This library uses rather a lazy error handling approach. This means that if the 
 1. Collect errors as it goes - you can customize how you handle each specific error, instead of throwing an exception on the first one
 2. Easy to configure
 3. Everything is immutable
-4. Kotlin :heart: 
+4. Extremely lightweight. 
+5. Kotlin :heart: 
 
 ## Known limitations
 As for now, this implementation does not yet respect all specifications of [RFC-4180](https://tools.ietf.org/html/rfc4180). 
