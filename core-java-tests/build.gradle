@@ -2,8 +2,8 @@ plugins {
     id "java"
 }
 
-sourceCompatibility = 14
-targetCompatibility = 14
+sourceCompatibility = 11
+targetCompatibility = 11
 
 // Allows conserving parameter name of constructors
 compileTestJava {
@@ -14,7 +14,7 @@ test {
     useJUnitPlatform()
     testLogging {
         showStandardStreams = true
-        events "standardOut", "started", "passed", "skipped", "failed"
+        events "standardOut", "passed", "skipped", "failed"
     }
 }
 
