@@ -30,6 +30,12 @@ commands:
       - steps: << parameters.steps >>
 
 jobs:
+  create-cache:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: ./gradlew dependencies
+      - *save-cache
   build:
     <<: *defaults
     steps:
@@ -52,8 +58,7 @@ workflows:
   version: 2.1
   create-cache:
     jobs:
-      - run: ./gradlew dependencies
-      - *save-cache
+      - create-cache
   test-and-verify:
     jobs:
       - build
