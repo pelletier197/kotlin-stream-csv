@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/Kheops-Engineering/kotlin-stream-csv.svg?style=svg)](https://app.circleci.com/pipelines/github/Kheops-Engineering/kotlin-stream-csv)
+[![CircleCI](https://circleci.com/gh/pelletier197/kotlin-stream-csv.svg?style=svg)](https://app.circleci.com/pipelines/github/pelletier197/kotlin-stream-csv)
 
 # Kotlin Stream CSV
 > We are still working on this implementation for now, so it might not be stable yet.
