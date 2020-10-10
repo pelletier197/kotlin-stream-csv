@@ -14,11 +14,8 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
-import java.util.Date
 import java.util.LinkedList
 import java.util.TreeSet
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 import kotlin.reflect.KClass
 
 private data class TestInstance(
@@ -38,9 +35,6 @@ class TypeConverterTest : ShouldSpec({
     val underTest = TypeConverter.getDefault()
 
     context("converting all default supported typed") {
-        val date = Date()
-        val df = Date()
-
         val testInstances = listOf(
             TestInstance(String::class, "test", "test"),
             TestInstance(Long::class, "12", 12L),

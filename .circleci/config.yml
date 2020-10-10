@@ -1,21 +1,63 @@
 version: 2.1
+aliases:
+  - &restore-cache
+    restore_cache:
+      keys:
+        - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
+        - v1-dependencies-
+  - &save-cache
+    save_cache:
+      paths:
+        - ./.gradle
+      key: v1-dependencies--{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
+  - &defaults
+    docker:
+      - image: cimg/openjdk:11.0
+  - &default-steps |-
+      checkout
+      *restore-cache
+      run: ./gradlew dependencies --info
+      *save-cache
+
+
+commands:
+  run-with-dependencies:
+    parameters:
+      steps:
+        description: "Steps that will be executed after loading dependencices"
+        type: steps
+    steps:
+      - checkout
+      - *restore-cache
+      - run: ./gradlew dependencies
+      - *save-cache
+      - steps: << parameters.steps >>
 
 jobs:
-  tests:
-    docker:
-      - image: cimg/openjdk:11.0
+  build:
+    <<: *defaults
     steps:
-      - run: ./gradlew test --info
-  lint:
-    docker:
-      - image: cimg/openjdk:11.0
-    steps:
-      - run: ./gradlew ktlintCheck --info
+      - run-with-dependencies:
+          steps:
+            - run: ./gradlew compile --info
 
+  tests:
+    <<: *defaults
+    steps:
+      - run-with-dependencies:
+          steps:
+            - run: ./gradlew test --info
+  lint:
+    <<: *defaults
+    steps:
+      - run-with-dependencies:
+          steps:
+            - run: ./gradlew ktlintCheck --info
 workflows:
   version: 2.1
   test_and_verify:
     jobs:
+      - build
       - tests
       - lint
 
