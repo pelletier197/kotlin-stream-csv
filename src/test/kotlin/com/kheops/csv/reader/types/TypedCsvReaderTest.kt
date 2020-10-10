@@ -221,6 +221,7 @@ class TypedCsvReaderTest : ShouldSpec({
                     CsvError(
                         csvField = "custom",
                         classField = "custom",
+                        providedValue = " custom converter test",
                         type = CsvErrorType.NO_CONVERTER_FOUND_FOR_VALUE,
                         cause = null
                     )
@@ -285,6 +286,7 @@ class TypedCsvReaderTest : ShouldSpec({
                         CsvError(
                             csvField = "test",
                             classField = "test",
+                            providedValue = "12",
                             type = CsvErrorType.NO_CONVERTER_FOUND_FOR_VALUE,
                             cause = null
                         )

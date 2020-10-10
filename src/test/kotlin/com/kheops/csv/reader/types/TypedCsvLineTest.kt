@@ -37,6 +37,7 @@ class TypedCsvLineTest : ShouldSpec({
                 CsvError(
                     csvField = "test",
                     classField = "test",
+                    providedValue = "a_value",
                     type = CsvErrorType.NO_CONVERTER_FOUND_FOR_VALUE,
                     cause = null
                 )

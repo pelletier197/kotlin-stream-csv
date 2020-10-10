@@ -63,6 +63,7 @@ internal class CsvReflectionCreatorTest : ShouldSpec({
                     InstantiationError(
                         field = "field",
                         originalField = "just_field",
+                        providedValue = null,
                         cause = null,
                         type = InstantiationErrorType.NON_NULLABLE_FIELD_IS_NULL
                     )
@@ -86,12 +87,14 @@ internal class CsvReflectionCreatorTest : ShouldSpec({
                 InstantiationError(
                     field = "field",
                     originalField = "just_field",
+                    providedValue = null,
                     cause = null,
                     type = InstantiationErrorType.NON_NULLABLE_FIELD_IS_NULL
                 ),
                 InstantiationError(
                     field = "fieldIgnoreCase",
                     originalField = "just_field_ignore",
+                    providedValue = null,
                     cause = null,
                     type = InstantiationErrorType.NON_NULLABLE_FIELD_IS_NULL
                 )

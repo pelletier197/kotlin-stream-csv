@@ -107,6 +107,7 @@ data class TypedCsvReader<T>(
         return CsvError(
             csvField = error.originalField,
             classField = error.field,
+            providedValue = error.providedValue,
             type = CsvErrorType.valueOf(error.type.toString()),
             cause = error.cause
         )

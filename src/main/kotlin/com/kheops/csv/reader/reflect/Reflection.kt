@@ -25,6 +25,7 @@ data class InstantiationError(
     val field: String,
     val originalField: String,
     val type: InstantiationErrorType,
+    val providedValue: String?,
     val cause: Throwable?
 )
 
@@ -132,6 +133,7 @@ data class InstanceCreator(
         return InstantiationError(
             field = argument.field.name,
             originalField = argument.originalTargetName,
+            providedValue = argument.value,
             type = type,
             cause = ex
         )

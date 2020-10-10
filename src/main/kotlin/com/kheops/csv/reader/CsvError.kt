@@ -10,6 +10,7 @@ enum class CsvErrorType {
 data class CsvError(
     val csvField: String,
     val classField: String,
+    val providedValue: String?,
     val type: CsvErrorType,
     val cause: Throwable?,
 )
