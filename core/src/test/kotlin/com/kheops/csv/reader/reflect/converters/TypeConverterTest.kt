@@ -46,6 +46,7 @@ class TypeConverterTest : ShouldSpec({
             TestInstance(Double::class, "12.64", 12.64),
             TestInstance(Float::class, "12.596", 12.596f),
             TestInstance(EnumTest::class, EnumTest.ANOTHER_ENUM_VALUE.toString(), EnumTest.ANOTHER_ENUM_VALUE),
+            TestInstance(EnumTest::class, EnumTest.ANOTHER_ENUM_VALUE.toString().toLowerCase(), EnumTest.ANOTHER_ENUM_VALUE),
             TestInstance(Boolean::class, "t", true),
             TestInstance(Boolean::class, "true", true),
             TestInstance(Boolean::class, "yes", true),
@@ -77,7 +78,7 @@ class TypeConverterTest : ShouldSpec({
     }
 
     context("converting a collection") {
-        val testValue = "1,2,3"
+        val testValue = "1,2,3, ,"
         val expected = listOf(1, 2, 3)
 
         val testInstances = listOf(
@@ -105,6 +106,35 @@ class TypeConverterTest : ShouldSpec({
                     every { parameterized.actualTypeArguments } returns arrayOf(Int::class.java)
                     every { parameterized.rawType } returns it.to.java
                     underTest.convertToType<Any?, Any?>(it.value, parameterized, settings).shouldBe(it.expected)
+                }
+            }
+        }
+    }
+
+    context("converting an enum") {
+        context("enum value is valid") {
+            val testInstances = listOf(
+                TestInstance(EnumTest::class, EnumTest.ANOTHER_ENUM_VALUE.toString(), EnumTest.ANOTHER_ENUM_VALUE),
+                TestInstance(EnumTest::class, EnumTest.ANOTHER_ENUM_VALUE.toString().toLowerCase(), EnumTest.ANOTHER_ENUM_VALUE),
+            )
+
+            should("convert value properly") {
+                testInstances.forAll {
+                    underTest.convertToType<Any?, Any?>(it.value, it.to.java, settings).shouldBe(it.expected)
+                }
+            }
+        }
+
+        context("enum value is invalid") {
+            val testInstances = listOf(
+                TestInstance(EnumTest::class, "FAKE_VALUE", EnumTest.ANOTHER_ENUM_VALUE),
+            )
+
+            should("convert value properly") {
+                testInstances.forAll {
+                    shouldThrow<ConversionFailedException> {
+                        underTest.convertToType<Any?, Any?>("FAKE_VALUE", EnumTest::class.java, settings).shouldBe(it.expected)
+                    }
                 }
             }
         }
