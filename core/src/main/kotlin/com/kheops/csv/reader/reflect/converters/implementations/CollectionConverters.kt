@@ -1,5 +1,7 @@
-package com.kheops.csv.reader.reflect.converters
+package com.kheops.csv.reader.reflect.converters.implementations
 
+import com.kheops.csv.reader.reflect.converters.ConversionParameters
+import com.kheops.csv.reader.reflect.converters.Converter
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.util.*
