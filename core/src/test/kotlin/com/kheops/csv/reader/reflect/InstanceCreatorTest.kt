@@ -1,6 +1,7 @@
 package com.kheops.csv.reader.reflect
 
 import com.kheops.csv.reader.reflect.converters.ConversionSettings
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
@@ -149,6 +150,25 @@ class InstanceCreatorTest : ShouldSpec({
                 InstantiationError::cause
             )
             result.errors[0].cause.shouldNotBeNull()
+        }
+    }
+
+    context("given an invalid target class") {
+        class TestInvalid private constructor(val field: String)
+
+        val argument = InstantiationArgument(
+            field = InstantiationField(
+                field = TestInvalid::field.javaField!!,
+                property = TestInvalid::field
+            ),
+            value = "any",
+            originalTargetName = "original_field"
+        )
+
+        should("throw an exception") {
+            shouldThrow<InvalidTargetClass> {
+                underTest.createInstance(TestInvalid::class.java, listOf(argument), ConversionSettings())
+            }
         }
     }
 })

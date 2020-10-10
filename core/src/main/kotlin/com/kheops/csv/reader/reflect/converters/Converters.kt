@@ -7,8 +7,8 @@ import kotlin.reflect.KFunction
 import kotlin.reflect.full.functions
 
 private data class ConversionTargets(
-    val source: String,
-    val target: String
+    private val source: String,
+    private val target: String
 )
 
 typealias ConvertFunction<S, T> = (value: S, to: Type, parameters: ConversionParameters) -> T
