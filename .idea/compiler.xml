@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="14" />
+    <bytecodeTargetLevel target="14">
+      <module name="kotlin-stream-csv.main" target="14" />
+      <module name="kotlin-stream-csv.test" target="14" />
+    </bytecodeTargetLevel>
   </component>
 </project>

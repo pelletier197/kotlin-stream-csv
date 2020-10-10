@@ -1,38 +1,8 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version "$kotlin_version"
-}
+allprojects {
+    group 'com.kheops'
+    version '1.0-SNAPSHOT'
 
-group 'com.kheops'
-version '1.0-SNAPSHOT'
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
+    repositories {
+        mavenCentral()
     }
-}
-
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
-    }
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        showStandardStreams = true
-        events "standardOut", "started", "passed", "skipped", "failed"
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation "org.jetbrains.kotlin:kotlin-reflect"
-
-    testImplementation "io.kotest:kotest-runner-junit5:$kotest_version"
-    testImplementation "io.kotest:kotest-assertions-core:$kotest_version"
 }

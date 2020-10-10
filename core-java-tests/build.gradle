@@ -1,0 +1,19 @@
+plugins {
+    id "java"
+}
+
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+        events "standardOut", "started", "passed", "skipped", "failed"
+    }
+}
+
+dependencies {
+    implementation project(":core")
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+}

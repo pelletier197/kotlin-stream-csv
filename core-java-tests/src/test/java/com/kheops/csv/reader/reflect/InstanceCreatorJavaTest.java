@@ -9,16 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class InstanceCreatorJavaTest {
-    static class JavaTestClass {
-        public final String value;
-        public final int intValue;
-
-        JavaTestClass(String value, int intValue) {
-            this.value = value;
-            this.intValue = intValue;
-        }
-    }
-
     private final InstanceCreator underTest = new InstanceCreator();
 
     @Nested
@@ -53,12 +43,12 @@ public class InstanceCreatorJavaTest {
             }
 
             @Test
-            private void thenConstructionSucceeds() {
+            void thenConstructionSucceeds() {
                 final var result = underTest.createInstance(JavaTestClass.class, arguments, new ConversionSettings());
                 Assertions.assertEquals(expected, result.getResult());
                 Assertions.assertTrue(result.getErrors().isEmpty());
-                Assertions.assertTrue(false);
             }
         }
     }
 }
+
