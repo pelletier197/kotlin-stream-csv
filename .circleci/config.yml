@@ -47,7 +47,7 @@ jobs:
     steps:
       - run-with-dependencies:
           steps:
-            - run: ./gradlew test --info
+            - run: ./gradlew test coveralls --info
   lint:
     <<: *defaults
     steps:
