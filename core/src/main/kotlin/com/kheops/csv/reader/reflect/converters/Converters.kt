@@ -53,7 +53,6 @@ private val defaultConverters = listOf(
     StringZonedDateTimeConverter(),
     StringLocalDateConverter(),
     StringLocalDateTimeConverter(),
-    StringDateConverter(),
     StringDoubleConverter(),
     StringToByteConverter(),
     StringIntConverter(),

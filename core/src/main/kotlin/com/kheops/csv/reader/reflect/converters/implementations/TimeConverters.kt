@@ -27,8 +27,3 @@ class StringLocalDateTimeConverter : StringConverterBase<LocalDateTime>() {
     override fun doConvert(value: String, to: Class<LocalDateTime>): LocalDateTime = LocalDateTime.parse(value)
 }
 
-class StringDateConverter : StringConverterBase<Date>() {
-    private val dateFormat = DateFormat.getInstance()
-    override val target: Class<Date> get() = Date::class.java
-    override fun doConvert(value: String, to: Class<Date>): Date = dateFormat.parse(value)
-}

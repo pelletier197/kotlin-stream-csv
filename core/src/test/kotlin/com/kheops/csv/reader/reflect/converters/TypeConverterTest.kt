@@ -38,6 +38,8 @@ class TypeConverterTest : ShouldSpec({
 
     context("converting all default supported typed") {
         val date = Date()
+        val df = Date()
+
         val testInstances = listOf(
             TestInstance(String::class, "test", "test"),
             TestInstance(Long::class, "12", 12L),
@@ -69,7 +71,6 @@ class TypeConverterTest : ShouldSpec({
                 "2019-03-12T00:00:00.000",
                 LocalDateTime.parse("2019-03-12T00:00:00.000")
             ),
-            TestInstance(Date::class, DateFormat.getInstance().format(Date()), date),
         )
 
         should("convert all values properly") {
