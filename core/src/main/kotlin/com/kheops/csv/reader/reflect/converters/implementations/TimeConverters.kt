@@ -1,11 +1,9 @@
 package com.kheops.csv.reader.reflect.converters.implementations
 
-import java.text.DateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
-import java.util.*
 
 class StringInstantConverter : StringConverterBase<Instant>() {
     override val target: Class<Instant> = Instant::class.java
@@ -26,4 +24,3 @@ class StringLocalDateTimeConverter : StringConverterBase<LocalDateTime>() {
     override val target: Class<LocalDateTime> get() = LocalDateTime::class.java
     override fun doConvert(value: String, to: Class<LocalDateTime>): LocalDateTime = LocalDateTime.parse(value)
 }
-

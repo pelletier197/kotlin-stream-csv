@@ -57,7 +57,8 @@ class TypedCsvLineTest : ShouldSpec({
                         message = "any",
                         errors = underTestWithErrors.errors,
                         line = underTestWithErrors.line
-                    ), CsvParsingException::message
+                    ),
+                    CsvParsingException::message
                 )
             }
         }

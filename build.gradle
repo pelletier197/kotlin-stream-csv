@@ -1,3 +1,9 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version "$kotlin_version" apply false
+    id "org.jlleitschuh.gradle.ktlint" version "$ktlint_version"
+    id "org.jlleitschuh.gradle.ktlint-idea" version "$ktlint_version"
+}
+
 allprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'

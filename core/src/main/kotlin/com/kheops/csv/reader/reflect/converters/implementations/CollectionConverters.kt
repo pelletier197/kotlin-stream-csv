@@ -4,7 +4,8 @@ import com.kheops.csv.reader.reflect.converters.ConversionParameters
 import com.kheops.csv.reader.reflect.converters.Converter
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
-import java.util.*
+import java.util.LinkedList
+import java.util.TreeSet
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
@@ -51,7 +52,7 @@ class StringToTreeSetConverter : BaseStringToCollectionConverter<TreeSet<*>>() {
 private fun asList(value: String, to: Type, parameters: ConversionParameters): List<*> {
     if (to !is ParameterizedType) throw IllegalArgumentException(
         """
-                Not enough information to determine the type of the target list for value '${value}' of type '${to}'
+                Not enough information to determine the type of the target list for value '$value' of type '$to'
                 To convert a list, it is mandatory to pass the generic type of the list, and not simply the class, otherwise it is impossible 
                 to determine the target type
             """

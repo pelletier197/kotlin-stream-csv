@@ -1,10 +1,12 @@
 package com.kheops.csv.reader.reflect
 
-import com.kheops.csv.reader.reflect.converters.*
-import java.lang.Exception
+import com.kheops.csv.reader.reflect.converters.ConversionFailedException
+import com.kheops.csv.reader.reflect.converters.ConversionSettings
+import com.kheops.csv.reader.reflect.converters.Converter
+import com.kheops.csv.reader.reflect.converters.NoConverterFoundException
+import com.kheops.csv.reader.reflect.converters.TypeConverter
 import java.lang.reflect.Constructor
 import java.lang.reflect.Field
-import kotlin.collections.ArrayList
 import kotlin.reflect.KFunction
 import kotlin.reflect.KProperty
 import kotlin.reflect.KVisibility
@@ -103,30 +105,32 @@ data class InstanceCreator(
     ): Array<Any?> {
         val instantiationFieldByName = arguments.map { it.field.name to it }.toMap()
         val names = constructor.parameterNames
-        return names.map(fun(it: String): Any? {
-            val instField = instantiationFieldByName[it] ?: error("no field found with name '${it}'")
-            val fieldValue = instField.value
+        return names.map(
+            fun(it: String): Any? {
+                val instField = instantiationFieldByName[it] ?: error("no field found with name '$it'")
+                val fieldValue = instField.value
 
-            if (fieldValue == null && !instField.field.isNullable) {
-                errors.add(createError(instField, InstantiationErrorType.NON_NULLABLE_FIELD_IS_NULL))
+                if (fieldValue == null && !instField.field.isNullable) {
+                    errors.add(createError(instField, InstantiationErrorType.NON_NULLABLE_FIELD_IS_NULL))
+                    return null
+                }
+
+                try {
+                    return fieldValue?.let {
+                        typeConverter.convertForField<String, Any?>(
+                            fieldValue,
+                            instField.field.field,
+                            settings
+                        )
+                    }
+                } catch (e: NoConverterFoundException) {
+                    errors.add(createError(instField, InstantiationErrorType.NO_CONVERTER_FOUND_FOR_VALUE, e))
+                } catch (e: ConversionFailedException) {
+                    errors.add(createError(instField, InstantiationErrorType.CONVERSION_OF_FIELD_FAILED, e))
+                }
                 return null
             }
-
-            try {
-                return fieldValue?.let {
-                    typeConverter.convertForField<String, Any?>(
-                        fieldValue,
-                        instField.field.field,
-                        settings
-                    )
-                }
-            } catch (e: NoConverterFoundException) {
-                errors.add(createError(instField, InstantiationErrorType.NO_CONVERTER_FOUND_FOR_VALUE, e))
-            } catch (e: ConversionFailedException) {
-                errors.add(createError(instField, InstantiationErrorType.CONVERSION_OF_FIELD_FAILED, e))
-            }
-            return null
-        }).toTypedArray()
+        ).toTypedArray()
     }
 
     private fun createError(
@@ -150,13 +154,17 @@ data class InstanceCreator(
     ): GenericConstructor<T> {
         val fieldNames = fields.map { it.name }
         return try {
-            (target.kotlin.constructors.filter { canBeSeen(it) }.find { constructor ->
-                constructor.parameters.map { it.name }.containsAll(fieldNames)
-            } as KFunction<T>?)?.let { KotlinConstructor(it) }
+            (
+                target.kotlin.constructors.filter { canBeSeen(it) }.find { constructor ->
+                    constructor.parameters.map { it.name }.containsAll(fieldNames)
+                } as KFunction<T>?
+                )?.let { KotlinConstructor(it) }
         } catch (ex: KotlinReflectionNotSupportedError) {
-            (target.constructors.find { constructor ->
-                constructor.parameters.map { it.name }.containsAll(fieldNames)
-            } as Constructor<T>?)?.let { JavaConstructor(it) }
+            (
+                target.constructors.find { constructor ->
+                    constructor.parameters.map { it.name }.containsAll(fieldNames)
+                } as Constructor<T>?
+                )?.let { JavaConstructor(it) }
         } ?: throw InvalidTargetClass(target, fields)
     }
 
@@ -182,4 +190,3 @@ data class InstanceCreator(
         override fun call(args: Array<Any?>): T = function.call(*args)
     }
 }
-

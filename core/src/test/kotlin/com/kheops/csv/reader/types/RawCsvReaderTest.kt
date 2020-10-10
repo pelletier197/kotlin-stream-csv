@@ -10,12 +10,12 @@ import java.io.File
 import java.nio.file.Paths
 import kotlin.streams.toList
 
-
 class RawCsvReaderTest : ShouldSpec({
     val underTest = CsvReader().reader()
 
     context("on a regular CSV") {
-        val csv = """
+        val csv =
+            """
                 a,b,c
                 1,2,3
             """.trimIndent()
@@ -33,7 +33,6 @@ class RawCsvReaderTest : ShouldSpec({
         context("parsing CSV from string") {
             should("parse and return all CSV lines") {
                 underTest.read(csv).toList().shouldContainExactly(expectedLines)
-
             }
         }
 
@@ -82,7 +81,8 @@ class RawCsvReaderTest : ShouldSpec({
     }
 
     context("when setting custom separator") {
-        val csv = """
+        val csv =
+            """
                 a;b;c,4
             """.trimIndent()
         context("with custom separator") {
@@ -109,7 +109,8 @@ class RawCsvReaderTest : ShouldSpec({
     }
 
     context("when setting custom column delimiter") {
-        val csv = """
+        val csv =
+            """
                 a,"b, c",'c, d'
             """.trimIndent()
         context("with default delimiter") {
@@ -136,7 +137,8 @@ class RawCsvReaderTest : ShouldSpec({
     }
 
     context("when trimming whitespaces") {
-        val csv = """
+        val csv =
+            """
                 a  , b , c
             """.trimIndent()
         context("with default setting") {
@@ -163,9 +165,10 @@ class RawCsvReaderTest : ShouldSpec({
     }
 
     context("when parsing empty strings as null") {
-        val csv = """
+        val csv =
+            """
             a,,c
-        """.trimIndent()
+            """.trimIndent()
 
         context("with default setting") {
             should("return empty strings as empty") {
@@ -190,11 +193,12 @@ class RawCsvReaderTest : ShouldSpec({
     }
 
     context("when skipping empty lines") {
-        val csv = """
+        val csv =
+            """
             
             a,b,c
             
-        """.trimIndent()
+            """.trimIndent()
         context("with default settings") {
             should("skip empty lines") {
                 underTest.read(csv).toList().shouldContainExactly(
@@ -227,5 +231,3 @@ class RawCsvReaderTest : ShouldSpec({
 
     afterSpec { deleteTestFile() }
 })
-
-

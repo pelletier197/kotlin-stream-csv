@@ -136,7 +136,6 @@ class InstanceCreatorTest : ShouldSpec({
             )
         )
 
-
         should("return an error of conversion failed") {
             val result = underTest.createInstance(
                 InstantFieldClass::class.java,

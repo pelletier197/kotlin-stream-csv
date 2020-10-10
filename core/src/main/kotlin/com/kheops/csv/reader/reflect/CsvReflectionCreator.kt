@@ -4,7 +4,7 @@ import com.kheops.csv.CsvProperty
 import com.kheops.csv.reader.reflect.converters.ConversionSettings
 import com.kheops.csv.reader.reflect.converters.Converter
 import java.lang.reflect.Field
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.jvm.kotlinProperty
 
 data class CsvReflectionCreator<T>(

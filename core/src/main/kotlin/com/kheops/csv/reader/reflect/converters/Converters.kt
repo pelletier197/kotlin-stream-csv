@@ -1,6 +1,26 @@
 package com.kheops.csv.reader.reflect.converters
 
-import com.kheops.csv.reader.reflect.converters.implementations.*
+import com.kheops.csv.reader.reflect.converters.implementations.StringDoubleConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringFloatConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringInstantConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringIntConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringLocalDateConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringLocalDateTimeConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringLongConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToArrayListConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToBigDecimalConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToBigIntegerConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToBooleanConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToByteConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToEnumConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToHashSetConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToLinkedListConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToListConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToSetConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringToTreeSetConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringUIntConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringULongConverter
+import com.kheops.csv.reader.reflect.converters.implementations.StringZonedDateTimeConverter
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import kotlin.reflect.KFunction
@@ -29,9 +49,16 @@ internal data class ConverterWrapper(
     val function: KFunction<Any?>
 ) {
     @Suppress("UNCHECKED_CAST")
-    fun <S, T> convert(value: S, to: Type, settings: ConversionSettings, internalConvertFunction: ConvertFunction<Any, *>): T {
+    fun <S, T> convert(
+        value: S,
+        to: Type,
+        settings: ConversionSettings,
+        internalConvertFunction: ConvertFunction<Any, *>
+    ): T {
         return convert(
-            value, to, ConversionParameters(
+            value,
+            to,
+            ConversionParameters(
                 settings = settings,
                 convert = internalConvertFunction,
             )

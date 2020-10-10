@@ -50,7 +50,8 @@ class HeaderCsvReaderTest : ShouldSpec({
     }
 
     context("on a regular CSV") {
-        val csv = """
+        val csv =
+            """
                 a,b,c
                 1,2,3
             """.trimIndent()
@@ -116,10 +117,11 @@ class HeaderCsvReaderTest : ShouldSpec({
     }
 
     context("different header provisioning") {
-        val csv = """
+        val csv =
+            """
             a1,b1,c1
             12,14,67
-        """.trimIndent()
+            """.trimIndent()
         context("header is provided") {
             val underTestWithHeader = underTest.withHeader(listOf("c1", "c2", "c3"))
             val expectedLinesWithHeader = listOf(

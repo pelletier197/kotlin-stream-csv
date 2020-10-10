@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.util.stream.Stream
 
-
 data class TypedCsvReader<T>(
     private val targetClass: Class<T>,
     val listSeparator: Char = ',',
@@ -93,7 +92,8 @@ data class TypedCsvReader<T>(
     private fun readHeaderLines(lines: Stream<HeaderCsvLine>): Stream<TypedCsvLine<T>> {
         return lines.map {
             val mappedInstance = creator.createCsvInstance(
-                csvHeadersValues = it.values, settings = conversionSettings
+                csvHeadersValues = it.values,
+                settings = conversionSettings
             )
             TypedCsvLine(
                 result = mappedInstance.result,

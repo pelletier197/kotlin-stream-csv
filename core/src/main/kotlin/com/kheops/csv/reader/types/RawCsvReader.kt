@@ -12,7 +12,6 @@ import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.stream.Stream
 
-
 data class RawCsvLine(
     val columns: List<String?>,
     val line: Int

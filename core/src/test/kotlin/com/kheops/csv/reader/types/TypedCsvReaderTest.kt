@@ -1,8 +1,12 @@
 package com.kheops.csv.reader.types
 
-import com.kheops.csv.reader.*
+import com.kheops.csv.reader.CsvError
+import com.kheops.csv.reader.CsvErrorType
+import com.kheops.csv.reader.deleteTestFile
+import com.kheops.csv.reader.filePath
 import com.kheops.csv.reader.reflect.converters.ConversionParameters
 import com.kheops.csv.reader.reflect.converters.Converter
+import com.kheops.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
@@ -89,7 +93,8 @@ class TypedCsvReaderTest : ShouldSpec({
     }
 
     context("on a regular CSV") {
-        val csv = """
+        val csv =
+            """
                 str,int,list,instant
                 abc,12,"a,b,c",2019-03-05T05:12:34.000Z
             """.trimIndent()
@@ -156,7 +161,8 @@ class TypedCsvReaderTest : ShouldSpec({
     }
 
     context("settings custom list separator") {
-        val csv = """
+        val csv =
+            """
                 str,int,list,instant
                 abc,12,"a;b,c",2019-03-05T05:12:34.000Z
             """.trimIndent()
@@ -207,10 +213,11 @@ class TypedCsvReaderTest : ShouldSpec({
 
         val underTestCustomConverter = TypedCsvReader(TestClassCustomConverter::class.java)
 
-        val csv = """
+        val csv =
+            """
             test,custom
             test string, custom converter test
-        """.trimIndent()
+            """.trimIndent()
 
         context("without the custom converter") {
             val expectedLine = TypedCsvLine<TestClassCustomConverter>(
@@ -272,7 +279,8 @@ class TypedCsvReaderTest : ShouldSpec({
             )
 
             val underTestNoConverter = TypedCsvReader(TestClassNoConverters::class.java)
-            val csvNoConverter = """
+            val csvNoConverter =
+                """
                     test
                     12
                 """.trimIndent()
@@ -298,7 +306,6 @@ class TypedCsvReaderTest : ShouldSpec({
                 }
             }
         }
-
     }
 })
 

@@ -11,17 +11,16 @@ class ConversionSettings(
 class NoConverterFoundException(value: Any, target: Type) :
     Exception(
         """
-        Could not find a converter for value '${value}' of type '${value::class.java.name}' to '${target.typeName}'.
+        Could not find a converter for value '$value' of type '${value::class.java.name}' to '${target.typeName}'.
         It is possible the value you are trying to convert is not supported by default. You should create and register your custom converter to handle this value. 
     """.trimMargin()
     )
 
 class ConversionFailedException(value: Any, target: Type, cause: Throwable) :
     Exception(
-        "conversion failed for value '${value}' of type '${value::class.java.name}' to '${target.typeName}'",
+        "conversion failed for value '$value' of type '${value::class.java.name}' to '${target.typeName}'",
         cause
     )
-
 
 class TypeConverter private constructor(private val converters: Converters) {
     companion object {
@@ -91,4 +90,3 @@ class TypeConverter private constructor(private val converters: Converters) {
         return converters.hashCode()
     }
 }
-

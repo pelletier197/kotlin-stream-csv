@@ -14,4 +14,3 @@ data class CsvError(
     val type: CsvErrorType,
     val cause: Throwable?,
 )
-
