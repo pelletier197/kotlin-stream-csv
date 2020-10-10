@@ -21,18 +21,17 @@ aliases:
     - *restore-cache
     - ./gradlew dependencies --info
     - *save-cache
-  - &base-java-image
-    - docker:
-        - image: cimg/openjdk:11.0
+  - &docker-image
+    cimg/openjdk:11.0
 
 jobs:
   build:
-    *base-java-image
+    docker: *docker-image
     steps:
       - *dependencies
       - run: ./gradlew test --info
   lint:
-    *base-java-image
+    docker: *docker-image
     steps:
       - *dependencies
       - run: ./gradlew ktlintCheck --info
