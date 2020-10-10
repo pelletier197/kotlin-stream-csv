@@ -39,8 +39,7 @@ jobs:
     steps:
       - run-with-dependencies:
           steps:
-            - run: ./gradlew compile --info
-
+            - run: ./gradlew assemble --info
   tests:
     <<: *defaults
     steps:
