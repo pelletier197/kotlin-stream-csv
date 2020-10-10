@@ -1,0 +1,11 @@
+// Allows conserving parameter name of constructors
+compileTestJava {
+    options.compilerArgs << '-parameters'
+}
+
+dependencies {
+    implementation project(":core")
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+}
