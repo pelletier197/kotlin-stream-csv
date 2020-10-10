@@ -14,7 +14,10 @@ class InvalidTargetClass(
 ) : Exception(
     """
     Invalid recipient class: '${target.name}'. Recipient class is expected to have a public constructor for all the public field of the target class and no other parameters.
-    Expected constructor:
+    
+    >> If the constructor exists and is public, it is possible that constructor's fields name are lost at compile time, which makes it impossible to find field's parameter names. With Java 8+, you can enable JVM option to conserve field name values with compile option '-parameters'. 
+    
+Expected constructor:
     ${target.name} (
 ${fields.joinToString(separator = "\n") { "         ${it.name}: ${it.field.genericType.typeName}" }}
     )

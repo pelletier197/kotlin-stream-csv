@@ -1,11 +1,8 @@
 package com.kheops.csv.reader.types
 
-import com.kheops.csv.reader.CsvError
-import com.kheops.csv.reader.CsvErrorType
-import com.kheops.csv.reader.filePath
+import com.kheops.csv.reader.*
 import com.kheops.csv.reader.reflect.converters.ConversionParameters
 import com.kheops.csv.reader.reflect.converters.Converter
-import com.kheops.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
@@ -26,6 +23,8 @@ data class TestClass(
 
 class TypedCsvReaderTest : ShouldSpec({
     val underTest = TypedCsvReader(TestClass::class.java)
+
+    afterSpec { deleteTestFile() }
 
     context("a request to set header reader parameters") {
         context("configuring separator") {

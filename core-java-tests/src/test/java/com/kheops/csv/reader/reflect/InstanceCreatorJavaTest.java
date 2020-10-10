@@ -7,15 +7,30 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class InstanceCreatorJavaTest {
-    static class JavaTestClass {
+    public static class JavaTestClass {
         public final String value;
         public final int intValue;
 
-        JavaTestClass(String value, int intValue) {
+        public JavaTestClass(String value, int intValue) {
             this.value = value;
             this.intValue = intValue;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            JavaTestClass that = (JavaTestClass) o;
+            return intValue == that.intValue &&
+                    Objects.equals(value, that.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value, intValue);
         }
     }
 
@@ -53,12 +68,12 @@ public class InstanceCreatorJavaTest {
             }
 
             @Test
-            private void thenConstructionSucceeds() {
+            void thenConstructionSucceeds() {
                 final var result = underTest.createInstance(JavaTestClass.class, arguments, new ConversionSettings());
                 Assertions.assertEquals(expected, result.getResult());
                 Assertions.assertTrue(result.getErrors().isEmpty());
-                Assertions.assertTrue(false);
             }
         }
     }
 }
+

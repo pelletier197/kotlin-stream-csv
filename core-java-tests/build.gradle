@@ -1,0 +1,26 @@
+plugins {
+    id "java"
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+// Allows conserving parameter name of constructors
+compileTestJava {
+    options.compilerArgs << '-parameters'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+        events "standardOut", "passed", "skipped", "failed"
+    }
+}
+
+dependencies {
+    implementation project(":core")
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+}
