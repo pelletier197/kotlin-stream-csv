@@ -1,19 +1,17 @@
 version: 2.1
 aliases:
-  - &dependencies-path
-      v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
-
   - &restore-cache
     restore_cache:
       keys:
-        - *dependencies-path
+        - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
         - v1-dependencies-
   - &save-cache
     save_cache:
       paths:
         - ./.gradle
         - ~/.gradle
-      key: *dependencies-path
+      key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
+
 
   - &defaults
     docker:
@@ -35,6 +33,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - *restore-cache
       - run: ./gradlew dependencies
       - *save-cache
   build:
