@@ -30,7 +30,7 @@ commands:
       - steps: << parameters.steps >>
 
 jobs:
-  cache:
+  create-cache:
     <<: *defaults
     steps:
       - checkout
@@ -56,7 +56,7 @@ jobs:
             - run: ./gradlew ktlintCheck --info
 workflows:
   version: 2.1
-  test-and-verify:
+  build-test-verify-deploy:
     jobs:
       - create-cache
       - build:
