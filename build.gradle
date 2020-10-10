@@ -55,7 +55,7 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
 }
 
 coveralls {
-    sourceDirs += ["${project(":core").projectDir}/src/main/kotlin"]
+    sourceDirs = ["${project(":core").projectDir}/src/main/kotlin"]
     service = "circleci"
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
