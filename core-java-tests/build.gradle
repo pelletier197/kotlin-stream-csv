@@ -2,6 +2,13 @@ plugins {
     id "java"
 }
 
+sourceCompatibility = 14
+targetCompatibility = 14
+
+// Allows conserving parameter name of constructors
+compileTestJava {
+    options.compilerArgs << '-parameters'
+}
 
 test {
     useJUnitPlatform()
