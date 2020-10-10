@@ -1,6 +1,7 @@
 package com.kheops.csv.reader.reflect.converters
 
 import java.lang.reflect.Field
+import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Type
 
 class ConversionSettings(
@@ -15,10 +16,10 @@ class NoConverterFoundException(value: Any, target: Type) :
     """.trimMargin()
     )
 
-class ConversionFailedException(value: Any, target: Type, exception: Exception) :
+class ConversionFailedException(value: Any, target: Type, cause: Throwable) :
     Exception(
         "conversion failed for value '${value}' of type '${value::class.java.name}' to '${target.typeName}'",
-        exception
+        cause
     )
 
 
@@ -49,7 +50,15 @@ class TypeConverter private constructor(private val converters: Converters) {
             converters.getConverter(nonNullValue::class.java, to) ?: throw NoConverterFoundException(nonNullValue, to)
 
         try {
-            return converter.convert(nonNullValue, to, settings)
+            return converter.convert(nonNullValue, to, settings) { internalValue, internalTo, internalSettings ->
+                this.convertToType(
+                    internalValue,
+                    internalTo,
+                    internalSettings.settings,
+                )
+            }
+        } catch (ex: InvocationTargetException) {
+            throw ConversionFailedException(nonNullValue, to, ex.cause ?: ex)
         } catch (ex: Exception) {
             throw ConversionFailedException(nonNullValue, to, ex)
         }

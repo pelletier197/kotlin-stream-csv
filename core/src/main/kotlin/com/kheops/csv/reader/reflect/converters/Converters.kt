@@ -1,13 +1,14 @@
 package com.kheops.csv.reader.reflect.converters
 
+import com.kheops.csv.reader.reflect.converters.implementations.*
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.functions
 
 private data class ConversionTargets(
-    val source: String,
-    val target: String
+    private val source: String,
+    private val target: String
 )
 
 typealias ConvertFunction<S, T> = (value: S, to: Type, parameters: ConversionParameters) -> T
@@ -28,17 +29,11 @@ internal data class ConverterWrapper(
     val function: KFunction<Any?>
 ) {
     @Suppress("UNCHECKED_CAST")
-    fun <S, T> convert(value: S, to: Type, settings: ConversionSettings): T {
+    fun <S, T> convert(value: S, to: Type, settings: ConversionSettings, internalConvertFunction: ConvertFunction<Any, *>): T {
         return convert(
             value, to, ConversionParameters(
                 settings = settings,
-                convert = { internalValue, internalTo, internalParam ->
-                    this.convert(
-                        internalValue,
-                        internalTo,
-                        internalParam
-                    )
-                }
+                convert = internalConvertFunction,
             )
         )
     }

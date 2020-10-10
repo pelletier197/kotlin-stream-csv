@@ -1,5 +1,7 @@
-package com.kheops.csv.reader.reflect.converters
+package com.kheops.csv.reader.reflect.converters.implementations
 
+import com.kheops.csv.reader.reflect.converters.ConversionParameters
+import com.kheops.csv.reader.reflect.converters.Converter
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.util.*
@@ -57,7 +59,6 @@ private fun asList(value: String, to: Type, parameters: ConversionParameters): L
     val settings = parameters.settings
     val targetClass = to.actualTypeArguments[0]
     return value.split(settings.listSeparator)
-        .map { it.trim() }
-        .filter { it.isNotEmpty() }
+        .filter { it.isNotBlank() }
         .map { parameters.convert(it, targetClass, parameters) }
 }

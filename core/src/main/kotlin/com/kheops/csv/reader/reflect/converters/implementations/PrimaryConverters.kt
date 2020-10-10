@@ -1,14 +1,10 @@
-package com.kheops.csv.reader.reflect.converters
+package com.kheops.csv.reader.reflect.converters.implementations
 
+import com.kheops.csv.reader.reflect.converters.ConversionParameters
+import com.kheops.csv.reader.reflect.converters.Converter
 import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.text.DateFormat
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZonedDateTime
-import java.util.*
 
 abstract class StringConverterBase<TO> : Converter<String, TO> {
     override val source: Class<String> get() = String::class.java
@@ -18,32 +14,6 @@ abstract class StringConverterBase<TO> : Converter<String, TO> {
         doConvert(value.trim(), to as Class<TO>)
 
     abstract fun doConvert(value: String, to: Class<TO>): TO?
-}
-
-class StringInstantConverter : StringConverterBase<Instant>() {
-    override val target: Class<Instant> = Instant::class.java
-    override fun doConvert(value: String, to: Class<Instant>): Instant = Instant.parse(value)
-}
-
-class StringZonedDateTimeConverter : StringConverterBase<ZonedDateTime>() {
-    override val target: Class<ZonedDateTime> get() = ZonedDateTime::class.java
-    override fun doConvert(value: String, to: Class<ZonedDateTime>): ZonedDateTime = ZonedDateTime.parse(value)
-}
-
-class StringLocalDateConverter : StringConverterBase<LocalDate>() {
-    override val target: Class<LocalDate> get() = LocalDate::class.java
-    override fun doConvert(value: String, to: Class<LocalDate>): LocalDate = LocalDate.parse(value)
-}
-
-class StringLocalDateTimeConverter : StringConverterBase<LocalDateTime>() {
-    override val target: Class<LocalDateTime> get() = LocalDateTime::class.java
-    override fun doConvert(value: String, to: Class<LocalDateTime>): LocalDateTime = LocalDateTime.parse(value)
-}
-
-class StringDateConverter : StringConverterBase<Date>() {
-    private val dateFormat = DateFormat.getInstance()
-    override val target: Class<Date> get() = Date::class.java
-    override fun doConvert(value: String, to: Class<Date>): Date = dateFormat.parse(value)
 }
 
 class StringLongConverter : StringConverterBase<Long>() {
@@ -88,7 +58,7 @@ class StringToEnumConverter : StringConverterBase<Enum<*>>() {
 }
 
 class StringToBooleanConverter : StringConverterBase<Boolean>() {
-    private val trueValues = setOf("true", "t", "yes", "1")
+    private val trueValues = setOf("true", "t", "yes", "1", "x")
     override val target: Class<Boolean> get() = Boolean::class.java
     override fun doConvert(value: String, to: Class<Boolean>): Boolean = trueValues.contains(value.toLowerCase())
 }

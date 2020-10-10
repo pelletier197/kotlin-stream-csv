@@ -7,6 +7,7 @@ import java.lang.reflect.Field
 import kotlin.collections.ArrayList
 import kotlin.reflect.KFunction
 import kotlin.reflect.KProperty
+import kotlin.reflect.KVisibility
 
 class InvalidTargetClass(
     target: Class<*>,
@@ -149,7 +150,7 @@ data class InstanceCreator(
     ): GenericConstructor<T> {
         val fieldNames = fields.map { it.name }
         return try {
-            (target.kotlin.constructors.find { constructor ->
+            (target.kotlin.constructors.filter { canBeSeen(it) }.find { constructor ->
                 constructor.parameters.map { it.name }.containsAll(fieldNames)
             } as KFunction<T>?)?.let { KotlinConstructor(it) }
         } catch (ex: KotlinReflectionNotSupportedError) {
@@ -158,6 +159,9 @@ data class InstanceCreator(
             } as Constructor<T>?)?.let { JavaConstructor(it) }
         } ?: throw InvalidTargetClass(target, fields)
     }
+
+    private fun canBeSeen(it: KFunction<Any>) =
+        it.visibility == KVisibility.PUBLIC || it.visibility == KVisibility.PROTECTED
 
     private interface GenericConstructor<T> {
         val parameterNames: List<String>

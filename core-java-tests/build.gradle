@@ -1,21 +1,6 @@
-plugins {
-    id "java"
-}
-
-sourceCompatibility = 11
-targetCompatibility = 11
-
 // Allows conserving parameter name of constructors
 compileTestJava {
     options.compilerArgs << '-parameters'
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        showStandardStreams = true
-        events "standardOut", "passed", "skipped", "failed"
-    }
 }
 
 dependencies {
