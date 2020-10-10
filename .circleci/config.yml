@@ -3,27 +3,44 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
+aliases:
+  - &restore-cache
+    - restore_cache:
+        keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
+          - v1-dependencies-
+  - &save-cache
+    - save_cache:
+        paths:
+          - ~/.gradle
+          - ./.gradle
+        key: v1-dependencies--{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "core-java-tests/build.gradle" }}
+
+  - &dependencies
+    - checkout
+    - *restore-cache
+    - ./gradlew dependencies --info
+    - *save-cache
+  - &base-java-image
+    - docker:
+        - image: cimg/openjdk:11.0
+
 jobs:
   build:
-    docker:
-      # specify the version you desire here
-      - image: cimg/openjdk:11.0
-    working_directory: ~/repo
+    *base-java-image
     steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: ./gradlew dependencies
-
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
-
-      # run tests!
+      - *dependencies
       - run: ./gradlew test --info
+  lint:
+    *base-java-image
+    steps:
+      - *dependencies
+      - run: ./gradlew ktlintCheck --info
+
+workflows:
+  version: 2
+  test_and_validate:
+    jobs:
+      - test
+      - lint
+
