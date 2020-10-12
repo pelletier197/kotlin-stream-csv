@@ -70,7 +70,6 @@ workflows:
             - create-cache
       - release:
           requires:
-            - build
             - tests
             - lint
           filters:

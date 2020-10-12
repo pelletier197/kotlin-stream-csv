@@ -7,13 +7,14 @@ plugins {
     id 'com.github.kt3k.coveralls' version "$coveralls_version"
 
     id 'net.researchgate.release' version "$researchgate_release_version" apply false
+    id "org.danilopianini.publish-on-central" version "$publish_on_central_version" apply false
 }
 
 allprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
-    group 'com.kheops'
+    group 'com.kheops.csv'
     version "1.0.0-SNAPSHOT"
 
     sourceCompatibility = 11

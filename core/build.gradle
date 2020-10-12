@@ -5,6 +5,7 @@ plugins {
     id "org.jlleitschuh.gradle.ktlint"
 
     id 'net.researchgate.release'
+    id "org.danilopianini.publish-on-central"
 }
 
 release {
