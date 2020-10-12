@@ -84,5 +84,6 @@ workflows:
             - lint
           filters:
             branches:
-              only: /^release-*/
+              only:
+                - /^release-.*$/
 
