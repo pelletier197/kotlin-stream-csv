@@ -61,7 +61,7 @@ jobs:
     steps:
       - run-with-dependencies:
           steps:
-            - run: ./gradlew core:publishMavenCentralPublicationToMavenRepository
+            - run: ./gradlew core:publish
 workflows:
   version: 2.1
   build-test-verify-deploy:

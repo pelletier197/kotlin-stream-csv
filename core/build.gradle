@@ -97,8 +97,8 @@ publishing {
         maven {
             url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
             credentials {
-                username "sonatypeUsername"
-                password "sonatypePassword"
+                username System.getenv("SONATYPE_NEXUS_USERNAME")
+                password System.getenv("SONATYPE_NEXUS_PASSWORD")
             }
         }
     }
