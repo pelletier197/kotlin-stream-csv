@@ -71,5 +71,4 @@ tasks.coveralls {
 nexusStaging {
     username System.getenv("SONATYPE_NEXUS_USERNAME")
     password System.getenv("SONATYPE_NEXUS_PASSWORD")
-
 }
