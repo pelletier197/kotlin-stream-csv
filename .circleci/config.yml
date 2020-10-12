@@ -55,7 +55,8 @@ jobs:
           steps:
             - run: git config user.email "circle-ci@pipeline.com"
             - run: git config user.name "Circle CI"
-            - run: ./gradlew core:release -Prelease.useAutomaticVersion=true -Prelease.version=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
+            - run: export 'RELEASE_VERSION=$(echo $CIRCLE_BRANCH | cut -f2 -d-)' >> $BASH_ENV
+            - run: ./gradlew core:release -Prelease.useAutomaticVersion=true -Prelease.version=$RELEASE_VERSION
 
 workflows:
   version: 2.1
