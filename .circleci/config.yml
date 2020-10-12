@@ -29,63 +29,51 @@ commands:
       - steps: << parameters.steps >>
 
 jobs:
-#  create-cache:
-#    <<: *defaults
-#    steps:
-#      - checkout
-#      - *restore-cache
-#      - run: ./gradlew dependencies
-#      - *save-cache
-#  tests:
-#    <<: *defaults
-#    steps:
-#      - run-with-dependencies:
-#          steps:
-#            - run: ./gradlew test coveralls --info
-#  lint:
-#    <<: *defaults
-#    steps:
-#      - run-with-dependencies:
-#          steps:
-#            - run: ./gradlew ktlintCheck --info
-#  release:
-#    <<: *defaults
-#    steps:
-#      - run-with-dependencies:
-#          steps:
-#            - run: git config user.email "circle-ci@pipeline.com"
-#            - run: git config user.name "Circle CI"
-#            - run: ./gradlew core:release -Prelease.useAutomaticVersion=true -PreleaseVersion=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
+  create-cache:
+    <<: *defaults
+    steps:
+      - checkout
+      - *restore-cache
+      - run: ./gradlew dependencies
+      - *save-cache
+  tests:
+    <<: *defaults
+    steps:
+      - run-with-dependencies:
+          steps:
+            - run: ./gradlew test coveralls --info
+  lint:
+    <<: *defaults
+    steps:
+      - run-with-dependencies:
+          steps:
+            - run: ./gradlew ktlintCheck --info
   deploy:
     <<: *defaults
     steps:
       - run-with-dependencies:
           steps:
+            - run: git config user.email "circle-ci@pipeline.com"
+            - run: git config user.name "Circle CI"
             - run: ./gradlew core:publish
+            - run: ./gradlew core:closeAndReleaseRepository
+            - run: ./gradlew core:release -Prelease.useAutomaticVersion=true -PreleaseVersion=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
 workflows:
   version: 2.1
   build-test-verify-deploy:
     jobs:
-#      - create-cache
-#      - tests:
-#          requires:
-#            - create-cache
-#      - lint:
-#          requires:
-#            - create-cache
-#      - release:
-#          requires:
-#            - tests
-#            - lint
-#          filters:
-#            branches:
-#              only:
-#                - /^release-.*$/
-      - deploy #:
-#          requires:
-#            - tests
-#            - lint
-#          filters:
-#            branches:
-#              only:
-#                - /^release-.*$/
+      - create-cache
+      - tests:
+          requires:
+            - create-cache
+      - lint:
+          requires:
+            - create-cache
+      - deploy:
+          requires:
+            - tests
+            - lint
+          filters:
+            branches:
+              only:
+                - /^release-.*$/
