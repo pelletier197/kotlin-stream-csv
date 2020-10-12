@@ -13,7 +13,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
-    group 'com.kheops'
+    group 'io.github.pelletier197'
     version "1.0.0-SNAPSHOT"
 
     sourceCompatibility = 11
