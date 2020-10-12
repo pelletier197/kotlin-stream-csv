@@ -6,6 +6,7 @@ plugins {
 
     id 'net.researchgate.release'
     id 'maven-publish'
+    id 'signing'
     id "org.danilopianini.publish-on-central"
 }
 
@@ -18,6 +19,13 @@ release {
     git {
         requireBranch = '^release-.*$'
     }
+}
+
+signing {
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign stuffZip
 }
 
 publishOnCentral {
