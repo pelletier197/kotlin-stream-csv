@@ -65,22 +65,22 @@ jobs:
 workflows:
   version: 2.1
   build-test-verify-deploy:
-    jobs:
-      - create-cache
-      - tests:
-          requires:
-            - create-cache
-      - lint:
-          requires:
-            - create-cache
-      - release:
-          requires:
-            - tests
-            - lint
-          filters:
-            branches:
-              only:
-                - /^release-.*$/
+#    jobs:
+#      - create-cache
+#      - tests:
+#          requires:
+#            - create-cache
+#      - lint:
+#          requires:
+#            - create-cache
+#      - release:
+#          requires:
+#            - tests
+#            - lint
+#          filters:
+#            branches:
+#              only:
+#                - /^release-.*$/
       - deploy #:
 #          requires:
 #            - tests

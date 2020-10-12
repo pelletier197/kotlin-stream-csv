@@ -7,7 +7,7 @@ plugins {
     id 'com.github.kt3k.coveralls' version "$coveralls_version"
 
     id 'net.researchgate.release' version "$researchgate_release_version" apply false
-    id "org.danilopianini.publish-on-central" version "$publish_on_central_version" apply false
+    id "com.vanniktech.maven.publish" version "$maven_publish_version" apply false
 }
 
 allprojects {

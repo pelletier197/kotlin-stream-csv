@@ -7,7 +7,7 @@ plugins {
     id 'net.researchgate.release'
     id 'maven-publish'
     id 'signing'
-    id "org.danilopianini.publish-on-central"
+    id "com.vanniktech.maven.publish"
 }
 
 release {
@@ -19,22 +19,6 @@ release {
     git {
         requireBranch = '^release-.*$'
     }
-}
-
-signing {
-    def signingKey = findProperty("signingKey")
-    def signingPassword = findProperty("signingPassword")
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign stuffZip
-}
-
-publishOnCentral {
-    projectDescription.set("A kotlin and java CSV parser that uses the power of kotlin DSL to simplify parsing and error handling compared to existing solutions")
-    projectLongName.set("Kotlin stream CSV")
-    licenseName.set("MIT")
-    licenseUrl.set("https://opensource.org/licenses/MIT")
-    projectUrl.set("https://github.com/pelletier197/kotlin-stream-csv")
-    scmConnection.set("git@github.com:pelletier197/kotlin-stream-csv.git")
 }
 
 compileKotlin {
