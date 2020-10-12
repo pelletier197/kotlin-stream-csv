@@ -5,9 +5,8 @@ plugins {
     id "org.jlleitschuh.gradle.ktlint"
 
     id 'net.researchgate.release'
-    id 'maven-publish'
-    id 'signing'
     id "com.vanniktech.maven.publish"
+    id "org.jetbrains.dokka" version "$kotlin_version"
 }
 
 release {
@@ -20,6 +19,7 @@ release {
         requireBranch = '^release-.*$'
     }
 }
+
 
 compileKotlin {
     kotlinOptions {

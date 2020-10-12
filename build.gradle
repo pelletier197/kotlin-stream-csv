@@ -14,7 +14,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
-    group 'io.github.pelletier197'
+    group "$GROUP"
     version "1.0.0-SNAPSHOT"
 
     sourceCompatibility = 11
