@@ -59,7 +59,7 @@ jobs:
             - run: ./gradlew closeAndReleaseRepository
             - run: ./gradlew core:release -Prelease.useAutomaticVersion=true -PreleaseVersion=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
             - run: git checkout master
-            - run: git pull origin $CURCLE_BRANCH
+            - run: git pull origin $CIRCLE_BRANCH
             - run: git push
 workflows:
   version: 2.1
