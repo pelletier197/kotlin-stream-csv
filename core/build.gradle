@@ -5,6 +5,10 @@ plugins {
     id 'net.researchgate.release'
 }
 
+release {
+    tagTemplate = '$name-$version'
+}
+
 compileKotlin {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11
