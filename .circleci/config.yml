@@ -36,12 +36,6 @@ jobs:
       - *restore-cache
       - run: ./gradlew dependencies
       - *save-cache
-  build:
-    <<: *defaults
-    steps:
-      - run-with-dependencies:
-          steps:
-            - run: ./gradlew assemble --info
   tests:
     <<: *defaults
     steps:
@@ -59,22 +53,15 @@ jobs:
     steps:
       - run-with-dependencies:
           steps:
-            - add_ssh_keys:
-                fingerprints:
-                  - "81:f3:60:9a:cf:e7:f7:c0:7c:1d:f9:2f:90:12:e7:df"
             - run: git config user.email "circle-ci@pipeline.com"
             - run: git config user.name "Circle CI"
-            - run: RELEASE_VERSION=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
-            - run: ./gradlew core:release -Prelease.useAutomaticVersion=true -Prelease.version=$RELEASE_VERSION
+            - run: ./gradlew core:release -Prelease.useAutomaticVersion=true -Prelease.version=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
 
 workflows:
   version: 2.1
   build-test-verify-deploy:
     jobs:
       - create-cache
-      - build:
-          requires:
-            - create-cache
       - tests:
           requires:
             - create-cache
