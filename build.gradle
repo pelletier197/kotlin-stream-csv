@@ -14,7 +14,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
-    group 'com.kheops.csv'
+    group 'com.kheops'
     version "1.0.0-SNAPSHOT"
 
     sourceCompatibility = 11
