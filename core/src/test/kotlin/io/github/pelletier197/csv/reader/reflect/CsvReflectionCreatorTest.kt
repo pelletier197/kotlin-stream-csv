@@ -1,7 +1,7 @@
 package io.github.pelletier197.csv.reader.reflect
 
 import io.github.pelletier197.csv.CsvProperty
-import com.kheops.csv.reader.reflect.converters.ConversionSettings
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionSettings
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 

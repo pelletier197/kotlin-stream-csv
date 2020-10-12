@@ -1,10 +1,10 @@
 package io.github.pelletier197.csv.reader.reflect
 
-import com.kheops.csv.reader.reflect.converters.ConversionFailedException
-import com.kheops.csv.reader.reflect.converters.ConversionSettings
-import com.kheops.csv.reader.reflect.converters.Converter
-import com.kheops.csv.reader.reflect.converters.NoConverterFoundException
-import com.kheops.csv.reader.reflect.converters.TypeConverter
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionFailedException
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionSettings
+import io.github.pelletier197.csv.reader.reflect.converters.Converter
+import io.github.pelletier197.csv.reader.reflect.converters.NoConverterFoundException
+import io.github.pelletier197.csv.reader.reflect.converters.TypeConverter
 import java.lang.reflect.Constructor
 import java.lang.reflect.Field
 import kotlin.reflect.KFunction

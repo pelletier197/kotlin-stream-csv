@@ -1,9 +1,9 @@
 package io.github.pelletier197.csv.reader.types
 
-import com.kheops.csv.reader.CsvReader
-import com.kheops.csv.reader.deleteTestFile
-import com.kheops.csv.reader.filePath
-import com.kheops.csv.reader.writeTestFile
+import io.github.pelletier197.csv.reader.CsvReader
+import io.github.pelletier197.csv.reader.deleteTestFile
+import io.github.pelletier197.csv.reader.filePath
+import io.github.pelletier197.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import java.io.File

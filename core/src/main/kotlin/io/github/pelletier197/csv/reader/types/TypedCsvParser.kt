@@ -1,12 +1,12 @@
 package io.github.pelletier197.csv.reader.types
 
-import com.kheops.csv.reader.CsvError
-import com.kheops.csv.reader.CsvErrorType
-import com.kheops.csv.reader.CsvParsingException
-import com.kheops.csv.reader.reflect.CsvReflectionCreator
-import com.kheops.csv.reader.reflect.InstantiationError
-import com.kheops.csv.reader.reflect.converters.ConversionSettings
-import com.kheops.csv.reader.reflect.converters.Converter
+import io.github.pelletier197.csv.reader.CsvError
+import io.github.pelletier197.csv.reader.CsvErrorType
+import io.github.pelletier197.csv.reader.CsvParsingException
+import io.github.pelletier197.csv.reader.reflect.CsvReflectionCreator
+import io.github.pelletier197.csv.reader.reflect.InstantiationError
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionSettings
+import io.github.pelletier197.csv.reader.reflect.converters.Converter
 import java.io.File
 import java.io.InputStream
 import java.net.URL

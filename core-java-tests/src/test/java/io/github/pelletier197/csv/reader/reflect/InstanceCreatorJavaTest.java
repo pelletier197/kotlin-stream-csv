@@ -1,6 +1,6 @@
 package io.github.pelletier197.csv.reader.reflect;
 
-import com.kheops.csv.reader.reflect.converters.ConversionSettings;
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionSettings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

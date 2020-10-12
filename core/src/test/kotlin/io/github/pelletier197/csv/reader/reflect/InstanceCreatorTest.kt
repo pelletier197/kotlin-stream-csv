@@ -1,6 +1,6 @@
 package io.github.pelletier197.csv.reader.reflect
 
-import com.kheops.csv.reader.reflect.converters.ConversionSettings
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionSettings
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldHaveSize

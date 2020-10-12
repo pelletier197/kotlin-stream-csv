@@ -1,7 +1,7 @@
 package io.github.pelletier197.csv.reader.reflect.converters.implementations
 
-import com.kheops.csv.reader.reflect.converters.ConversionParameters
-import com.kheops.csv.reader.reflect.converters.Converter
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionParameters
+import io.github.pelletier197.csv.reader.reflect.converters.Converter
 import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.math.BigInteger

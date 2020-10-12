@@ -1,12 +1,12 @@
 package io.github.pelletier197.csv.reader.types
 
-import com.kheops.csv.reader.CsvError
-import com.kheops.csv.reader.CsvErrorType
-import com.kheops.csv.reader.deleteTestFile
-import com.kheops.csv.reader.filePath
-import com.kheops.csv.reader.reflect.converters.ConversionParameters
-import com.kheops.csv.reader.reflect.converters.Converter
-import com.kheops.csv.reader.writeTestFile
+import io.github.pelletier197.csv.reader.CsvError
+import io.github.pelletier197.csv.reader.CsvErrorType
+import io.github.pelletier197.csv.reader.deleteTestFile
+import io.github.pelletier197.csv.reader.filePath
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionParameters
+import io.github.pelletier197.csv.reader.reflect.converters.Converter
+import io.github.pelletier197.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize

@@ -1,8 +1,8 @@
 package io.github.pelletier197.csv.reader.reflect
 
 import io.github.pelletier197.csv.CsvProperty
-import com.kheops.csv.reader.reflect.converters.ConversionSettings
-import com.kheops.csv.reader.reflect.converters.Converter
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionSettings
+import io.github.pelletier197.csv.reader.reflect.converters.Converter
 import java.lang.reflect.Field
 import java.util.UUID
 import kotlin.reflect.jvm.kotlinProperty

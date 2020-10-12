@@ -1,8 +1,8 @@
 package io.github.pelletier197.csv.reader.types
 
-import com.kheops.csv.reader.CsvError
-import com.kheops.csv.reader.CsvErrorType
-import com.kheops.csv.reader.CsvParsingException
+import io.github.pelletier197.csv.reader.CsvError
+import io.github.pelletier197.csv.reader.CsvErrorType
+import io.github.pelletier197.csv.reader.CsvParsingException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.booleans.shouldBeFalse

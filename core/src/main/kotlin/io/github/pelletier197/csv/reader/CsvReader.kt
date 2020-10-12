@@ -1,8 +1,8 @@
 package io.github.pelletier197.csv.reader
 
-import com.kheops.csv.reader.types.HeaderCsvReader
-import com.kheops.csv.reader.types.RawCsvReader
-import com.kheops.csv.reader.types.TypedCsvReader
+import io.github.pelletier197.csv.reader.types.HeaderCsvReader
+import io.github.pelletier197.csv.reader.types.RawCsvReader
+import io.github.pelletier197.csv.reader.types.TypedCsvReader
 
 class CsvReader {
     inline fun <reified T> readerForType(): TypedCsvReader<T> {
