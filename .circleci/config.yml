@@ -55,6 +55,7 @@ jobs:
           steps:
             - run: git config user.email "circle-ci@pipeline.com"
             - run: git config user.name "Circle CI"
+            - run: ORG_GRADLE_PROJECT_signingKey=$(echo $ORG_GRADLE_PROJECT_signingKey | base64 -d)
             - run: ./gradlew core:publish
             - run: ./gradlew core:closeAndReleaseRepository
             - run: ./gradlew core:release -Prelease.useAutomaticVersion=true -PreleaseVersion=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
