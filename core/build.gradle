@@ -5,8 +5,8 @@ plugins {
     id "org.jlleitschuh.gradle.ktlint"
 
     id 'net.researchgate.release'
-    id "com.vanniktech.maven.publish"
-    id "org.jetbrains.dokka" version "$kotlin_version"
+    id 'maven-publish'
+    id 'signing'
 }
 
 release {
@@ -42,3 +42,64 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockk_version"
 }
 
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourceJar
+    archives javadocJar
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = "$group"
+            artifactId 'csv-core'
+            version "$version"
+
+            pom {
+                name = 'Kotlin stream CSV core'
+                description = 'A kotlin and java CSV parser that uses the power of kotlin DSL to simplify parsing and error handling compared to existing solutions'
+                url = 'https://github.com/pelletier197/kotlin-stream-csv'
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/pelletier197/kotlin-stream-csv.git'
+                    developerConnection = 'scm:git:git@github.com:pelletier197/kotlin-stream-csv.git'
+                    url = 'https://github.com/pelletier197/'
+                }
+            }
+
+            from components.java
+
+            artifact(sourceJar) {
+                classifier = 'sources'
+            }
+            artifact(javadocJar) {
+                classifier = 'javadoc'
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username "sonatypeUsername"
+                password "sonatypePassword"
+            }
+        }
+    }
+}

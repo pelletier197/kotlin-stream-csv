@@ -7,14 +7,13 @@ plugins {
     id 'com.github.kt3k.coveralls' version "$coveralls_version"
 
     id 'net.researchgate.release' version "$researchgate_release_version" apply false
-    id "com.vanniktech.maven.publish" version "$maven_publish_version" apply false
 }
 
 allprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
-    group "$GROUP"
+    group "io.github.pelletier197"
     version "1.0.0-SNAPSHOT"
 
     sourceCompatibility = 11
