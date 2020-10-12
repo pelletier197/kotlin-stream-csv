@@ -14,7 +14,6 @@ allprojects {
     apply plugin: 'jacoco'
 
     group "io.github.pelletier197"
-    version "1.0.0-SNAPSHOT"
 
     sourceCompatibility = 11
     targetCompatibility = 11
