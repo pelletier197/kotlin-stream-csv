@@ -57,7 +57,6 @@ java {
     withSourcesJar()
 }
 
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -71,6 +70,13 @@ publishing {
                     license {
                         name = 'MIT'
                         url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'pelletier197'
+                        name = 'Sunny Pelletier'
+                        email = 'sunnypelletier01@gmail.com'
                     }
                 }
                 scm {
