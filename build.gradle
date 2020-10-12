@@ -6,7 +6,7 @@ plugins {
 
     id 'com.github.kt3k.coveralls' version "$coveralls_version"
 
-    id 'net.researchgate.release' version "$researchgate_release_version"
+    id 'net.researchgate.release' version "$researchgate_release_version" apply false
 }
 
 allprojects {
