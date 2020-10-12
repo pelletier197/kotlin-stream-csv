@@ -54,6 +54,15 @@ jobs:
       - run-with-dependencies:
           steps:
             - run: ./gradlew ktlintCheck --info
+  release:
+    <<: *defaults
+    steps:
+      - run-with-dependencies:
+          steps:
+          - run: RELEASE_VERSION=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
+          - run: ./gradlew core:release -Prelease.useAutomaticVersion=true -Prelease.version=$RELEASE_VERSION
+
+
 workflows:
   version: 2.1
   build-test-verify-deploy:
@@ -68,4 +77,12 @@ workflows:
       - lint:
           requires:
             - create-cache
+      - release:
+          requires:
+            - build
+            - tests
+            - lint
+          filters:
+            branches:
+              only: release-*
 
