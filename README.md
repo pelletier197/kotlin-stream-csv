@@ -2,8 +2,6 @@
 
 
 # Kotlin Stream CSV
-> We are still working on this implementation for now, so it might not be stable yet.
-
 A pure kotlin implementation of the CSV parser. This implementation uses the simplicity and the power of Kotlin, while remaining compatible with Java source code. It is completely stream driven to maximize performance and flexibility. 
 
 ## Yet another CSV library?
