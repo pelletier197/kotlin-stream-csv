@@ -17,6 +17,13 @@ This library uses rather a lazy error handling approach. This means that if the 
 4. Extremely lightweight. 
 5. Kotlin :heart: 
 
+## Usage 
+Three possibilities of parsers are available. 
+- Typed CSV parser will read your CSV file directly into a data class
+- Returns CSV rows
+### Typed CSV parser
+
+
 ## Known limitations
 As for now, this implementation does not yet respect all specifications of [RFC-4180](https://tools.ietf.org/html/rfc4180). 
 - Field containing line breaks is not yet supported

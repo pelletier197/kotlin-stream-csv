@@ -45,6 +45,10 @@ data class TypedCsvReader<T>(
         return copy(reader = reader.withEmptyStringsAsNull(emptyAsNulls))
     }
 
+    fun withHeader(header: List<String>): TypedCsvReader<T> {
+        return copy(reader = reader.withHeader(header))
+    }
+
     fun withListSeparator(listSeparator: Char): TypedCsvReader<T> {
         return copy(listSeparator = listSeparator)
     }
