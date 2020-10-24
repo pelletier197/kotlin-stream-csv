@@ -83,7 +83,7 @@ reader.read(invalidCsv).forEach { println(it) }
 | Error type                   | Description                                                                                                                   |
 |------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
 | NON_NULLABLE_FIELD_IS_NULL   | In a Kotlin data class, this occurs whem target field is of non-nullable type but provided value is null                      |
-| NO_CONVERTER_FOUND_FOR_VALUE | When trying to convert a value to a field that has no converter. You should register a custom converter to support this field |
+| NO_CONVERTER_FOUND_FOR_VALUE | When trying to convert a value to a field class that has no converter. You should register a custom converter to support this field |
 | CONVERSION_OF_FIELD_FAILED   | When trying to convert a field and the converter throws an exception.                                                         |
 
 #### Custom converters
