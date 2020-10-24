@@ -18,10 +18,11 @@ This library uses rather a lazy error handling approach. This means that if the 
 5. Kotlin :heart: 
 
 ## Usage 
-Three possibilities of parsers are available. 
+Three types of parsers are available:
 - Typed CSV parser will read your CSV file directly into a data class
 - Returns CSV rows
 ### Typed CSV parser
+Will read your CSV directly to a custom data class.
 
 
 ## Known limitations
