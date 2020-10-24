@@ -3,13 +3,6 @@ package io.github.pelletier197.csv
 import io.github.pelletier197.csv.reader.CsvReader
 import kotlin.streams.toList
 
-private val csv =
-    """
-    first_name, last_name, phone_number, emails
-    John, Doe, 1+342-534-2342, "john.doe.1@test.com,john.doe.2@test.com"
-    Alice, Doe, 1+423-253-3453, alice.doe@test.com 
-    """.trimIndent()
-
 data class CsvPerson(
     @CsvProperty("first_name")
     val firstName: String,
@@ -23,6 +16,7 @@ data class CsvPerson(
 fun main() {
     val reader = CsvReader()
         .readerForType<CsvPerson>()
+        // .withHeader("first_name", "last_name", "phone_number", "emails") // If you wish to provide the header yourself
         .withSeparator(',')
         .withDelimiter('"')
         .withEmptyStringsAsNull(false)
