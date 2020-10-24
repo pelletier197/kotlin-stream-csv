@@ -59,7 +59,7 @@ data class CsvReflectionCreator<T>(
             )
         }
 
-        return instanceCreator.createInstance(target = target, arguments = arguments, settings)
+        return instanceCreator.createInstance(target = target, arguments = arguments, settings = settings)
     }
 
     fun withConverter(newConverter: Converter<*, *>): CsvReflectionCreator<T> {
