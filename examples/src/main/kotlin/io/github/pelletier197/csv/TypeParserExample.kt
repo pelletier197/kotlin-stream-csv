@@ -14,7 +14,7 @@ data class CsvPerson(
 )
 
 fun main() {
-    // readValidCsv()
+    readValidCsv()
     readInvalidCsv()
 }
 
@@ -46,6 +46,9 @@ private fun readInvalidCsv() {
 
     val reader = CsvReader()
         .readerForType<CsvPerson>()
+        .withEmptyStringsAsNull(true)
 
-    reader.read(invalidCsv).forEach { print(it) }
+    reader.read(invalidCsv).forEach { println(it) }
+    // Output:
+    // TypedCsvLine(result=null, line=2, errors=[CsvError(csvField=emails, classField=emails, providedValue=null, type=NON_NULLABLE_FIELD_IS_NULL, cause=null)])
 }

@@ -28,6 +28,17 @@ Probably the most useful implementation of all three of CSV parser for most use-
 
 #### Basic usage
 ```kotlin
+    data class CsvPerson(
+        // Csv property allows to specify what is the header name in the CSV, while naming you class field how you wish
+        @CsvProperty("first_name")
+        val firstName: String,
+        @CsvProperty("last_name")
+        val lastName: String,
+        @CsvProperty("phone_number")
+        val phoneNumber: String,
+        val emails: Set<String>
+    )
+
     val reader = CsvReader()
         .readerForType<CsvPerson>()
     val people = reader.read(csv).map { it.getResultOrThrow() }.toList()
@@ -39,6 +50,41 @@ Probably the most useful implementation of all three of CSV parser for most use-
 ```
 
 #### Error handling
+It is fairly simple to handle errors of a CSV input
+
+```kotlin
+    // Missing emails field
+    val invalidCsv =
+        """
+            first_name, last_name, phone_number, emails 
+            John, Doe, 1+342-534-2342
+        """.trimIndent()
+
+    val reader = CsvReader()
+        .readerForType<CsvPerson>()
+        .withEmptyStringsAsNull(true)
+
+    reader.read(invalidCsv).forEach { println(it) }
+    // Output:
+    // TypedCsvLine(result=null, line=2, errors=[CsvError(csvField=emails, classField=emails, providedValue=null, type=NON_NULLABLE_FIELD_IS_NULL, cause=null)])
+```
+
+##### Output fields description
+| Field                  | Description                                                                                                     |
+|------------------------|-----------------------------------------------------------------------------------------------------------------|
+| result                 | always non-null if there are no errors. It means the line was parsed successfully                               |
+| errors[].csvField      | The field in the CSV that is missing                                                                            |
+| errors[].classField    | The field in the recipient class that is missing. Will differ from `csvField` if `@CsvProperty` is used.        |
+| errors[].providedValue | The value provided in the CSV that caused this error. Will be null if the error is `NON_NULLABLE_FIELD_IS_NULL` |
+| errors[].type          | The error type. See [error type descriptions](#error-type-descriptions)                                                               |
+| errors[].cause         | The root exception that caused the error, if there is one                                                       |
+
+##### Error type descriptions
+| Error type                   | Description                                                                                                                   |
+|------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| NON_NULLABLE_FIELD_IS_NULL   | In a Kotlin data class, this occurs whem target field is of non-nullable type but provided value is null                      |
+| NO_CONVERTER_FOUND_FOR_VALUE | When trying to convert a value to a field that has no converter. You should register a custom converter to support this field |
+| CONVERSION_OF_FIELD_FAILED   | When trying to convert a field and the converter throws an exception.                                                         |
 
 ## Known limitations
 As for now, this implementation does not yet respect all specifications of [RFC-4180](https://tools.ietf.org/html/rfc4180). 
