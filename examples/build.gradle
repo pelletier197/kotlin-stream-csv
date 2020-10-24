@@ -15,6 +15,13 @@ compileTestKotlin {
     }
 }
 
+jacocoTestReport {
+    reports {
+        html.enabled = true
+        xml.enabled = true
+    }
+}
+
 dependencies {
     implementation project(":core")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
