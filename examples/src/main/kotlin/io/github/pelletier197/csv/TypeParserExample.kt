@@ -1,14 +1,14 @@
 package io.github.pelletier197.csv
 
 import io.github.pelletier197.csv.reader.CsvReader
-import java.util.stream.Collectors.toList
+import kotlin.streams.toList
 
 private val csv =
     """
     first_name, last_name, phone_number, emails
-    John, Doe, 1+342-534-2342, "john.doe.1@test.com, john.doe.2@test.com"
+    John, Doe, 1+342-534-2342, "john.doe.1@test.com,john.doe.2@test.com"
     Alice, Doe, 1+423-253-3453, alice.doe@test.com 
-""".trimMargin()
+    """.trimIndent()
 
 data class CsvPerson(
     @CsvProperty("first_name")
@@ -29,11 +29,10 @@ fun main() {
         .withListSeparator(',')
         .withSkipEmptyLines(true)
         .withTrimEntries(false)
-
-    val people = reader.read(csv).map { it.getResultOrThrow() }.collect(toList())
+    val people = reader.read(csv).map { it.getResultOrThrow() }.toList()
 
     println(people.joinToString(separator = "\n"))
     // Output:
-    // CsvPerson(firstName=    John, lastName= Doe, phoneNumber= 1+342-534-2342, emails=[])
-    // CsvPerson(firstName=    Alice, lastName= Doe, phoneNumber= 1+423-253-3453, emails=[ alice.doe@test.com ])
+    // CsvPerson(firstName=John, lastName= Doe, phoneNumber= 1+342-534-2342, emails=[john.doe.1@test.com, john.doe.2@test.com])
+    // CsvPerson(firstName=Alice, lastName= Doe, phoneNumber= 1+423-253-3453, emails=[ alice.doe@test.com ])
 }
