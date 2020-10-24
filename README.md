@@ -18,10 +18,27 @@ This library uses rather a lazy error handling approach. This means that if the 
 ## Usage 
 Three types of parsers are available:
 - Typed CSV parser will read your CSV file directly into a data class
-- Returns CSV rows
-### Typed CSV parser
-Will read your CSV directly to a custom data class.
+- Header CSV parser will return a `Map<String, String>` for each row, where the map's key is the header's value
+- Raw CSV reader will return a `List<String>` for every line of the CSV
 
+For advanced configuration examples of all three types of CSV, see [example project](./examples/src/main/kotlin/io/github/pelletier197/csv)
+
+### Typed CSV parser
+Probably the most useful implementation of all three of CSV parser for most use-cases. 
+
+#### Basic usage
+```kotlin
+    val reader = CsvReader()
+        .readerForType<CsvPerson>()
+    val people = reader.read(csv).map { it.getResultOrThrow() }.toList()
+
+    println(people.joinToString(separator = "\n"))
+    // Output:
+    // CsvPerson(firstName=John, lastName= Doe, phoneNumber= 1+342-534-2342, emails=[john.doe.1@test.com, john.doe.2@test.com])
+    // CsvPerson(firstName=Alice, lastName= Doe, phoneNumber= 1+423-253-3453, emails=[ alice.doe@test.com ])
+```
+
+#### Error handling
 
 ## Known limitations
 As for now, this implementation does not yet respect all specifications of [RFC-4180](https://tools.ietf.org/html/rfc4180). 

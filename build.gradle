@@ -35,7 +35,7 @@ allprojects {
 task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     description = 'Generates an aggregate report from all subprojects'
 
-    def coverageProjects = [project(':core'), project('core-java-tests')]
+    def coverageProjects = [project(':core'), project(':core-java-tests')]
     additionalSourceDirs.setFrom(files(coverageProjects.sourceSets.main.allSource.srcDirs))
     sourceDirectories.setFrom(files(coverageProjects.sourceSets.main.allSource.srcDirs))
     classDirectories.setFrom(files(coverageProjects.sourceSets.main.output))

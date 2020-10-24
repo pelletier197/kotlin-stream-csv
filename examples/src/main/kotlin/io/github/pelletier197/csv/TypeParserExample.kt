@@ -14,6 +14,11 @@ data class CsvPerson(
 )
 
 fun main() {
+    // readValidCsv()
+    readInvalidCsv()
+}
+
+private fun readValidCsv() {
     val reader = CsvReader()
         .readerForType<CsvPerson>()
         // .withHeader("first_name", "last_name", "phone_number", "emails") // If you wish to provide the header yourself
@@ -29,4 +34,18 @@ fun main() {
     // Output:
     // CsvPerson(firstName=John, lastName= Doe, phoneNumber= 1+342-534-2342, emails=[john.doe.1@test.com, john.doe.2@test.com])
     // CsvPerson(firstName=Alice, lastName= Doe, phoneNumber= 1+423-253-3453, emails=[ alice.doe@test.com ])
+}
+
+private fun readInvalidCsv() {
+    // John doe is missing the email column
+    val invalidCsv =
+        """
+            first_name, last_name, phone_number, emails 
+            John, Doe, 1+342-534-2342
+        """.trimIndent()
+
+    val reader = CsvReader()
+        .readerForType<CsvPerson>()
+
+    reader.read(invalidCsv).forEach { print(it) }
 }
