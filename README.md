@@ -149,14 +149,14 @@ This last one is the low level parser that returns the every raw line in the CSV
 Configuration is extremely simple and versatile. Every configuration change will create a new immutable parser to avoid side effects. Here are the available configuration for the different parsers that are available through an explicit method name on the parser.
 
 | Configuration         | Definition                                                                                    | Default | Typed | Header | Raw |
-|-----------------------|-----------------------------------------------------------------------------------------------|---------|-------|--------|-----|
-| Separator             | The separator to use for the columns. For now, a single character can be used as a separator. |   ','   |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
-| Delimiter             | The quoted column delimiter, when you want to use the separator inside a column.              |   '"'   |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
+|-----------------------|-----------------------------------------------------------------------------------------------|:---------:|:-------:|:--------:|:-----:|
+| Separator             | The separator to use for the columns. For now, a single character can be used as a separator. |   , (comma)   |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
+| Delimiter             | The quoted column delimiter, when you want to use the separator inside a column.              |   " (double quote)  |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
 | Trim entries          | Either to trim entries or not when parsing this input.                                        |  false  |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
 | Skip empty lines      | Either to skip the empty lines or not.                                                        |   true  |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
 | Empty strings as null | Either to treat empty strings as null when parsing the columns.                               |  false  |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
 | Header                | Allows settings the header of the parser. When not configured, first non-empty line is used.  |   null  |   :heavy_check_mark:   |    :heavy_check_mark:   |     |
-| List separator        | The character to use when converting a string to a collection (list, set)                     |   ','   |   :heavy_check_mark:   |        |     |
+| List separator        | The character to use when converting a string to a collection (list, set)                     |   , (comma)  |   :heavy_check_mark:   |        |     |
 
 
 ## Known limitations
