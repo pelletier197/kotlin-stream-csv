@@ -150,13 +150,13 @@ Configuration is extremely simple and versatile. Every configuration change will
 
 | Configuration         | Definition                                                                                    | Default | Typed | Header | Raw |
 |-----------------------|-----------------------------------------------------------------------------------------------|---------|-------|--------|-----|
-| Separator             | The separator to use for the columns. For now, a single character can be used as a separator. |   ','   |   X   |    X   |  X  |
-| Delimiter             | The quoted column delimiter, when you want to use the separator inside a column.              |   '"'   |   X   |    X   |  X  |
-| Trim entries          | Either to trim entries or not when parsing this input.                                        |  false  |   X   |    X   |  X  |
-| Skip empty lines      | Either to skip the empty lines or not.                                                        |   true  |   X   |    X   |  X  |
-| Empty strings as null | Either to treat empty strings as null when parsing the columns.                               |  false  |   X   |    X   |  X  |
-| Header                | Allows settings the header of the parser. When not configured, first non-empty line is used.  |   null  |   X   |    X   |     |
-| List separator        | The character to use when converting a string to a collection (list, set)                     |   ','   |   X   |        |     |
+| Separator             | The separator to use for the columns. For now, a single character can be used as a separator. |   ','   |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
+| Delimiter             | The quoted column delimiter, when you want to use the separator inside a column.              |   '"'   |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
+| Trim entries          | Either to trim entries or not when parsing this input.                                        |  false  |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
+| Skip empty lines      | Either to skip the empty lines or not.                                                        |   true  |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
+| Empty strings as null | Either to treat empty strings as null when parsing the columns.                               |  false  |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
+| Header                | Allows settings the header of the parser. When not configured, first non-empty line is used.  |   null  |   :heavy_check_mark:   |    :heavy_check_mark:   |     |
+| List separator        | The character to use when converting a string to a collection (list, set)                     |   ','   |   :heavy_check_mark:   |        |     |
 
 
 ## Known limitations
