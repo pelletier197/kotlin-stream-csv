@@ -10,5 +10,7 @@ fun writeTestFile(content: String) {
 }
 
 fun deleteTestFile() {
-    Files.delete(Paths.get(filePath))
+    if (Files.exists(Paths.get(filePath))) {
+        Files.delete(Paths.get(filePath))
+    }
 }

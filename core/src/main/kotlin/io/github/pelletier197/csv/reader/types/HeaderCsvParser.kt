@@ -72,12 +72,16 @@ data class HeaderCsvReader(
 
     private fun readRaw(lines: Stream<RawCsvLine>): Stream<HeaderCsvLine> {
         val currentHeader = AtomicReference(this.header)
-        return lines.filter { setHeaderAndSkip(it, currentHeader) }.map {
-            HeaderCsvLine(
-                values = currentHeader.get()!!.mapIndexed { index, column -> column to it.columns[index] }.toMap(),
-                line = it.line,
-            )
-        }
+        return lines
+            .filter { setHeaderAndSkip(it, currentHeader) }
+            .map {
+                HeaderCsvLine(
+                    values = currentHeader.get()!!
+                        .mapIndexed { index, column -> column to it.columns.getOrElse(index) { if (reader.emptyStringsAsNull) null else "" } }
+                        .toMap(),
+                    line = it.line,
+                )
+            }
     }
 
     private fun setHeaderAndSkip(rawCsvLine: RawCsvLine, currentHeader: AtomicReference<List<String>?>): Boolean {

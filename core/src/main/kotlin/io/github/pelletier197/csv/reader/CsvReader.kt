@@ -17,7 +17,7 @@ class CsvReader {
         return HeaderCsvReader()
     }
 
-    fun reader(): RawCsvReader {
+    fun rawReader(): RawCsvReader {
         return RawCsvReader()
     }
 }

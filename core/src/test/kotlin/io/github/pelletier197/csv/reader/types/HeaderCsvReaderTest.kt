@@ -116,6 +116,46 @@ class HeaderCsvReaderTest : ShouldSpec({
         }
     }
 
+    context("on an invalid CSV") {
+        context("a csv where a row is missing a column") {
+            val csv =
+                """
+                a,b,c
+                1,2
+                """.trimIndent()
+
+            context("reader parses empty strings as null") {
+                should("return the missing column as null") {
+                    underTest.withEmptyStringsAsNull(true).read(csv).toList().shouldContainExactly(
+                        HeaderCsvLine(
+                            values = mapOf(
+                                "a" to "1",
+                                "b" to "2",
+                                "c" to null
+                            ),
+                            line = 2
+                        )
+                    )
+                }
+            }
+
+            context("reader leaves empty strings as is") {
+                should("return the missing column as an empty string") {
+                    underTest.withEmptyStringsAsNull(false).read(csv).toList().shouldContainExactly(
+                        HeaderCsvLine(
+                            values = mapOf(
+                                "a" to "1",
+                                "b" to "2",
+                                "c" to ""
+                            ),
+                            line = 2
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     context("different header provisioning") {
         val csv =
             """

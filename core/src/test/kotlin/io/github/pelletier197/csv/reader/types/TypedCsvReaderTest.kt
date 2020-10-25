@@ -90,6 +90,18 @@ class TypedCsvReaderTest : ShouldSpec({
                 }
             }
         }
+        context("configuration the header of the reader") {
+            should("update header reader with given parameter") {
+                val header = listOf("test", "header_2")
+                underTest.withHeader(header)
+                    .shouldBe(
+                        TypedCsvReader(
+                            targetClass = TestClass::class.java,
+                            reader = HeaderCsvReader(header = header)
+                        )
+                    )
+            }
+        }
     }
 
     context("on a regular CSV") {

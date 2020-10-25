@@ -18,13 +18,6 @@ allprojects {
     sourceCompatibility = 11
     targetCompatibility = 11
 
-    jacocoTestReport {
-        reports {
-            html.enabled = true
-            xml.enabled = true
-        }
-    }
-
     repositories {
         mavenCentral()
     }
@@ -42,10 +35,11 @@ allprojects {
 task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     description = 'Generates an aggregate report from all subprojects'
 
-    additionalSourceDirs.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
-    sourceDirectories.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
-    classDirectories.setFrom(files(subprojects.sourceSets.main.output))
-    executionData.setFrom(files(subprojects.jacocoTestReport.executionData))
+    def coverageProjects = [project(':core'), project(':core-java-tests')]
+    additionalSourceDirs.setFrom(files(coverageProjects.sourceSets.main.allSource.srcDirs))
+    sourceDirectories.setFrom(files(coverageProjects.sourceSets.main.allSource.srcDirs))
+    classDirectories.setFrom(files(coverageProjects.sourceSets.main.output))
+    executionData.setFrom(files(coverageProjects.jacocoTestReport.executionData))
 
     reports {
         html.enabled = true

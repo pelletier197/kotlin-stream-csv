@@ -122,6 +122,6 @@ data class RawCsvReader(
         val s = separator
         val d = delimiter
         // https://stackoverflow.com/questions/18144431/regex-to-split-a-csv/18147076
-        return Regex("(?:$s|\\n|^)($d(?:(?:$d$d)*[^$d]*)*$d|[^$d$s\\n]*|(?:\\n|\$))")
+        return Regex("(?:$s|\\n|^)(\\s*$d(?:(?:$d$d)*[^$d]*)*$d|[^$d$s\\n]*|(?:\\n|\$))")
     }
 }
