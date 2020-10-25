@@ -5,7 +5,7 @@ import kotlin.streams.toList
 
 fun main() {
     val reader = CsvReader()
-        .reader()
+        .rawReader()
         .withSeparator(',')
         .withDelimiter('"')
         .withEmptyStringsAsNull(false)

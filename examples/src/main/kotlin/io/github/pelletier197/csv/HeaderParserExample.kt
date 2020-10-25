@@ -16,6 +16,6 @@ fun main() {
 
     println(people.joinToString(separator = "\n"))
     // Output:
-    // HeaderCsvLine(values={first_name=    John, last_name= Doe, phone_number= 1+342-534-2342, emails=john.doe.1@test.com, john.doe.2@test.com}, line=2)
-    // HeaderCsvLine(values={first_name=    Alice, last_name= Doe, phone_number= 1+423-253-3453, emails= alice.doe@test.com }, line=3)
+    // HeaderCsvLine(values={first_name=John, last_name= Doe, phone_number= 1+342-534-2342, emails=john.doe.1@test.com, john.doe.2@test.com}, line=2)
+    // HeaderCsvLine(values={first_name=Alice, last_name= Doe, phone_number= 1+423-253-3453, emails= alice.doe@test.com }, line=3)
 }

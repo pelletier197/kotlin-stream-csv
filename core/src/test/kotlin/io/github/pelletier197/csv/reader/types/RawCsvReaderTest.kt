@@ -11,7 +11,7 @@ import java.nio.file.Paths
 import kotlin.streams.toList
 
 class RawCsvReaderTest : ShouldSpec({
-    val underTest = CsvReader().reader()
+    val underTest = CsvReader().rawReader()
 
     context("on a regular CSV") {
         val csv =

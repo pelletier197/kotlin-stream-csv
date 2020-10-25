@@ -24,8 +24,13 @@ Three types of parsers are available:
 For advanced configuration examples of all three types of CSV, see [example project](./examples/src/main/kotlin/io/github/pelletier197/csv)
 
 ### Typed CSV parser
-Probably the most useful implementation of all three of CSV parser for most use-cases. 
+Probably the most useful implementation of all three of CSV parser for most use-cases. All examples under are based on the followed CSV:
 
+```csv
+first_name, last_name, phone_number, emails
+John, Doe, 1+342-534-2342, "john.doe.1@test.com, john.doe.2@test.com"
+Alice, Doe, 1+423-253-3453, alice.doe@test.com 
+```
 #### Basic usage
 ```kotlin
 data class CsvPerson(
@@ -108,6 +113,50 @@ val people = reader.read(csv).map { it.getResultOrThrow() }.toList()
 // CustomCsvPerson(firstName=John, lastName= Doe, emails=[Email(value=john.doe.1@test.com), Email(value= john.doe.2@test.com)])
 // CustomCsvPerson(firstName=Alice, lastName= Doe, emails=[Email(value= alice.doe@test.com )])
 ```
+
+### Header CSV Parser
+This kind of CSV parser can also be useful if you don't know exactly the input format of the CSV, or for other sorts of reason. This parser uses the first non-empty line of the CSV as the header if you don't provide one programmatically.
+
+#### Basic usage
+```kotlin
+    val reader = CsvReader()
+        .readerWithHeader()
+        .withHeader("first_name", "last_name", "phone_number", "emails") // If you wish to provide the header yourself
+    val people = reader.read(csv).map { it }.toList()
+
+    println(people.joinToString(separator = "\n"))
+    // Output:
+    // HeaderCsvLine(values={first_name=John, last_name= Doe, phone_number= 1+342-534-2342, emails=john.doe.1@test.com, john.doe.2@test.com}, line=2)
+    // HeaderCsvLine(values={first_name=Alice, last_name= Doe, phone_number= 1+423-253-3453, emails= alice.doe@test.com }, line=3)
+```
+
+### Raw CSV parser
+This last one is the low level parser that returns the every raw line in the CSV as it comes.
+
+#### Basic usage
+```kotlin
+    val reader = CsvReader().rawReader()
+    val people = reader.read(csv).map { it }.toList()
+
+    println(people.joinToString(separator = "\n"))
+    // Output:
+    // RawCsvLine(columns=[first_name,  last_name,  phone_number,  emails], line=1)
+    // RawCsvLine(columns=[John,  Doe,  1+342-534-2342, john.doe.1@test.com, john.doe.2@test.com], line=2)
+    // RawCsvLine(columns=[Alice,  Doe,  1+423-253-3453,  alice.doe@test.com ], line=3)
+```
+
+### Configuration
+Configuration is extremely simple and versatile. Every configuration change will create a new immutable parser to avoid side effects. Here are the available configuration for the different parsers that are available through an explicit method name on the parser.
+
+| Configuration         | Definition                                                                                    | Default | Typed | Header | Raw |
+|-----------------------|-----------------------------------------------------------------------------------------------|---------|-------|--------|-----|
+| Separator             | The separator to use for the columns. For now, a single character can be used as a separator. |   ','   |   X   |    X   |  X  |
+| Delimiter             | The quoted column delimiter, when you want to use the separator inside a column.              |   '"'   |   X   |    X   |  X  |
+| Trim entries          | Either to trim entries or not when parsing this input.                                        |  false  |   X   |    X   |  X  |
+| Skip empty lines      | Either to skip the empty lines or not.                                                        |   true  |   X   |    X   |  X  |
+| Empty strings as null | Either to treat empty strings as null when parsing the columns.                               |  false  |   X   |    X   |  X  |
+| Header                | Allows settings the header of the parser. When not configured, first non-empty line is used.  |   null  |   X   |    X   |     |
+| List separator        | The character to use when converting a string to a collection (list, set)                     |   ','   |   X   |        |     |
 
 
 ## Known limitations
