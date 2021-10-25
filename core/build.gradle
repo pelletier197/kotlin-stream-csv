@@ -62,6 +62,8 @@ publishing {
         mavenJava(MavenPublication) {
             artifactId 'csv-core'
 
+            from components.java
+
             pom {
                 name = 'Kotlin stream CSV core'
                 description = 'A kotlin and java CSV parser that uses the power of kotlin DSL to simplify parsing and error handling compared to existing solutions'
