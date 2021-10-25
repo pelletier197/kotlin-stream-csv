@@ -12,7 +12,6 @@ aliases:
         - ~/.gradle/caches
       key: v1-dependencies-{{ checksum "gradle.properties" }}
 
-
   - &defaults
     docker:
       - image: cimg/openjdk:11.0
@@ -62,7 +61,7 @@ jobs:
             - run: git pull origin $CIRCLE_BRANCH
             - run: git push
 workflows:
-  version: 2.1
+  version: 2
   build-test-verify-deploy:
     jobs:
       - create-cache
