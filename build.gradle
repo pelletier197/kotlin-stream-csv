@@ -37,6 +37,8 @@ jacoco {
 }
 
 task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
+    executionData.setFrom(files(executionData.findAll { it.exists() }))
+
     description = 'Generates an aggregate report from all subprojects'
 
     def coverageProjects = [project(':core'), project(':core-java-tests')]
@@ -46,12 +48,12 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     executionData.setFrom(files(coverageProjects.jacocoTestReport.executionData))
 
     reports {
-        html.enabled = true
-        xml.enabled = true
-    }
-
-    doFirst {
-        executionData.setFrom(files(executionData.findAll { it.exists() }))
+        html {
+            enabled true
+        }
+        xml {
+            enabled true
+        }
     }
 }
 
