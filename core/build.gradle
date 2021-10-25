@@ -61,7 +61,6 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifactId 'csv-core'
-
             from components.java
 
             pom {
@@ -87,16 +86,9 @@ publishing {
                     url = 'https://github.com/pelletier197/'
                 }
             }
-
-
-            artifact(sourceJar) {
-                classifier = 'sources'
-            }
-            artifact(javadocJar) {
-                classifier = 'javadoc'
-            }
         }
     }
+
     repositories {
         maven {
             url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
