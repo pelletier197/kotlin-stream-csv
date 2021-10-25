@@ -35,11 +35,11 @@ data class CsvReflectionCreator<T>(
     }
 
     private fun toIgnoreCaseToken(value: String): String {
-        return ignoreCaseTokenId + value.toUpperCase()
+        return ignoreCaseTokenId + value.uppercase()
     }
 
     private fun toCsvHeader(value: String): String {
-        if (value.startsWith(ignoreCaseTokenId)) return value.replace(ignoreCaseTokenId, "").toLowerCase()
+        if (value.startsWith(ignoreCaseTokenId)) return value.replace(ignoreCaseTokenId, "").lowercase()
         return value
     }
 

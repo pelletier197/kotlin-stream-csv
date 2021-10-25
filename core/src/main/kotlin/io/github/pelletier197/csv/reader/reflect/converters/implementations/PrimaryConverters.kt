@@ -54,13 +54,13 @@ class StringToBigIntegerConverter : StringConverterBase<BigInteger>() {
 class StringToEnumConverter : StringConverterBase<Enum<*>>() {
     override val target: Class<Enum<*>> get() = Enum::class.java
     override fun doConvert(value: String, to: Class<Enum<*>>): Enum<*> =
-        to.enumConstants.first { value.toLowerCase() == it.name.toLowerCase() }
+        to.enumConstants.first { value.lowercase() == it.name.lowercase() }
 }
 
 class StringToBooleanConverter : StringConverterBase<Boolean>() {
     private val trueValues = setOf("true", "t", "yes", "1", "x")
     override val target: Class<Boolean> get() = Boolean::class.java
-    override fun doConvert(value: String, to: Class<Boolean>): Boolean = trueValues.contains(value.toLowerCase())
+    override fun doConvert(value: String, to: Class<Boolean>): Boolean = trueValues.contains(value.lowercase())
 }
 
 @Suppress("EXPERIMENTAL_API_USAGE")

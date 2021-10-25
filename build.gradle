@@ -32,6 +32,10 @@ allprojects {
     }
 }
 
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     description = 'Generates an aggregate report from all subprojects'
 

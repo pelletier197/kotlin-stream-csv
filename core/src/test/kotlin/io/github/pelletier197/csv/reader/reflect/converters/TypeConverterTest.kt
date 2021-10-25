@@ -45,7 +45,7 @@ class TypeConverterTest : ShouldSpec({
             TestInstance(Double::class, "12.64", 12.64),
             TestInstance(Float::class, "12.596", 12.596f),
             TestInstance(EnumTest::class, EnumTest.ANOTHER_ENUM_VALUE.toString(), EnumTest.ANOTHER_ENUM_VALUE),
-            TestInstance(EnumTest::class, EnumTest.ANOTHER_ENUM_VALUE.toString().toLowerCase(), EnumTest.ANOTHER_ENUM_VALUE),
+            TestInstance(EnumTest::class, EnumTest.ANOTHER_ENUM_VALUE.toString().lowercase(), EnumTest.ANOTHER_ENUM_VALUE),
             TestInstance(Boolean::class, "t", true),
             TestInstance(Boolean::class, "true", true),
             TestInstance(Boolean::class, "yes", true),
@@ -113,7 +113,7 @@ class TypeConverterTest : ShouldSpec({
         context("enum value is valid") {
             val testInstances = listOf(
                 TestInstance(EnumTest::class, EnumTest.ANOTHER_ENUM_VALUE.toString(), EnumTest.ANOTHER_ENUM_VALUE),
-                TestInstance(EnumTest::class, EnumTest.ANOTHER_ENUM_VALUE.toString().toLowerCase(), EnumTest.ANOTHER_ENUM_VALUE),
+                TestInstance(EnumTest::class, EnumTest.ANOTHER_ENUM_VALUE.toString().lowercase(), EnumTest.ANOTHER_ENUM_VALUE),
             )
 
             should("convert value properly") {
