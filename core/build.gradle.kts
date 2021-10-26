@@ -77,4 +77,3 @@ configure<SigningExtension> {
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign("mavenJava")
 }
-
