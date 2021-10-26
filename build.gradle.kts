@@ -14,6 +14,7 @@ plugins {
     kotlin("jvm")
 }
 
+
 allprojects {
     apply(plugin = "kotlin")
     apply(plugin = "jacoco")
@@ -54,25 +55,26 @@ configure<io.github.gradlenexus.publishplugin.NexusPublishExtension> {
     }
 }
 
-//tasks.withType<JacocoReport>() {
-//    executionData.setFrom(files(executionData. { it.exists() }))
-//
-//    description = 'Generates an aggregate report from all subprojects'
-//
-//    def coverageProjects = [project(':core'), project(':core-java-tests')]
-//    sourceDirectories.setFrom(files(coverageProjects.sourceSets.main.allSource.srcDirs))
-//    classDirectories.setFrom(files(coverageProjects.sourceSets.main.output))
-//    executionData.setFrom(files(coverageProjects.jacocoTestReport.executionData))
-//
-//    reports {
-//        html {
-//            enabled true
-//        }
-//        xml {
-//            enabled true
-//        }
-//    }
-//}
+tasks.create<JacocoReport>("jacocoRootReport") {
+    executionData("junitPlatformTest")
+
+    description = "Generates an aggregate report from all subprojects"
+
+    val coverageProjects = listOf(project(":core"), project(":core-java-tests"))
+    sourceDirectories.setFrom(coverageProjects.flatMap { files(it.sourceSets["main"].allSource.srcDirs) })
+    classDirectories.setFrom(coverageProjects.flatMap { files(it.sourceSets["main"].output) })
+    executionData.setFrom(coverageProjects.flatMap {
+        it.getTasksByName("jacocoTestReport", true)
+            .filterIsInstance<JacocoReport>()
+            .flatMap { task -> files(task.executionData) }
+    })
+
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+}
+
 //task jacocoRootReport(type: , group: 'Coverage reports') {
 //
 //}
