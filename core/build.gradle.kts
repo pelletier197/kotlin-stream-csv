@@ -78,7 +78,7 @@ configure<SigningExtension> {
     sign("mavenJava")
 }
 //
-//configure<NexusStagingExtension> {
+// configure<NexusStagingExtension> {
 //    username = System.getenv("SONATYPE_NEXUS_USERNAME")
 //    password = System.getenv("SONATYPE_NEXUS_PASSWORD")
-//}
+// }

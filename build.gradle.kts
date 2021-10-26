@@ -1,7 +1,7 @@
-import org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT
-import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
+import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
+import org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT
 
 plugins {
     id("org.jlleitschuh.gradle.ktlint")
@@ -13,7 +13,6 @@ plugins {
 
     kotlin("jvm")
 }
-
 
 allprojects {
     apply(plugin = "kotlin")
@@ -63,11 +62,13 @@ tasks.create<JacocoReport>("jacocoRootReport") {
     val coverageProjects = listOf(project(":core"), project(":core-java-tests"))
     sourceDirectories.setFrom(coverageProjects.flatMap { files(it.sourceSets["main"].allSource.srcDirs) })
     classDirectories.setFrom(coverageProjects.flatMap { files(it.sourceSets["main"].output) })
-    executionData.setFrom(coverageProjects.flatMap {
-        it.getTasksByName("jacocoTestReport", true)
-            .filterIsInstance<JacocoReport>()
-            .flatMap { task -> files(task.executionData) }
-    })
+    executionData.setFrom(
+        coverageProjects.flatMap {
+            it.getTasksByName("jacocoTestReport", true)
+                .filterIsInstance<JacocoReport>()
+                .flatMap { task -> files(task.executionData) }
+        }
+    )
 
     reports {
         html.required.set(true)
@@ -75,9 +76,9 @@ tasks.create<JacocoReport>("jacocoRootReport") {
     }
 }
 
-//task jacocoRootReport(type: , group: 'Coverage reports') {
+// task jacocoRootReport(type: , group: 'Coverage reports') {
 //
-//}
+// }
 
 coveralls {
 //    sourceDirs = listOf(project(":core").["${project(":core").projectDir}/src/main/kotlin"]
@@ -90,4 +91,3 @@ tasks.coveralls {
 
     dependsOn("jacocoRootReport")
 }
-
