@@ -1,3 +1,4 @@
+
 import java.net.URI
 
 plugins {
@@ -43,6 +44,7 @@ configure<PublishingExtension> {
                         url.set("https://opensource.org/licenses/MIT")
                     }
                 }
+
                 developers {
                     developer {
                         id.set("pelletier197")
@@ -50,6 +52,7 @@ configure<PublishingExtension> {
                         email.set("sunnypelletier01@gmail.com")
                     }
                 }
+
                 scm {
                     connection.set("scm:git:git://github.com/pelletier197/kotlin-stream-csv.git")
                     developerConnection.set("scm:git:git@github.com:pelletier197/kotlin-stream-csv.git")
@@ -75,5 +78,5 @@ configure<SigningExtension> {
     val signingKey = System.getProperty("signingKey")
     val signingPassword = System.getProperty("signingPassword")
     useInMemoryPgpKeys(signingKey, signingPassword)
-    sign("mavenJava")
+    sign(publishing.publications)
 }
