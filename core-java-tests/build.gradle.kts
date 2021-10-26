@@ -1,3 +1,7 @@
+plugins {
+    id("java")
+}
+
 dependencies {
     val junitJupiterVersion: String by project
 
@@ -7,7 +11,8 @@ dependencies {
     testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
 }
 
-//configure<JavaCompile> {
-//    // Allows conserving parameter name of constructors
-//    options.compilerArgs.add("-parameters")
-//}
+
+tasks.withType<JavaCompile> {
+    // Allows conserving parameter name of constructors
+    options.compilerArgs.add("-parameters")
+}
