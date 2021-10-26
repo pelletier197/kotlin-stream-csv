@@ -77,9 +77,9 @@ tasks.create<JacocoReport>("jacocoRootReport") {
 }
 
 coveralls {
-//    sourceDirs = listOf(project(":core").["${project(":core").projectDir}/src/main/kotlin"]
+    sourceDirs = listOf("${project(":core").projectDir}/src/main/kotlin")
     service = "circleci"
-//    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 
 tasks.coveralls {
