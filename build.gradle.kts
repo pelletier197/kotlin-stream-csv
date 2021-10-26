@@ -76,10 +76,6 @@ tasks.create<JacocoReport>("jacocoRootReport") {
     }
 }
 
-// task jacocoRootReport(type: , group: 'Coverage reports') {
-//
-// }
-
 coveralls {
 //    sourceDirs = listOf(project(":core").["${project(":core").projectDir}/src/main/kotlin"]
     service = "circleci"

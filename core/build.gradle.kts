@@ -77,8 +77,4 @@ configure<SigningExtension> {
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign("mavenJava")
 }
-//
-// configure<NexusStagingExtension> {
-//    username = System.getenv("SONATYPE_NEXUS_USERNAME")
-//    password = System.getenv("SONATYPE_NEXUS_PASSWORD")
-// }
+
