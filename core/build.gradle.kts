@@ -77,7 +77,6 @@ configure<PublishingExtension> {
 configure<SigningExtension> {
     val signingKey = System.getenv("SIGNING_KEY")
     val signingPassword = System.getenv("SIGNING_PASSWORD")
-    println(signingKey + signingPassword)
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign(publishing.publications)
 }
