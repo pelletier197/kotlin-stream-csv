@@ -7,7 +7,9 @@ import io.github.pelletier197.csv.reader.parser.RawCsvLine
 import io.github.pelletier197.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldNotContain
 import java.io.File
+import java.nio.charset.Charset
 import java.nio.file.Paths
 import kotlin.streams.toList
 
@@ -217,6 +219,68 @@ class RawCsvReaderTest : ShouldSpec({
                     )
                 )
             }
+        }
+    }
+
+    context("when using custom encoding") {
+        val csv =
+            """
+            à,b,ç,d,é
+            """.trimIndent()
+
+        val expectedLine = RawCsvLine(
+            columns = listOf("à", "b", "ç", "d", "é"),
+            line = 1,
+        )
+
+        context("using default encoding") {
+            should("parse characters correctly") {
+                underTest.read(csv.byteInputStream(charset = Charset.defaultCharset())).toList()
+                    .shouldContainExactly(expectedLine)
+            }
+        }
+
+        context("using a different encoding") {
+            context("text is encoded using a different encoding") {
+                underTest
+                    .withEncoding(Charsets.ISO_8859_1)
+                    .read(csv.byteInputStream(charset = Charset.defaultCharset())).toList()
+                    .shouldNotContain(expectedLine)
+            }
+
+            context("text is encoded using the same encoding") {
+                underTest
+                    .withEncoding(Charsets.ISO_8859_1)
+                    .read(csv.byteInputStream(Charsets.ISO_8859_1)).toList()
+                    .shouldContainExactly(expectedLine)
+            }
+        }
+    }
+
+    context("when CSV has a line of multiple lines") {
+        val csv = """
+            a,b,"
+            c,
+            d,
+            ",f
+            super line, h, with other stuff
+        """.trimIndent()
+
+        should("parse each line correctly") {
+            underTest.read(csv).toList().shouldContainExactly(
+                RawCsvLine(
+                    columns = listOf(
+                        "a", "b", "\nc,\nd,\n", "f"
+                    ),
+                    line = 1,
+                ),
+                RawCsvLine(
+                    columns = listOf(
+                        "super line", " h", " with other stuff"
+                    ),
+                    line = 2,
+                )
+            )
         }
     }
 

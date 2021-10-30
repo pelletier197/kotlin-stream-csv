@@ -140,7 +140,7 @@ data class CsvLineParser(
 
             if (char == '\n') {
                 if (delimiterActive) {
-                    // We are in a delimiter, which means that the current line is allowed to contain spaces
+                    columnBuilder.append(char)
                     continue
                 } else {
                     columns.add(columnBuilder.toString())
