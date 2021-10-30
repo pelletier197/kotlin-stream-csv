@@ -284,5 +284,17 @@ class RawCsvReaderTest : ShouldSpec({
         }
     }
 
+    context("when csv contains carriage returns") {
+        should("ignore the carriage return char") {
+            underTest.read("a,b,\"t\r\n,e\"").toList()
+                .shouldContainExactly(
+                    RawCsvLine(
+                        columns = listOf("a", "b", "t\n,e"),
+                        line = 1,
+                    )
+                )
+        }
+    }
+
     afterSpec { deleteTestFile() }
 })
