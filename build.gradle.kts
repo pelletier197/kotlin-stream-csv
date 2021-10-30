@@ -78,13 +78,14 @@ tasks.create<JacocoReport>("jacocoRootReport") {
 }
 
 coveralls {
+    println(System.getenv("COVERALLS_REPO_TOKEN"))
     sourceDirs = listOf("${project(":core").projectDir}/src/main/kotlin")
+    description = "Uploads coverage report to coveralls"
     service = "circleci"
     jacocoReportPath = "$buildDir/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+    println(jacocoReportPath)
 }
 
 tasks.coveralls {
-    description = "Uploads coverage report to coveralls"
-
     dependsOn("jacocoRootReport")
 }
