@@ -153,13 +153,15 @@ data class CsvLineParser(
     }
 
     private fun processLine(columns: List<String>): List<String?>? {
-        if (skipEmptyLines) {
-            if (columns.isEmpty()) {
-                return null
-            }
+        if (skipEmptyLines && columns.isEmpty()) {
+            return null
+        }
 
-            if (columns.size == 1 && columns.first().isBlank()) {
-                return null
+        if (columns.size == 1 && columns.first().isBlank()) {
+            return if (skipEmptyLines) {
+                null
+            } else {
+                emptyList()
             }
         }
 
