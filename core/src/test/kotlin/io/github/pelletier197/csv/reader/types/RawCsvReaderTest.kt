@@ -3,6 +3,7 @@ package io.github.pelletier197.csv.reader.types
 import io.github.pelletier197.csv.reader.CsvReader
 import io.github.pelletier197.csv.reader.deleteTestFile
 import io.github.pelletier197.csv.reader.filePath
+import io.github.pelletier197.csv.reader.parser.RawCsvLine
 import io.github.pelletier197.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -39,12 +40,6 @@ class RawCsvReaderTest : ShouldSpec({
         context("parsing CSV from lines list") {
             should("parse and return all CSV lines") {
                 underTest.read(csv.lines()).toList().shouldContainExactly(expectedLines)
-            }
-        }
-
-        context("parsing CSV from lines stream") {
-            should("parse and return all CSV lines") {
-                underTest.read(csv.lines().stream()).toList().shouldContainExactly(expectedLines)
             }
         }
 

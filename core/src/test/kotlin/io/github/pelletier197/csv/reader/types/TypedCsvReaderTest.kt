@@ -4,6 +4,7 @@ import io.github.pelletier197.csv.reader.CsvError
 import io.github.pelletier197.csv.reader.CsvErrorType
 import io.github.pelletier197.csv.reader.deleteTestFile
 import io.github.pelletier197.csv.reader.filePath
+import io.github.pelletier197.csv.reader.parser.CsvLineParser
 import io.github.pelletier197.csv.reader.reflect.converters.ConversionParameters
 import io.github.pelletier197.csv.reader.reflect.converters.Converter
 import io.github.pelletier197.csv.reader.writeTestFile
@@ -37,7 +38,7 @@ class TypedCsvReaderTest : ShouldSpec({
                     .shouldBe(
                         TypedCsvReader(
                             targetClass = TestClass::class.java,
-                            reader = HeaderCsvReader(reader = RawCsvReader(separator = '/'))
+                            reader = HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(separator = '/')))
                         )
                     )
             }
@@ -47,7 +48,7 @@ class TypedCsvReaderTest : ShouldSpec({
                 underTest.withDelimiter('@').shouldBe(
                     TypedCsvReader(
                         targetClass = TestClass::class.java,
-                        reader = HeaderCsvReader(reader = RawCsvReader(delimiter = '@'))
+                        reader = HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(delimiter = '@')))
                     )
                 )
             }
@@ -58,7 +59,7 @@ class TypedCsvReaderTest : ShouldSpec({
                     underTest.withTrimEntries(it).shouldBe(
                         TypedCsvReader(
                             targetClass = TestClass::class.java,
-                            reader = HeaderCsvReader(reader = RawCsvReader(trimEntries = it))
+                            reader = HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(trimEntries = it)))
                         )
                     )
                 }
@@ -71,7 +72,7 @@ class TypedCsvReaderTest : ShouldSpec({
                         .shouldBe(
                             TypedCsvReader(
                                 targetClass = TestClass::class.java,
-                                reader = HeaderCsvReader(reader = RawCsvReader(skipEmptyLines = it))
+                                reader = HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(skipEmptyLines = it)))
                             )
                         )
                 }
@@ -84,7 +85,7 @@ class TypedCsvReaderTest : ShouldSpec({
                         .shouldBe(
                             TypedCsvReader(
                                 targetClass = TestClass::class.java,
-                                reader = HeaderCsvReader(reader = RawCsvReader(emptyStringsAsNull = it))
+                                reader = HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(emptyStringsAsNull = it)))
                             )
                         )
                 }
@@ -131,12 +132,6 @@ class TypedCsvReaderTest : ShouldSpec({
         context("parsing CSV from lines list") {
             should("parse and return all CSV lines with their header") {
                 underTest.read(csv.lines()).toList().shouldContainExactly(expectedLines)
-            }
-        }
-
-        context("parsing CSV from lines stream") {
-            should("parse and return all CSV lines with their header") {
-                underTest.read(csv.lines().stream()).toList().shouldContainExactly(expectedLines)
             }
         }
 

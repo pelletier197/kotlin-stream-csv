@@ -4,6 +4,7 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.nio.charset.Charset
+import java.util.Comparator
 import java.util.Spliterator
 import java.util.Spliterator.DISTINCT
 import java.util.Spliterator.IMMUTABLE
@@ -65,11 +66,15 @@ data class CsvLineParser(
             }
 
             override fun estimateSize(): Long {
-                return -1
+                return 0
             }
 
             override fun characteristics(): Int {
                 return DISTINCT or SORTED or ORDERED or NONNULL or IMMUTABLE
+            }
+
+            override fun getComparator(): Comparator<in RawCsvLine> {
+                return Comparator.comparing { it.line }
             }
         }
     }
@@ -159,14 +164,14 @@ data class CsvLineParser(
             }
         }
 
-        val columnStream = columns.stream()
+        var columnStream = columns.stream()
 
         if (trimEntries) {
-            columnStream.map { it.trim() }
+            columnStream = columnStream.map { it.trim() }
         }
 
         if (emptyStringsAsNull) {
-            columnStream.map { it.ifEmpty { null } }
+            columnStream = columnStream.map { it.ifEmpty { null } }
         }
 
         return columnStream.collect(Collectors.toList())
