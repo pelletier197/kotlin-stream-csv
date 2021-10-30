@@ -284,6 +284,30 @@ class RawCsvReaderTest : ShouldSpec({
         }
     }
 
+    context("when CSV contains escaped characters") {
+        val csv = """
+            a,b,"and then he said \"we don't need any booleans, we got integer\" and everyone laughed",f
+            super line, h, with other stuff
+        """.trimIndent()
+
+        should("parse each line correctly") {
+            underTest.read(csv).toList().shouldContainExactly(
+                RawCsvLine(
+                    columns = listOf(
+                        "a", "b", "and then he said \"we don't need any booleans, we got integer\" and everyone laughed", "f"
+                    ),
+                    line = 1,
+                ),
+                RawCsvLine(
+                    columns = listOf(
+                        "super line", " h", " with other stuff"
+                    ),
+                    line = 2,
+                )
+            )
+        }
+    }
+
     context("when csv contains carriage returns") {
         should("ignore the carriage return char") {
             underTest.read("a,b,\"t\r\n,e\"").toList()

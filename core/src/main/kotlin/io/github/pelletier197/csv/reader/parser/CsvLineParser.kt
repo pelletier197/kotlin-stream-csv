@@ -61,13 +61,9 @@ data class CsvLineParser(
                 return true
             }
 
-            override fun trySplit(): Spliterator<RawCsvLine>? {
-                return null
-            }
+            override fun trySplit(): Spliterator<RawCsvLine>? = null
 
-            override fun estimateSize(): Long {
-                return 0
-            }
+            override fun estimateSize(): Long = 0
 
             override fun characteristics(): Int {
                 return DISTINCT or SORTED or ORDERED or NONNULL or IMMUTABLE
