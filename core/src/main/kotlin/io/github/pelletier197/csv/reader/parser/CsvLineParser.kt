@@ -37,7 +37,7 @@ data class CsvLineParser(
 
     private fun createSplitIterator(input: InputStream): Spliterator<RawCsvLine> {
         val charReader = BufferedReader(InputStreamReader(input, encoding))
-        val lineIndex = AtomicInteger(0)
+        val lineIndex = AtomicInteger(1)
 
         return object : Spliterator<RawCsvLine> {
             override fun tryAdvance(consumer: Consumer<in RawCsvLine>): Boolean {
@@ -144,8 +144,7 @@ data class CsvLineParser(
                     continue
                 } else {
                     columns.add(columnBuilder.toString())
-                    columnBuilder = StringBuilder()
-                    continue
+                    return columns
                 }
             }
 

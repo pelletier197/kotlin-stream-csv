@@ -214,10 +214,6 @@ class RawCsvReaderTest : ShouldSpec({
                     RawCsvLine(
                         columns = listOf("a", "b", "c"),
                         line = 2
-                    ),
-                    RawCsvLine(
-                        columns = emptyList(),
-                        line = 3
                     )
                 )
             }
