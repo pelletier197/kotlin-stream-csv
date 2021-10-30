@@ -41,6 +41,7 @@ allprojects {
             showStandardStreams = true
             events = setOf(STANDARD_OUT, PASSED, SKIPPED, FAILED)
         }
+
         finalizedBy("jacocoTestReport")
     }
 }

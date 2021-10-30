@@ -2,6 +2,7 @@ package io.github.pelletier197.csv.reader.types
 
 import io.github.pelletier197.csv.reader.CsvError
 import io.github.pelletier197.csv.reader.CsvErrorType
+import io.github.pelletier197.csv.reader.CsvReader
 import io.github.pelletier197.csv.reader.deleteTestFile
 import io.github.pelletier197.csv.reader.filePath
 import io.github.pelletier197.csv.reader.parser.CsvLineParser
@@ -27,7 +28,7 @@ data class TestClass(
 )
 
 class TypedCsvReaderTest : ShouldSpec({
-    val underTest = TypedCsvReader(TestClass::class.java)
+    val underTest = CsvReader().readerForType<TestClass>()
 
     afterSpec { deleteTestFile() }
 
