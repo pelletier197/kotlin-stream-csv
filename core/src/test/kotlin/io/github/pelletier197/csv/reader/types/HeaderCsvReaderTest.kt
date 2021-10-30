@@ -2,6 +2,7 @@ package io.github.pelletier197.csv.reader.types
 
 import io.github.pelletier197.csv.reader.deleteTestFile
 import io.github.pelletier197.csv.reader.filePath
+import io.github.pelletier197.csv.reader.parser.CsvLineParser
 import io.github.pelletier197.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -16,18 +17,18 @@ class HeaderCsvReaderTest : ShouldSpec({
     context("a request to set raw reader parameters") {
         context("configuring separator") {
             should("update raw reader with given separator") {
-                underTest.withSeparator('/').shouldBe(HeaderCsvReader(reader = RawCsvReader(separator = '/')))
+                underTest.withSeparator('/').shouldBe(HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(separator = '/'))))
             }
         }
         context("configuring delimiter") {
             should("update raw reader with given delimiter") {
-                underTest.withDelimiter('@').shouldBe(HeaderCsvReader(reader = RawCsvReader(delimiter = '@')))
+                underTest.withDelimiter('@').shouldBe(HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(delimiter = '@'))))
             }
         }
         context("setting trim entries parameter") {
             should("update raw reader with given parameter") {
                 listOf(false, true).forEach {
-                    underTest.withTrimEntries(it).shouldBe(HeaderCsvReader(reader = RawCsvReader(trimEntries = it)))
+                    underTest.withTrimEntries(it).shouldBe(HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(trimEntries = it))))
                 }
             }
         }
@@ -35,7 +36,7 @@ class HeaderCsvReaderTest : ShouldSpec({
             should("update raw reader with given parameter") {
                 listOf(false, true).forEach {
                     underTest.withSkipEmptyLines(it)
-                        .shouldBe(HeaderCsvReader(reader = RawCsvReader(skipEmptyLines = it)))
+                        .shouldBe(HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(skipEmptyLines = it))))
                 }
             }
         }
@@ -43,7 +44,7 @@ class HeaderCsvReaderTest : ShouldSpec({
             should("update raw reader with given parameter") {
                 listOf(false, true).forEach {
                     underTest.withEmptyStringsAsNull(it)
-                        .shouldBe(HeaderCsvReader(reader = RawCsvReader(emptyStringsAsNull = it)))
+                        .shouldBe(HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(emptyStringsAsNull = it))))
                 }
             }
         }
@@ -75,12 +76,6 @@ class HeaderCsvReaderTest : ShouldSpec({
         context("parsing CSV from lines list") {
             should("parse and return all CSV lines with their header") {
                 underTest.read(csv.lines()).toList().shouldContainExactly(expectedLines)
-            }
-        }
-
-        context("parsing CSV from lines stream") {
-            should("parse and return all CSV lines with their header") {
-                underTest.read(csv.lines().stream()).toList().shouldContainExactly(expectedLines)
             }
         }
 

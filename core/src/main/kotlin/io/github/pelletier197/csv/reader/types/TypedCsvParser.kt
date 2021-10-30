@@ -10,8 +10,6 @@ import io.github.pelletier197.csv.reader.reflect.converters.Converter
 import java.io.File
 import java.io.InputStream
 import java.net.URL
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.util.stream.Stream
 
@@ -65,12 +63,12 @@ data class TypedCsvReader<T>(
         return copy(creator = creator.withClearedConverters())
     }
 
-    fun read(url: URL, charset: Charset = StandardCharsets.UTF_8): Stream<TypedCsvLine<T>> {
-        return readHeaderLines(reader.read(url, charset))
+    fun read(url: URL): Stream<TypedCsvLine<T>> {
+        return readHeaderLines(reader.read(url))
     }
 
-    fun read(input: InputStream, charset: Charset = StandardCharsets.UTF_8): Stream<TypedCsvLine<T>> {
-        return readHeaderLines(reader.read(input, charset))
+    fun read(input: InputStream): Stream<TypedCsvLine<T>> {
+        return readHeaderLines(reader.read(input))
     }
 
     fun read(file: File): Stream<TypedCsvLine<T>> {
@@ -87,10 +85,6 @@ data class TypedCsvReader<T>(
 
     fun read(value: String): Stream<TypedCsvLine<T>> {
         return readHeaderLines(reader.read(value))
-    }
-
-    fun read(lines: Stream<String>): Stream<TypedCsvLine<T>> {
-        return readHeaderLines(reader.read(lines))
     }
 
     private fun readHeaderLines(lines: Stream<HeaderCsvLine>): Stream<TypedCsvLine<T>> {

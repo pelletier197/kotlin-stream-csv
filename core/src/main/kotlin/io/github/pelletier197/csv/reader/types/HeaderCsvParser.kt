@@ -1,10 +1,9 @@
 package io.github.pelletier197.csv.reader.types
 
+import io.github.pelletier197.csv.reader.parser.RawCsvLine
 import java.io.File
 import java.io.InputStream
 import java.net.URL
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Stream
@@ -42,12 +41,12 @@ data class HeaderCsvReader(
         return copy(reader = reader.withEmptyStringsAsNull(emptyAsNulls))
     }
 
-    fun read(url: URL, charset: Charset = StandardCharsets.UTF_8): Stream<HeaderCsvLine> {
-        return readRaw(reader.read(url, charset))
+    fun read(url: URL): Stream<HeaderCsvLine> {
+        return readRaw(reader.read(url))
     }
 
-    fun read(input: InputStream, charset: Charset = StandardCharsets.UTF_8): Stream<HeaderCsvLine> {
-        return readRaw(reader.read(input, charset))
+    fun read(input: InputStream): Stream<HeaderCsvLine> {
+        return readRaw(reader.read(input))
     }
 
     fun read(file: File): Stream<HeaderCsvLine> {
@@ -66,10 +65,6 @@ data class HeaderCsvReader(
         return readRaw(reader.read(value))
     }
 
-    fun read(lines: Stream<String>): Stream<HeaderCsvLine> {
-        return readRaw(reader.read(lines))
-    }
-
     private fun readRaw(lines: Stream<RawCsvLine>): Stream<HeaderCsvLine> {
         val currentHeader = AtomicReference(this.header)
         return lines
@@ -77,7 +72,7 @@ data class HeaderCsvReader(
             .map {
                 HeaderCsvLine(
                     values = currentHeader.get()!!
-                        .mapIndexed { index, column -> column to it.columns.getOrElse(index) { if (reader.emptyStringsAsNull) null else "" } }
+                        .mapIndexed { index, column -> column to it.columns.getOrElse(index) { if (reader.parser.emptyStringsAsNull) null else "" } }
                         .toMap(),
                     line = it.line,
                 )
