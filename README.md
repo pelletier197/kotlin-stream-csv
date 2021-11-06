@@ -155,7 +155,7 @@ Configuration is extremely simple and versatile. Every configuration change will
 | Trim entries          | Either to trim entries or not when parsing this input.                                        |  false  |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
 | Skip empty lines      | Either to skip the empty lines or not.                                                        |   true  |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
 | Empty strings as null | Either to treat empty strings as null when parsing the columns.                               |  false  |   :heavy_check_mark:   |    :heavy_check_mark:   |  :heavy_check_mark:  |
-| Header                | Allows settings the header of the parser. When not configured, first non-empty line is used.  |   null  |   :heavy_check_mark:   |    :heavy_check_mark:   |     |
+| Header                | Allows setting the header of the parser. When not configured, first non-empty line is used as the header.  |   null  |   :heavy_check_mark:   |    :heavy_check_mark:   |     |
 | List separator        | The character to use when converting a string to a collection (list, set)                     |  ,  |   :heavy_check_mark:   |        |     |
 
 
