@@ -131,7 +131,7 @@ This kind of CSV parser can also be useful if you don't know exactly the input f
 ```
 
 ### Raw CSV parser
-This last one is the low level parser that returns the every raw line in the CSV as it comes.
+This last one is the low level parser that returns every raw line in the CSV as it comes.
 
 #### Basic usage
 ```kotlin
