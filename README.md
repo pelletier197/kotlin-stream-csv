@@ -159,7 +159,6 @@ Configuration is extremely simple and versatile. Every configuration change will
 | List separator        | The character to use when converting a string to a collection (list, set)                     |  ,  |   :heavy_check_mark:   |        |     |
 
 
-## Known limitations
-As for now, this implementation does not yet respect all specifications of [RFC-4180](https://tools.ietf.org/html/rfc4180). 
-- Field containing line breaks is not yet supported
-- Escaping a double quote is not yet supported 
+## RFC-4180
+This implementation respects all specifications of [RFC-4180](https://tools.ietf.org/html/rfc4180).
+
