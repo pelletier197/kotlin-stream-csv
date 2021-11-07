@@ -1,6 +1,6 @@
 package io.github.pelletier197.csv.reader.reflect.converters.implementations
 
-import io.github.pelletier197.csv.reader.reflect.converters.ConversionParameters
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionContext
 import io.github.pelletier197.csv.reader.reflect.converters.Converter
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
@@ -15,41 +15,41 @@ abstract class BaseStringToCollectionConverter<TO> : Converter<String, TO> {
 
 class StringToListConverter : BaseStringToCollectionConverter<List<*>>() {
     override val target: Class<List<*>> get() = List::class.java
-    override fun convert(value: String, to: Type, parameters: ConversionParameters): List<*> =
-        asList(value, to, parameters)
+    override fun convert(value: String, to: Type, context: ConversionContext): List<*> =
+        asList(value, to, context)
 }
 
 class StringToArrayListConverter : BaseStringToCollectionConverter<ArrayList<*>>() {
     override val target: Class<ArrayList<*>> get() = ArrayList::class.java
-    override fun convert(value: String, to: Type, parameters: ConversionParameters): ArrayList<*> =
-        ArrayList(asList(value, to, parameters))
+    override fun convert(value: String, to: Type, context: ConversionContext): ArrayList<*> =
+        ArrayList(asList(value, to, context))
 }
 
 class StringToLinkedListConverter : BaseStringToCollectionConverter<LinkedList<*>>() {
     override val target: Class<LinkedList<*>> get() = LinkedList::class.java
-    override fun convert(value: String, to: Type, parameters: ConversionParameters): LinkedList<*> =
-        LinkedList(asList(value, to, parameters))
+    override fun convert(value: String, to: Type, context: ConversionContext): LinkedList<*> =
+        LinkedList(asList(value, to, context))
 }
 
 class StringToSetConverter : BaseStringToCollectionConverter<Set<*>>() {
     override val target: Class<Set<*>> get() = Set::class.java
-    override fun convert(value: String, to: Type, parameters: ConversionParameters): Set<*> =
-        asList(value, to, parameters).toSet()
+    override fun convert(value: String, to: Type, context: ConversionContext): Set<*> =
+        asList(value, to, context).toSet()
 }
 
 class StringToHashSetConverter : BaseStringToCollectionConverter<HashSet<*>>() {
     override val target: Class<HashSet<*>> get() = HashSet::class.java
-    override fun convert(value: String, to: Type, parameters: ConversionParameters): HashSet<*> =
-        HashSet(asList(value, to, parameters))
+    override fun convert(value: String, to: Type, context: ConversionContext): HashSet<*> =
+        HashSet(asList(value, to, context))
 }
 
 class StringToTreeSetConverter : BaseStringToCollectionConverter<TreeSet<*>>() {
     override val target: Class<TreeSet<*>> get() = TreeSet::class.java
-    override fun convert(value: String, to: Type, parameters: ConversionParameters): TreeSet<*> =
-        TreeSet(asList(value, to, parameters))
+    override fun convert(value: String, to: Type, context: ConversionContext): TreeSet<*> =
+        TreeSet(asList(value, to, context))
 }
 
-private fun asList(value: String, to: Type, parameters: ConversionParameters): List<*> {
+private fun asList(value: String, to: Type, parameters: ConversionContext): List<*> {
     if (to !is ParameterizedType) throw IllegalArgumentException(
         """
                 Not enough information to determine the type of the target list for value '$value' of type '$to'

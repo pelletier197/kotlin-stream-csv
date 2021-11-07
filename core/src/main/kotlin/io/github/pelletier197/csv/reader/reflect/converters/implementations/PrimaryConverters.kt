@@ -1,6 +1,6 @@
 package io.github.pelletier197.csv.reader.reflect.converters.implementations
 
-import io.github.pelletier197.csv.reader.reflect.converters.ConversionParameters
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionContext
 import io.github.pelletier197.csv.reader.reflect.converters.Converter
 import java.lang.reflect.Type
 import java.math.BigDecimal
@@ -10,7 +10,7 @@ abstract class StringConverterBase<TO> : Converter<String, TO> {
     override val source: Class<String> get() = String::class.java
 
     @Suppress("UNCHECKED_CAST")
-    override fun convert(value: String, to: Type, parameters: ConversionParameters): TO? =
+    override fun convert(value: String, to: Type, context: ConversionContext): TO? =
         doConvert(value.trim(), to as Class<TO>)
 
     abstract fun doConvert(value: String, to: Class<TO>): TO?

@@ -31,9 +31,9 @@ private data class ConversionTargets(
     private val target: String
 )
 
-typealias ConvertFunction<S, T> = (value: S, to: Type, parameters: ConversionParameters) -> T
+typealias ConvertFunction<S, T> = (value: S, to: Type, parameters: ConversionContext) -> T
 
-data class ConversionParameters(
+data class ConversionContext(
     val settings: ConversionSettings,
     val convert: ConvertFunction<Any, *>
 )
@@ -41,7 +41,7 @@ data class ConversionParameters(
 interface Converter<FROM, TO> {
     val source: Class<FROM>
     val target: Class<TO>
-    fun convert(value: FROM, to: Type, parameters: ConversionParameters): TO?
+    fun convert(value: FROM, to: Type, context: ConversionContext): TO?
 }
 
 internal data class ConverterWrapper(
@@ -56,9 +56,9 @@ internal data class ConverterWrapper(
         internalConvertFunction: ConvertFunction<Any, *>
     ): T {
         return convert(
-            value,
-            to,
-            ConversionParameters(
+            value = value,
+            to = to,
+            context = ConversionContext(
                 settings = settings,
                 convert = internalConvertFunction,
             )
@@ -66,10 +66,10 @@ internal data class ConverterWrapper(
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <S, T> convert(value: S, to: Type, parameters: ConversionParameters): T {
+    fun <S, T> convert(value: S, to: Type, context: ConversionContext): T {
         val nonNullValue = value!!
         if (nonNullValue::class.java == to || to == Any::class.java) return value as T
-        return function.call(converter, value, to, parameters) as T
+        return function.call(converter, value, to, context) as T
     }
 }
 

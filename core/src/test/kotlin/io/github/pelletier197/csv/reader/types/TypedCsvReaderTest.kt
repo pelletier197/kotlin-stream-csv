@@ -6,7 +6,7 @@ import io.github.pelletier197.csv.reader.CsvReaders
 import io.github.pelletier197.csv.reader.deleteTestFile
 import io.github.pelletier197.csv.reader.filePath
 import io.github.pelletier197.csv.reader.parser.CsvLineParser
-import io.github.pelletier197.csv.reader.reflect.converters.ConversionParameters
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionContext
 import io.github.pelletier197.csv.reader.reflect.converters.Converter
 import io.github.pelletier197.csv.reader.writeTestFile
 import io.kotest.core.spec.style.ShouldSpec
@@ -267,7 +267,7 @@ class TypedCsvReaderTest : ShouldSpec({
             class CustomConverter : Converter<String, CustomType> {
                 override val source: Class<String> get() = String::class.java
                 override val target: Class<CustomType> get() = CustomType::class.java
-                override fun convert(value: String, to: Type, parameters: ConversionParameters): CustomType {
+                override fun convert(value: String, to: Type, context: ConversionContext): CustomType {
                     return CustomType(value)
                 }
             }

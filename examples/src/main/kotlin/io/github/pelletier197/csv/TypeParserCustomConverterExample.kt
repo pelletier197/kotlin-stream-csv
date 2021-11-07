@@ -1,7 +1,7 @@
 package io.github.pelletier197.csv
 
 import io.github.pelletier197.csv.reader.CsvReaders
-import io.github.pelletier197.csv.reader.reflect.converters.ConversionParameters
+import io.github.pelletier197.csv.reader.reflect.converters.ConversionContext
 import io.github.pelletier197.csv.reader.reflect.converters.Converter
 import java.lang.reflect.Type
 import kotlin.streams.toList
@@ -22,7 +22,7 @@ class EmailConverter : Converter<String, Email> {
     override val source: Class<String> get() = String::class.java
     override val target: Class<Email> get() = Email::class.java
 
-    override fun convert(value: String, to: Type, parameters: ConversionParameters): Email {
+    override fun convert(value: String, to: Type, context: ConversionContext): Email {
         return Email(value = value)
     }
 }
