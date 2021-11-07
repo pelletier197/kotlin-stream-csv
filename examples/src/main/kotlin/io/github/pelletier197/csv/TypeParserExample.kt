@@ -1,6 +1,6 @@
 package io.github.pelletier197.csv
 
-import io.github.pelletier197.csv.reader.CsvReader
+import io.github.pelletier197.csv.reader.CsvReaders
 import kotlin.streams.toList
 
 data class CsvPerson(
@@ -19,8 +19,8 @@ fun main() {
 }
 
 private fun readValidCsv() {
-    val reader = CsvReader()
-        .readerForType<CsvPerson>()
+    val reader = CsvReaders
+        .forType<CsvPerson>()
         // .withHeader("first_name", "last_name", "phone_number", "emails") // If you wish to provide the header yourself
         .withSeparator(',')
         .withDelimiter('"')
@@ -44,8 +44,8 @@ private fun readInvalidCsv() {
             John, Doe, 1+342-534-2342
         """.trimIndent()
 
-    val reader = CsvReader()
-        .readerForType<CsvPerson>()
+    val reader = CsvReaders
+        .forType<CsvPerson>()
         .withEmptyStringsAsNull(true)
 
     reader.read(invalidCsv).forEach { println(it) }

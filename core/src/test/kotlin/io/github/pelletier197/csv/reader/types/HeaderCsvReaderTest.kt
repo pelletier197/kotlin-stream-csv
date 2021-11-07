@@ -1,6 +1,6 @@
 package io.github.pelletier197.csv.reader.types
 
-import io.github.pelletier197.csv.reader.CsvReader
+import io.github.pelletier197.csv.reader.CsvReaders
 import io.github.pelletier197.csv.reader.deleteTestFile
 import io.github.pelletier197.csv.reader.filePath
 import io.github.pelletier197.csv.reader.parser.CsvLineParser
@@ -13,7 +13,7 @@ import java.nio.file.Paths
 import kotlin.streams.toList
 
 class HeaderCsvReaderTest : ShouldSpec({
-    val underTest = CsvReader().readerWithHeader()
+    val underTest = CsvReaders.header()
 
     context("a request to set raw reader parameters") {
         context("configuring separator") {

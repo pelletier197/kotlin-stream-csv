@@ -1,11 +1,11 @@
 package io.github.pelletier197.csv
 
-import io.github.pelletier197.csv.reader.CsvReader
+import io.github.pelletier197.csv.reader.CsvReaders
 import kotlin.streams.toList
 
 fun main() {
-    val reader = CsvReader()
-        .readerWithHeader()
+    val reader = CsvReaders
+        .header()
         // .withHeader("first_name", "last_name", "phone_number", "emails") // If you wish to provide the header yourself
         .withSeparator(',')
         .withDelimiter('"')

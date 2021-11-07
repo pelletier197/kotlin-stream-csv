@@ -1,6 +1,6 @@
 package io.github.pelletier197.csv
 
-import io.github.pelletier197.csv.reader.CsvReader
+import io.github.pelletier197.csv.reader.CsvReaders
 import io.github.pelletier197.csv.reader.reflect.converters.ConversionParameters
 import io.github.pelletier197.csv.reader.reflect.converters.Converter
 import java.lang.reflect.Type
@@ -28,8 +28,8 @@ class EmailConverter : Converter<String, Email> {
 }
 
 fun main() {
-    val reader = CsvReader()
-        .readerForType<CustomCsvPerson>()
+    val reader = CsvReaders
+        .forType<CustomCsvPerson>()
         .withConverter(EmailConverter())
 
     val people = reader.read(csv).map { it.getResultOrThrow() }.toList()

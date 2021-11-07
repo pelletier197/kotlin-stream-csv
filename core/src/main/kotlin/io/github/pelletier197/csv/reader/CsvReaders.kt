@@ -4,20 +4,20 @@ import io.github.pelletier197.csv.reader.types.HeaderCsvReader
 import io.github.pelletier197.csv.reader.types.RawCsvReader
 import io.github.pelletier197.csv.reader.types.TypedCsvReader
 
-class CsvReader {
-    inline fun <reified T> readerForType(): TypedCsvReader<T> {
-        return readerForType(T::class.java)
+object CsvReaders {
+    inline fun <reified T> forType(): TypedCsvReader<T> {
+        return forType(T::class.java)
     }
 
-    fun <T> readerForType(targetClass: Class<T>): TypedCsvReader<T> {
+    fun <T> forType(targetClass: Class<T>): TypedCsvReader<T> {
         return TypedCsvReader(targetClass = targetClass)
     }
 
-    fun readerWithHeader(): HeaderCsvReader {
+    fun header(): HeaderCsvReader {
         return HeaderCsvReader()
     }
 
-    fun rawReader(): RawCsvReader {
+    fun raw(): RawCsvReader {
         return RawCsvReader()
     }
 }

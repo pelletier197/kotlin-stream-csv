@@ -44,8 +44,8 @@ data class CsvPerson(
     val emails: Set<String>
 )
 
-val reader = CsvReader()
-    .readerForType<CsvPerson>()
+val reader = CsvReaders
+    .forType<CsvPerson>()
 val people = reader.read(csv).map { it.getResultOrThrow() }.toList()
 
 println(people.joinToString(separator = "\n"))
@@ -65,8 +65,8 @@ val invalidCsv =
         John, Doe, 1+342-534-2342
     """.trimIndent()
 
-val reader = CsvReader()
-    .readerForType<CsvPerson>()
+val reader = CsvReaders
+    .forType<CsvPerson>()
     .withEmptyStringsAsNull(true)
 
 reader.read(invalidCsv).forEach { println(it) }
@@ -104,8 +104,8 @@ class EmailConverter : Converter<String, Email> {
     }
 }
 
-val reader = CsvReader()
-    .readerForType<CustomCsvPerson>()
+val reader = CsvReaders
+    .forType<CustomCsvPerson>()
     .withConverter(EmailConverter())
 
 val people = reader.read(csv).map { it.getResultOrThrow() }.toList()
@@ -119,8 +119,8 @@ This kind of CSV parser can also be useful if you don't know exactly the input f
 
 #### Basic usage
 ```kotlin
-    val reader = CsvReader()
-        .readerWithHeader()
+    val reader = CsvReaders
+        .header()
         .withHeader("first_name", "last_name", "phone_number", "emails") // If you wish to provide the header yourself
     val people = reader.read(csv).map { it }.toList()
 
@@ -135,7 +135,7 @@ This last one is the low level parser that returns every raw line in the CSV as 
 
 #### Basic usage
 ```kotlin
-    val reader = CsvReader().rawReader()
+    val reader = CsvReaders.raw()
     val people = reader.read(csv).map { it }.toList()
 
     println(people.joinToString(separator = "\n"))

@@ -1,6 +1,6 @@
 package io.github.pelletier197.csv.reader.types
 
-import io.github.pelletier197.csv.reader.CsvReader
+import io.github.pelletier197.csv.reader.CsvReaders
 import io.github.pelletier197.csv.reader.deleteTestFile
 import io.github.pelletier197.csv.reader.filePath
 import io.github.pelletier197.csv.reader.parser.RawCsvLine
@@ -14,7 +14,7 @@ import java.nio.file.Paths
 import kotlin.streams.toList
 
 class RawCsvReaderTest : ShouldSpec({
-    val underTest = CsvReader().rawReader()
+    val underTest = CsvReaders.raw()
 
     context("on a regular CSV") {
         val csv =
