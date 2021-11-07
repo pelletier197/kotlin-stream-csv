@@ -92,6 +92,21 @@ class TypedCsvReaderTest : ShouldSpec({
                 }
             }
         }
+
+        context("setting custom encoding") {
+            should("update raw reader with given parameter") {
+                listOf(Charsets.ISO_8859_1, Charsets.UTF_16BE, Charsets.UTF_8).forEach {
+                    underTest.withEncoding(it)
+                        .shouldBe(
+                            TypedCsvReader(
+                                targetClass = TestClass::class.java,
+                                reader = HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(encoding = it)))
+                            )
+                        )
+                }
+            }
+        }
+
         context("configuration the header of the reader") {
             should("update header reader with given parameter") {
                 val header = listOf("test", "header_2")

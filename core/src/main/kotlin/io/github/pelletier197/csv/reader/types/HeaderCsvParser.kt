@@ -1,67 +1,75 @@
 package io.github.pelletier197.csv.reader.types
 
+import io.github.pelletier197.csv.reader.CsvLine
+import io.github.pelletier197.csv.reader.CsvReader
+import io.github.pelletier197.csv.reader.CsvReaderConfigurer
 import io.github.pelletier197.csv.reader.parser.RawCsvLine
 import java.io.File
 import java.io.InputStream
 import java.net.URL
+import java.nio.charset.Charset
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Stream
 
 data class HeaderCsvLine(
     val values: Map<String, String?>,
-    val line: Int
-)
+    override val line: Int
+) : CsvLine
 
 data class HeaderCsvReader(
     val header: List<String>? = null,
     private val reader: RawCsvReader = RawCsvReader(),
-) {
+) : CsvReader<HeaderCsvLine>, CsvReaderConfigurer<HeaderCsvReader> {
     fun withHeader(header: List<String>): HeaderCsvReader {
         return copy(header = header)
     }
 
-    fun withSeparator(separator: Char): HeaderCsvReader {
+    override fun withSeparator(separator: Char): HeaderCsvReader {
         return copy(reader = reader.withSeparator(separator))
     }
 
-    fun withDelimiter(delimiter: Char): HeaderCsvReader {
+    override fun withDelimiter(delimiter: Char): HeaderCsvReader {
         return copy(reader = reader.withDelimiter(delimiter))
     }
 
-    fun withTrimEntries(trim: Boolean): HeaderCsvReader {
+    override fun withTrimEntries(trim: Boolean): HeaderCsvReader {
         return copy(reader = reader.withTrimEntries(trim))
     }
 
-    fun withSkipEmptyLines(skip: Boolean): HeaderCsvReader {
+    override fun withSkipEmptyLines(skip: Boolean): HeaderCsvReader {
         return copy(reader = reader.withSkipEmptyLines(skip))
     }
 
-    fun withEmptyStringsAsNull(emptyAsNulls: Boolean): HeaderCsvReader {
+    override fun withEmptyStringsAsNull(emptyAsNulls: Boolean): HeaderCsvReader {
         return copy(reader = reader.withEmptyStringsAsNull(emptyAsNulls))
     }
 
-    fun read(url: URL): Stream<HeaderCsvLine> {
+    override fun withEncoding(encoding: Charset): HeaderCsvReader {
+        return copy(reader = reader.withEncoding(encoding))
+    }
+
+    override fun read(url: URL): Stream<HeaderCsvLine> {
         return readRaw(reader.read(url))
     }
 
-    fun read(input: InputStream): Stream<HeaderCsvLine> {
+    override fun read(input: InputStream): Stream<HeaderCsvLine> {
         return readRaw(reader.read(input))
     }
 
-    fun read(file: File): Stream<HeaderCsvLine> {
+    override fun read(file: File): Stream<HeaderCsvLine> {
         return readRaw(reader.read(file))
     }
 
-    fun read(path: Path): Stream<HeaderCsvLine> {
+    override fun read(path: Path): Stream<HeaderCsvLine> {
         return readRaw(reader.read(path))
     }
 
-    fun read(lines: List<String>): Stream<HeaderCsvLine> {
+    override fun read(lines: List<String>): Stream<HeaderCsvLine> {
         return readRaw(reader.read(lines))
     }
 
-    fun read(value: String): Stream<HeaderCsvLine> {
+    override fun read(value: String): Stream<HeaderCsvLine> {
         return readRaw(reader.read(value))
     }
 

@@ -21,11 +21,13 @@ class HeaderCsvReaderTest : ShouldSpec({
                 underTest.withSeparator('/').shouldBe(HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(separator = '/'))))
             }
         }
+
         context("configuring delimiter") {
             should("update raw reader with given delimiter") {
                 underTest.withDelimiter('@').shouldBe(HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(delimiter = '@'))))
             }
         }
+
         context("setting trim entries parameter") {
             should("update raw reader with given parameter") {
                 listOf(false, true).forEach {
@@ -33,6 +35,7 @@ class HeaderCsvReaderTest : ShouldSpec({
                 }
             }
         }
+
         context("setting skip empty lines parameter") {
             should("update raw reader with given parameter") {
                 listOf(false, true).forEach {
@@ -41,6 +44,16 @@ class HeaderCsvReaderTest : ShouldSpec({
                 }
             }
         }
+
+        context("setting custom encoding") {
+            should("update raw reader with given parameter") {
+                listOf(Charsets.ISO_8859_1, Charsets.UTF_8).forEach {
+                    underTest.withEncoding(it)
+                        .shouldBe(HeaderCsvReader(reader = RawCsvReader(parser = CsvLineParser(encoding = it))))
+                }
+            }
+        }
+
         context("setting empty strings as null parameter") {
             should("update raw reader with given parameter") {
                 listOf(false, true).forEach {

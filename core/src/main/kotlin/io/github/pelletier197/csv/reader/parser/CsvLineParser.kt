@@ -1,5 +1,6 @@
 package io.github.pelletier197.csv.reader.parser
 
+import io.github.pelletier197.csv.reader.CsvLine
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -19,8 +20,8 @@ import java.util.stream.StreamSupport
 
 data class RawCsvLine(
     val columns: List<String?>,
-    val line: Int
-)
+    override val line: Int
+) : CsvLine
 
 data class CsvLineParser(
     val separator: Char = ',',

@@ -101,13 +101,13 @@ internal class Converters(converters: List<Converter<*, *>> = defaultConverters)
     private val allConverters: Map<ConversionTargets, ConverterWrapper>
 
     init {
-        allConverters = converters.map { converter ->
+        allConverters = converters.associate { converter ->
             ConversionTargets(converter.source.name, converter.target.name) to ConverterWrapper(
                 converter = converter,
                 function = Converter::class.functions.find { f -> f.name == "convert" }
                     ?: error("expected a function convert inside the converter interface")
             )
-        }.toMap()
+        }
     }
 
     private val converters: List<Converter<*, *>> get() = allConverters.values.map { it.converter }
